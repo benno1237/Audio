@@ -8,7 +8,7 @@ from redbot import VersionInfo
 from redbot.core import commands
 from redbot.core.i18n import Translator
 
-from ..converters import get_lazy_converter, get_playlist_converter
+from ..converters import get_lazy_converter, get_lazy_multiline_converter, get_playlist_converter
 
 __version__ = VersionInfo.from_json(
     {"major": 3, "minor": 0, "micro": 0, "releaselevel": "alpha", "serial": 1}
@@ -20,6 +20,7 @@ _SCHEMA_VERSION: Final[int] = 4
 _OWNER_NOTIFICATION: Final[int] = 1
 
 LazyGreedyConverter = get_lazy_converter("--")
+LazyMultilineConverter = get_lazy_multiline_converter("--")
 PlaylistConverter = get_playlist_converter()
 T_ = Translator("Audio", __file__)
 
@@ -72,7 +73,6 @@ class CompositeMetaClass(type(commands.Cog), type(ABC)):
     This allows the metaclass used for proper type detection to
     coexist with discord.py's metaclass
     """
-
 
 
 # Both DataReader and DataWriter are taken from https://github.com/Devoxin/Lavalink.py/blob/master/lavalink/datarw.py
