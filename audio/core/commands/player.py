@@ -1,5 +1,4 @@
 import contextlib
-import datetime
 import logging
 import math
 import time
@@ -14,10 +13,11 @@ from redbot.core.commands import UserInputOptional
 from redbot.core.i18n import Translator
 from redbot.core.utils import AsyncIter
 from redbot.core.utils._dpy_menus_utils import dpymenu
-from redbot.core.utils.menus import DEFAULT_CONTROLS, close_menu, menu, next_page, prev_page
+from redbot.core.utils.menus import close_menu, menu, next_page, prev_page
 
 from ...audio_dataclasses import _PARTIALLY_SUPPORTED_MUSIC_EXT, Query
 from ...audio_logging import IS_DEBUG
+from ...converters import MultiLineConverter
 from ...errors import DatabaseError, QueryUnauthorized, SpotifyFetchError, TrackEnqueueError
 from ..abc import MixinMeta
 from ..cog_utils import ENABLED_TITLE, CompositeMetaClass
@@ -30,7 +30,7 @@ class PlayerCommands(MixinMeta, metaclass=CompositeMetaClass):
     @commands.command(name="play")
     @commands.guild_only()
     @commands.bot_has_permissions(embed_links=True)
-    async def command_play(self, ctx: commands.Context, *, query: str):
+    async def command_play(self, ctx: commands.Context, *, query: MultiLineConverter):
         """Play the specified track or search for a close match.
 
         To play a local track, the query should be `<parentfolder>\\<filename>`.

@@ -2,7 +2,7 @@ import argparse
 import functools
 import re
 from pathlib import Path
-from typing import Final, MutableMapping, Optional, Pattern, Tuple, Union
+from typing import Final, List, MutableMapping, Optional, Pattern, Tuple, Union
 
 import discord
 from redbot.core import commands
@@ -19,6 +19,7 @@ _ = Translator("Audio", Path(__file__))
 
 __all__ = [
     "ComplexScopeParser",
+    "MultiLineConverter",
     "PlaylistConverter",
     "ScopeParser",
     "LazyGreedyConverter",
@@ -136,6 +137,12 @@ async def global_unique_user_finder(
                 "Please use the ID for the server you're trying to specify."
             ).format(arg=arg)
         )
+
+
+class MultiLineConverter(commands.Converter):
+    async def convert(self, ctx: commands.Context, arg: str) -> List[str]:
+        """Split the input into multiple arguments (Separated by `\n`)"""
+        return arg.splitlines()
 
 
 class PlaylistConverter(commands.Converter):

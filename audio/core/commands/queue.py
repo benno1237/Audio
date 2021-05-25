@@ -1,16 +1,14 @@
 import asyncio
-import contextlib
 import logging
-import math
 from pathlib import Path
-from typing import MutableMapping, Optional
+from typing import Optional
 
 import discord
 import lavalink
 from redbot.core import commands
 from redbot.core.i18n import Translator
 from redbot.core.utils import AsyncIter
-from redbot.core.utils._dpy_menus_utils import SimpleHybridMenu, dpymenu
+from redbot.core.utils._dpy_menus_utils import SimpleHybridMenu
 from redbot.core.utils.menus import start_adding_reactions
 from redbot.core.utils.predicates import ReactionPredicate
 

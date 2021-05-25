@@ -8,7 +8,6 @@ import re
 import shutil
 import sys
 import tempfile
-import time
 from typing import ClassVar, Final, List, Optional, Pattern, Tuple
 
 import aiohttp

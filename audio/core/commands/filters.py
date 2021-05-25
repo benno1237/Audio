@@ -1,10 +1,6 @@
-import asyncio
-import contextlib
 import logging
-import re
 from pathlib import Path
 
-import discord
 import lavalink
 from lavalink import filters
 from lavalink.filters import Equalizer

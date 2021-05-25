@@ -1,5 +1,4 @@
 import asyncio
-import datetime
 import itertools
 import logging
 from collections import namedtuple
