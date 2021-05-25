@@ -58,7 +58,7 @@ class PlaylistUtilities(MixinMeta, metaclass=CompositeMetaClass):
         playlist_author = (
             guild.get_member(playlist.author)
             if guild
-            else self.bot.get_user(playlist.author) or user
+            else await self.bot.get_user_global(playlist.author) or user
         )
 
         is_different_user = len({playlist.author, user_to_query.id, ctx.author.id}) != 1
@@ -239,7 +239,9 @@ class PlaylistUtilities(MixinMeta, metaclass=CompositeMetaClass):
         number = 0
         correct_scope_matches = sorted(correct_scope_matches, key=lambda x: x.name.lower())
         async for number, playlist in AsyncIter(correct_scope_matches).enumerate(start=1):
-            author = self.bot.get_user(playlist.author) or playlist.author or _("Unknown")
+            author = (
+                await self.bot.get_user_globalr(playlist.author) or playlist.author or _("Unknown")
+            )
             line = _(
                 "{number}."
                 "    <{playlist.name}>\n"
@@ -267,7 +269,7 @@ class PlaylistUtilities(MixinMeta, metaclass=CompositeMetaClass):
         avaliable_emojis = ReactionPredicate.NUMBER_EMOJIS[1:]
         avaliable_emojis.append("🔟")
         emojis = avaliable_emojis[: len(correct_scope_matches)]
-        emojis.append("\N{CROSS MARK}")
+        emojis.append(self.get_cross_emoji(context))
         start_adding_reactions(msg, emojis)
         pred = ReactionPredicate.with_emojis(emojis, msg, user=context.author)
         try:
@@ -278,7 +280,7 @@ class PlaylistUtilities(MixinMeta, metaclass=CompositeMetaClass):
             raise TooManyMatches(
                 _("Too many matches found and you did not select which one you wanted.")
             )
-        if emojis[pred.result] == "\N{CROSS MARK}":
+        if emojis[pred.result] == self.get_cross_emoji(context):
             with contextlib.suppress(discord.HTTPException):
                 await msg.delete()
             raise TooManyMatches(

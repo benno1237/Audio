@@ -46,7 +46,11 @@ class QueueCommands(MixinMeta, metaclass=CompositeMetaClass):
             )
             song += _("\n Requested by: **{track.requester}**").format(track=player.current)
             song += f"\n\n{arrow}`{pos}`/`{dur}`"
-            embed = discord.Embed(title=_("Now Playing"), description=song)
+            embed = discord.Embed(description=song)
+            embed.set_author(
+                name=_("Now Playing"),
+                icon_url="https://cdn.discordapp.com/emojis/572861527049109515.gif",
+            )
             thumbnail = await self.config_cache.thumbnail.get_context_value(ctx.guild)
             if thumbnail and player.current and player.current.thumbnail:
                 embed.set_thumbnail(url=player.current.thumbnail)
@@ -88,7 +92,7 @@ class QueueCommands(MixinMeta, metaclass=CompositeMetaClass):
                 "stop": "\N{BLACK SQUARE FOR STOP}\N{VARIATION SELECTOR-16}",
                 "pause": "\N{BLACK RIGHT-POINTING TRIANGLE WITH DOUBLE VERTICAL BAR}\N{VARIATION SELECTOR-16}",
                 "next": "\N{BLACK RIGHT-POINTING DOUBLE TRIANGLE WITH VERTICAL BAR}\N{VARIATION SELECTOR-16}",
-                "close": "\N{CROSS MARK}",
+                "close": self.get_cross_emoji(ctx),
             }
             expected = tuple(emoji.values())
             if not player.queue and not autoplay:

@@ -533,3 +533,8 @@ class MixinMeta(ABC):
     @abstractmethod
     def can_join_and_speak(self, channel: discord.VoiceChannel) -> bool:
         raise NotImplementedError()
+
+    # --------------- BB8 Specific things should always go at the very bottom to reduce conflicts.
+    @abstractmethod
+    def get_cross_emoji(self, ctx: commands.Context) -> str:
+        raise NotImplementedError()

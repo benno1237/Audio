@@ -1,4 +1,5 @@
 from ..cog_utils import CompositeMetaClass
+from .bb8 import BB8Utilities
 from .equalizer import EqualizerUtilities
 from .formatting import FormattingUtilities
 from .local_tracks import LocalTrackUtilities
@@ -12,6 +13,7 @@ from .validation import ValidationUtilities
 
 
 class Utilities(
+    BB8Utilities,
     EqualizerUtilities,
     FormattingUtilities,
     LocalTrackUtilities,

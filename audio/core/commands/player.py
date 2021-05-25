@@ -400,7 +400,7 @@ class PlayerCommands(MixinMeta, metaclass=CompositeMetaClass):
             "\N{DIGIT FOUR}\N{COMBINING ENCLOSING KEYCAP}": _category_search_menu,
             "\N{DIGIT FIVE}\N{COMBINING ENCLOSING KEYCAP}": _category_search_menu,
             "\N{LEFTWARDS BLACK ARROW}\N{VARIATION SELECTOR-16}": prev_page,
-            "\N{CROSS MARK}": close_menu,
+            self.get_cross_emoji(ctx): close_menu,
             "\N{BLACK RIGHTWARDS ARROW}\N{VARIATION SELECTOR-16}": next_page,
         }
         playlist_search_controls = {
@@ -410,7 +410,7 @@ class PlayerCommands(MixinMeta, metaclass=CompositeMetaClass):
             "\N{DIGIT FOUR}\N{COMBINING ENCLOSING KEYCAP}": _playlist_search_menu,
             "\N{DIGIT FIVE}\N{COMBINING ENCLOSING KEYCAP}": _playlist_search_menu,
             "\N{LEFTWARDS BLACK ARROW}\N{VARIATION SELECTOR-16}": prev_page,
-            "\N{CROSS MARK}": close_menu,
+            self.get_cross_emoji(ctx): close_menu,
             "\N{BLACK RIGHTWARDS ARROW}\N{VARIATION SELECTOR-16}": next_page,
         }
 
@@ -697,7 +697,7 @@ class PlayerCommands(MixinMeta, metaclass=CompositeMetaClass):
             "\N{DIGIT FOUR}\N{COMBINING ENCLOSING KEYCAP}": _search_menu,
             "\N{DIGIT FIVE}\N{COMBINING ENCLOSING KEYCAP}": _search_menu,
             "\N{LEFTWARDS BLACK ARROW}\N{VARIATION SELECTOR-16}": prev_page,
-            "\N{CROSS MARK}": close_menu,
+            self.get_cross_emoji(ctx): close_menu,
             "\N{BLACK RIGHTWARDS ARROW}\N{VARIATION SELECTOR-16}": next_page,
         }
 

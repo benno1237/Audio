@@ -121,7 +121,7 @@ class EqualizerCommands(MixinMeta, metaclass=CompositeMetaClass):
         preset_list = ""
         for preset, data in eq_presets.items():
             try:
-                author = self.bot.get_user(data["author"])
+                author = await self.bot.get_user_global(data["author"])
             except TypeError:
                 author = "None"
             msg = f"{preset}{space * (22 - len(preset))}{author}\n"

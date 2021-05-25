@@ -86,7 +86,7 @@ class PlayerControllerCommands(MixinMeta, metaclass=CompositeMetaClass):
             "stop": "\N{BLACK SQUARE FOR STOP}\N{VARIATION SELECTOR-16}",
             "pause": "\N{BLACK RIGHT-POINTING TRIANGLE WITH DOUBLE VERTICAL BAR}\N{VARIATION SELECTOR-16}",
             "next": "\N{BLACK RIGHT-POINTING DOUBLE TRIANGLE WITH VERTICAL BAR}\N{VARIATION SELECTOR-16}",
-            "close": "\N{CROSS MARK}",
+            "close": self.get_cross_emoji(ctx),
         }
         expected = tuple(emoji.values())
         player = lavalink.get_player(ctx.guild.id)
@@ -110,7 +110,11 @@ class PlayerControllerCommands(MixinMeta, metaclass=CompositeMetaClass):
         if player.fetch("np_message") is not None:
             with contextlib.suppress(discord.HTTPException):
                 await player.fetch("np_message").delete()
-        embed = discord.Embed(title=_("Now Playing"), description=song)
+        embed = discord.Embed(description=song)
+        embed.set_author(
+            name=_("Now Playing"),
+            icon_url="https://cdn.discordapp.com/emojis/572861527049109515.gif",
+        )
         shuffle = await self.config_cache.shuffle.get_context_value(ctx.guild)
         repeat = await self.config_cache.repeat.get_context_value(ctx.guild)
         autoplay = await self.config_cache.autoplay.get_context_value(ctx.guild)

@@ -110,14 +110,14 @@ class BaseWrapper:
 
     async def clean_up_old_entries(self) -> None:
         """Delete entries older than x in the local cache tables"""
-        max_age = await self.config_cache.local_cache_age.get_global()
-        maxage = datetime.datetime.now(tz=datetime.timezone.utc) - datetime.timedelta(days=max_age)
-        maxage_int = int(time.mktime(maxage.timetuple()))
-        values = {"maxage": maxage_int}
-        with concurrent.futures.ThreadPoolExecutor(max_workers=1) as executor:
-            executor.submit(self.database.cursor().execute, LAVALINK_DELETE_OLD_ENTRIES, values)
-            executor.submit(self.database.cursor().execute, YOUTUBE_DELETE_OLD_ENTRIES, values)
-            executor.submit(self.database.cursor().execute, SPOTIFY_DELETE_OLD_ENTRIES, values)
+        # max_age = await self.config_cache.local_cache_age.get_global()
+        # maxage = datetime.datetime.now(tz=datetime.timezone.utc) - datetime.timedelta(days=max_age)
+        # maxage_int = int(time.mktime(maxage.timetuple()))
+        # values = {"maxage": maxage_int}
+        # with concurrent.futures.ThreadPoolExecutor(max_workers=1) as executor:
+        #     executor.submit(self.database.cursor().execute, LAVALINK_DELETE_OLD_ENTRIES, values)
+        #     executor.submit(self.database.cursor().execute, YOUTUBE_DELETE_OLD_ENTRIES, values)
+        #     executor.submit(self.database.cursor().execute, SPOTIFY_DELETE_OLD_ENTRIES, values)
 
     def maybe_migrate(self) -> None:
         """Maybe migrate Database schema for the local cache"""

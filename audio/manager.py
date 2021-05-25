@@ -12,7 +12,6 @@ import time
 from typing import ClassVar, Final, List, Optional, Pattern, Tuple
 
 import aiohttp
-from tqdm import tqdm
 
 try:
     from redbot import json
@@ -20,6 +19,7 @@ except ImportError:
     import json
 from redbot.core import data_manager
 from redbot.core.i18n import Translator
+from tqdm import tqdm
 
 from .errors import LavalinkDownloadFailed, ShouldAutoRecover
 from .utils import task_callback

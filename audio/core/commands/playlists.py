@@ -920,7 +920,11 @@ class PlaylistCommands(MixinMeta, metaclass=CompositeMetaClass):
                 embed = discord.Embed(
                     colour=await ctx.embed_colour(), title=embed_title, description=page
                 )
-                author_obj = self.bot.get_user(playlist.author) or playlist.author or _("Unknown")
+                author_obj = (
+                    await self.bot.get_user_global(playlist.author)
+                    or playlist.author
+                    or _("Unknown")
+                )
                 embed.set_footer(
                     text=_("Page {page}/{pages} | Author: {author_name} | {num} track(s)").format(
                         author_name=author_obj, num=track_len, pages=total_pages, page=numb
@@ -1066,7 +1070,7 @@ class PlaylistCommands(MixinMeta, metaclass=CompositeMetaClass):
                             _("ID: {id}").format(id=playlist.id),
                             _("Tracks: {num}").format(num=len(playlist.tracks)),
                             _("Author: {name}").format(
-                                name=self.bot.get_user(playlist.author)
+                                name=await self.bot.get_user_global(playlist.author)
                                 or playlist.author
                                 or _("Unknown")
                             ),
@@ -1533,7 +1537,7 @@ class PlaylistCommands(MixinMeta, metaclass=CompositeMetaClass):
                 ctx.command.reset_cooldown(ctx)
                 return
             maxlength = await self.config_cache.max_track_length.get_context_value(ctx.guild)
-            author_obj = self.bot.get_user(ctx.author.id)
+            author_obj = await self.bot.get_user_global(ctx.author.id)
             track_len = 0
             try:
                 player = lavalink.get_player(ctx.guild.id)

@@ -380,9 +380,9 @@ class FormattingUtilities(MixinMeta, metaclass=CompositeMetaClass):
             return track.to_string_user() + " "
         return None
 
-    def format_playlist_picker_data(self, pid, pname, ptracks, pauthor, scope) -> str:
+    async def format_playlist_picker_data(self, pid, pname, ptracks, pauthor, scope) -> str:
         """Format the values into a prettified codeblock."""
-        author = self.bot.get_user(pauthor) or pauthor or _("Unknown")
+        author = await self.bot.get_user_global(pauthor) or pauthor or _("Unknown")
         line = _(
             " - Name:   <{pname}>\n"
             " - Scope:  < {scope} >\n"
@@ -395,6 +395,10 @@ class FormattingUtilities(MixinMeta, metaclass=CompositeMetaClass):
         return box(line, lang="md")
 
     async def draw_time(self, ctx) -> str:
+        saber1 = "<:saber1:632678611148865548>"
+        saber2 = "<:saber2:632678634280452106>"
+        saber3 = "<:saber3:632678653116940298>"
+        tiefighter = "<:tiefighter:632674535774355486>"
         player = lavalink.get_player(ctx.guild.id)
         paused = player.paused
         pos = player.position or 1
@@ -402,14 +406,18 @@ class FormattingUtilities(MixinMeta, metaclass=CompositeMetaClass):
         sections = 12
         loc_time = round((pos / dur if dur != 0 else pos) * sections)
         bar = "\N{BOX DRAWINGS HEAVY HORIZONTAL}"
-        seek = "\N{RADIO BUTTON}"
+        hit_loc = False
         if paused:
-            msg = "\N{DOUBLE VERTICAL BAR}\N{VARIATION SELECTOR-16}"
+            msg = f"{tiefighter}{saber1}"
         else:
-            msg = "\N{BLACK RIGHT-POINTING TRIANGLE}\N{VARIATION SELECTOR-16}"
+            msg = f"{saber1}"
         for i in range(sections):
             if i == loc_time:
-                msg += seek
+                hit_loc = True
+                msg += saber3
             else:
-                msg += bar
+                if hit_loc:
+                    msg += bar
+                else:
+                    msg += saber2
         return msg

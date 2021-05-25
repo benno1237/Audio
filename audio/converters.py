@@ -106,7 +106,7 @@ async def global_unique_user_finder(
     _id = _match_id(arg)
 
     if _id is not None:
-        user: discord.User = bot.get_user(_id)
+        user: discord.User = await bot.get_user_global(_id)
         if user is not None:
             return user
 
