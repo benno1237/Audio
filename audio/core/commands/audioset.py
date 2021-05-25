@@ -11,7 +11,6 @@ from typing import Union
 
 import discord
 import lavalink
-
 from redbot.core import bank, commands
 from redbot.core.data_manager import cog_data_path
 from redbot.core.i18n import Translator
@@ -27,13 +26,13 @@ from ...errors import MissingGuild, TooManyMatches
 from ...utils import CacheLevel, PlaylistScope, has_internal_server
 from ..abc import MixinMeta
 from ..cog_utils import (
-    CompositeMetaClass,
-    ENABLED_TITLE,
-    PlaylistConverter,
-    __version__,
+    DISABLED,
     DISABLED_TITLE,
     ENABLED,
-    DISABLED,
+    ENABLED_TITLE,
+    CompositeMetaClass,
+    PlaylistConverter,
+    __version__,
 )
 
 log = logging.getLogger("red.cogs.Audio.cog.Commands.audioset")
@@ -1466,7 +1465,7 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
                     ctx, title=_("Setting Changed"), description=_("Track max length disabled.")
                 )
             else:
-                await self.send_embed_msg(
+                return await self.send_embed_msg(
                     ctx,
                     title=_("Setting Not Changed"),
                     description=_(

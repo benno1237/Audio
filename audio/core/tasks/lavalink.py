@@ -3,9 +3,9 @@ import logging
 from pathlib import Path
 
 import lavalink
-
 from redbot.core import data_manager
 from redbot.core.i18n import Translator
+
 from ...errors import LavalinkDownloadFailed, ShouldAutoRecover
 from ...manager import ServerManager
 from ..abc import MixinMeta

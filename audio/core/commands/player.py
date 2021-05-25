@@ -4,12 +4,10 @@ import logging
 import math
 import time
 from pathlib import Path
-
 from typing import MutableMapping
 
 import discord
 import lavalink
-
 from discord.embeds import EmptyEmbed
 from redbot.core import commands
 from redbot.core.commands import UserInputOptional
@@ -20,14 +18,9 @@ from redbot.core.utils.menus import DEFAULT_CONTROLS, close_menu, menu, next_pag
 
 from ...audio_dataclasses import _PARTIALLY_SUPPORTED_MUSIC_EXT, Query
 from ...audio_logging import IS_DEBUG
-from ...errors import (
-    DatabaseError,
-    QueryUnauthorized,
-    SpotifyFetchError,
-    TrackEnqueueError,
-)
+from ...errors import DatabaseError, QueryUnauthorized, SpotifyFetchError, TrackEnqueueError
 from ..abc import MixinMeta
-from ..cog_utils import CompositeMetaClass, ENABLED_TITLE
+from ..cog_utils import ENABLED_TITLE, CompositeMetaClass
 
 log = logging.getLogger("red.cogs.Audio.cog.Commands.player")
 _ = Translator("Audio", Path(__file__))
@@ -1091,9 +1084,7 @@ class PlayerCommands(MixinMeta, metaclass=CompositeMetaClass):
                 if isinstance(tracks, discord.Message):
                     return
                 if not tracks:
-                    return await self.send_embed_msg(
-                        ctx, title=_("Couldn't generated a mixlist.")
-                    )
+                    return await self.send_embed_msg(ctx, title=_("Couldn't generated a mixlist."))
                 single_track = tracks if isinstance(tracks, lavalink.rest_api.Track) else tracks[0]
                 _id = single_track._info["identifier"]
                 mix = "https://www.youtube.com/watch?v={id}&list=RD{id}".format(id=_id)

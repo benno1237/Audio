@@ -5,7 +5,6 @@ from pathlib import Path
 from typing import MutableMapping
 
 import discord
-
 from redbot.core import commands
 from redbot.core.i18n import Translator
 from redbot.core.utils._dpy_menus_utils import dpymenu

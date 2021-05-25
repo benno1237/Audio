@@ -1,12 +1,11 @@
 from __future__ import annotations
+
 import logging
 import re
-
-from typing import Final, Optional, Pattern, TYPE_CHECKING, Union
+from typing import TYPE_CHECKING, Final, Optional, Pattern, Union
 from urllib.parse import urlparse
 
 import discord
-
 from redbot.core.commands import Context
 
 from ...audio_dataclasses import Query

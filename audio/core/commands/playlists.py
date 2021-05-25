@@ -4,7 +4,6 @@ import math
 import os
 import tarfile
 import time
-
 from io import BytesIO
 from pathlib import Path
 from typing import cast
@@ -16,6 +15,7 @@ try:
     from redbot import json
 except ImportError:
     import json
+
 from redbot.core import commands
 from redbot.core.commands import UserInputOptional
 from redbot.core.data_manager import cog_data_path

@@ -1,10 +1,10 @@
 from __future__ import annotations
+
 import base64
 import contextlib
 import logging
 import time
 from pathlib import Path
-
 from typing import TYPE_CHECKING, List, Mapping, MutableMapping, Optional, Tuple, Union
 
 import aiohttp
@@ -13,6 +13,7 @@ try:
     from redbot import json
 except ImportError:
     import json
+
 from redbot.core import Config
 from redbot.core.bot import Red
 from redbot.core.commands import Cog, Context

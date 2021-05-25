@@ -5,14 +5,13 @@ import re
 from pathlib import Path
 
 import discord
-from lavalink import filters
 import lavalink
+from lavalink import filters
 from lavalink.filters import Equalizer
-from tabulate import tabulate
-
 from redbot.core import commands
 from redbot.core.i18n import Translator
 from redbot.core.utils.chat_formatting import box
+from tabulate import tabulate
 
 from ..abc import MixinMeta
 from ..cog_utils import CompositeMetaClass

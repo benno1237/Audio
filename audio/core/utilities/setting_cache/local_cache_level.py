@@ -3,9 +3,9 @@ from __future__ import annotations
 from typing import Dict, Optional
 
 import discord
+from redbot.cogs.audio.utils import CacheLevel
 
 from .abc import CacheBase
-from redbot.cogs.audio.utils import CacheLevel
 
 
 class LocalCacheLevelManager(CacheBase):

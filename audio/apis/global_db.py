@@ -1,8 +1,8 @@
 from __future__ import annotations
+
 import asyncio
 import contextlib
 import logging
-
 from copy import copy
 from pathlib import Path
 from typing import TYPE_CHECKING, Mapping, Optional, Union
@@ -14,6 +14,7 @@ try:
     from redbot import json
 except ImportError:
     import json
+
 from redbot.core import Config
 from redbot.core.bot import Red
 from redbot.core.commands import Cog

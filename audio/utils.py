@@ -2,13 +2,11 @@ import asyncio
 import contextlib
 import logging
 import time
-
 from enum import Enum, unique
 from pathlib import Path
 from typing import MutableMapping
 
 import discord
-
 from redbot.core import commands
 from redbot.core.i18n import Translator
 

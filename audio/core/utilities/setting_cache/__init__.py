@@ -1,10 +1,10 @@
 from __future__ import annotations
 
 import attr
-
 from redbot.core import Config
 from redbot.core.bot import Red
 
+from .auto_deafen import AutoDeafenManager
 from .autodc import AutoDCManager
 from .autoplay import AutoPlayManager
 from .blacklist_whitelist import WhitelistBlacklistManager
@@ -42,7 +42,6 @@ from .vc_restricted import VCRestrictedManager
 from .volume import VolumeManager
 from .votes_percentage import VotesPercentageManager
 from .voting import VotingManager
-from .auto_deafen import AutoDeafenManager
 
 __all__ = ["SettingCacheManager"]
 

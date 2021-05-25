@@ -2,11 +2,9 @@ import argparse
 import functools
 import re
 from pathlib import Path
-
 from typing import Final, MutableMapping, Optional, Pattern, Tuple, Union
 
 import discord
-
 from redbot.core import commands
 from redbot.core.bot import Red
 from redbot.core.i18n import Translator

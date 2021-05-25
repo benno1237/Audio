@@ -6,7 +6,6 @@ import datetime
 import logging
 import random
 import time
-
 from collections import namedtuple
 from pathlib import Path
 from typing import TYPE_CHECKING, Callable, List, MutableMapping, Optional, Tuple, Union, cast
@@ -14,12 +13,13 @@ from typing import TYPE_CHECKING, Callable, List, MutableMapping, Optional, Tupl
 import aiohttp
 import discord
 import lavalink
-
 from lavalink.rest_api import LoadResult, LoadType, Track
+
 try:
     from redbot import json
 except ImportError:
     import json
+
 from redbot.core import Config, commands
 from redbot.core.bot import Red
 from redbot.core.commands import Cog, Context

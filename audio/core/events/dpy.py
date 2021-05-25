@@ -2,14 +2,12 @@ import asyncio
 import contextlib
 import logging
 import re
-
 from collections import OrderedDict
 from pathlib import Path
 from typing import Final, Pattern
 
 import discord
 import lavalink
-
 from aiohttp import ClientConnectorError
 from discord.ext.commands import CheckFailure
 from redbot.core import commands

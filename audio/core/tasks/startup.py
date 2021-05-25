@@ -4,12 +4,10 @@ import itertools
 import logging
 from collections import namedtuple
 from pathlib import Path
-
 from typing import Optional
 
 import lavalink
 from lavalink.filters import Volume
-
 from redbot.core.data_manager import cog_data_path
 from redbot.core.i18n import Translator
 from redbot.core.utils import AsyncIter

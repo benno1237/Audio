@@ -4,8 +4,8 @@ from pathlib import Path
 from typing import Dict, Optional, Tuple
 
 import discord
-
 from redbot.core.i18n import Translator
+
 from .abc import CacheBase
 
 _ = Translator("Audio", Path(__file__))
