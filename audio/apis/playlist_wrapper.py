@@ -6,7 +6,10 @@ from pathlib import Path
 from types import SimpleNamespace
 from typing import List, MutableMapping, Optional, TYPE_CHECKING
 
-from redbot import json
+try:
+    from redbot import json
+except ImportError:
+    import json
 from redbot.core import Config
 from redbot.core.bot import Red
 from redbot.core.i18n import Translator

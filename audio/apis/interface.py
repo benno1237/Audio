@@ -16,7 +16,10 @@ import discord
 import lavalink
 
 from lavalink.rest_api import LoadResult, LoadType, Track
-from redbot import json
+try:
+    from redbot import json
+except ImportError:
+    import json
 from redbot.core import Config, commands
 from redbot.core.bot import Red
 from redbot.core.commands import Cog, Context

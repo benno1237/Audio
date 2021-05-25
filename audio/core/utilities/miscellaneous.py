@@ -12,7 +12,10 @@ import discord
 import lavalink
 from discord.embeds import EmptyEmbed
 
-from redbot import json
+try:
+    from redbot import json
+except ImportError:
+    import json
 from redbot.core import bank, commands
 from redbot.core.commands import Context
 from redbot.core.i18n import Translator

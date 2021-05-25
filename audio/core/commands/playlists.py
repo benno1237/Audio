@@ -12,7 +12,10 @@ from typing import cast
 import discord
 import lavalink
 
-from redbot import json
+try:
+    from redbot import json
+except ImportError:
+    import json
 from redbot.core import commands
 from redbot.core.commands import UserInputOptional
 from redbot.core.data_manager import cog_data_path

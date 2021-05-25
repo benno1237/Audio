@@ -8,7 +8,10 @@ from typing import Mapping
 import aiohttp
 import discord
 
-from redbot import json
+try:
+    from redbot import json
+except ImportError:
+    import json
 from redbot.core import Config
 from redbot.core.bot import Red
 from redbot.core.commands import Cog
