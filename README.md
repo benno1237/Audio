@@ -13,7 +13,7 @@
 I'm expecting things to be broken, if you are using this at the very least report issues, otherwise if I get people using this without reporting I'll just simply revoke any entries of this.
 
 
-Note: The source code shared Red's GNU General Public License v3.0 (https://github.com/Cog-Creators/Red-DiscordBot(https://github.com/Cog-Creators/Red-DiscordBot/blob/V3/develop/LICENSE); However any changes outside of Cog-Creators/Red-DiscordBot are unlicensed until I commit them into Reds repository.
+Note: The source code shared Red's GNU General Public License v3.0 (https://github.com/Cog-Creators/Red-DiscordBot(https://github.com/Cog-Creators/Red-DiscordBot/blob/V3/develop/LICENSE).
 
 
 
