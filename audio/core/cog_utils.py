@@ -10,9 +10,14 @@ from redbot.core.i18n import Translator
 
 from ..converters import get_lazy_converter, get_lazy_multiline_converter, get_playlist_converter
 
-__version__ = VersionInfo.from_json(
+VERSION = VersionInfo.from_json(
     {"major": 3, "minor": 0, "micro": 0, "releaselevel": "alpha", "serial": 1}
 )
+
+HASH = "9f321436eb299b81b3fa8a034ed6200b3f9354ba"  # FIXME: Add last HASH
+
+__version__ = f"{VERSION}-{HASH}"
+
 
 __author__ = ["aikaterna", "Draper"]
 
@@ -75,7 +80,8 @@ class CompositeMetaClass(type(commands.Cog), type(ABC)):
     """
 
 
-# Both DataReader and DataWriter are taken from https://github.com/Devoxin/Lavalink.py/blob/master/lavalink/datarw.py
+# Both DataReader and DataWriter are taken from
+# https://github.com/Devoxin/Lavalink.py/blob/master/lavalink/datarw.py
 # These are licenced under MIT, Thanks Devoxin for putting these together!
 # The license can be found in https://github.com/Devoxin/Lavalink.py/blob/master/LICENSE
 
@@ -121,24 +127,24 @@ class DataWriter:
     def write_byte(self, byte):
         self._buf.write(byte)
 
-    def write_boolean(self, b):
-        enc = struct.pack("B", 1 if b else 0)
+    def write_boolean(self, boolean):
+        enc = struct.pack("B", 1 if boolean else 0)
         self.write_byte(enc)
 
-    def write_unsigned_short(self, s):
-        enc = struct.pack(">H", s)
+    def write_unsigned_short(self, short):
+        enc = struct.pack(">H", short)
         self._write(enc)
 
-    def write_int(self, i):
-        enc = struct.pack(">i", i)
+    def write_int(self, integer):
+        enc = struct.pack(">i", integer)
         self._write(enc)
 
-    def write_long(self, l):
-        enc = struct.pack(">Q", l)
+    def write_long(self, long):
+        enc = struct.pack(">Q", long)
         self._write(enc)
 
-    def write_utf(self, s):
-        utf = s.encode("utf8")
+    def write_utf(self, string):
+        utf = string.encode("utf8")
         byte_len = len(utf)
 
         if byte_len > 65535:
