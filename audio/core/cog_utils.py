@@ -11,10 +11,10 @@ from redbot.core.i18n import Translator
 from ..converters import get_lazy_converter, get_lazy_multiline_converter, get_playlist_converter
 
 VERSION = VersionInfo.from_json(
-    {"major": 3, "minor": 0, "micro": 0, "releaselevel": "alpha", "serial": 1}
+    {"major": 3, "minor": 0, "micro": 0, "releaselevel": "alpha", "serial": 2}
 )
 
-HASH = "9f321436eb299b81b3fa8a034ed6200b3f9354ba"  # FIXME: Add last HASH
+HASH = "4f99f32afbb830e013a1113a6b99e689a9b7e999"  # FIXME: Add last HASH
 
 __version__ = f"{VERSION}-{HASH}"
 
