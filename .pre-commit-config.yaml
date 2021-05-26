@@ -55,13 +55,17 @@ repos:
       # Checks for git-related issues
       - id: check-case-conflict
       - id: check-merge-conflict
-      - id: no-commit-to-branch
-        args:
-          - "--branch"
-          - "V3/develop"
   - repo: https://github.com/pre-commit/pygrep-hooks
     rev: v1.8.0
     hooks:
       - id: python-check-blanket-noqa
       - id: rst-directive-colons
       - id: rst-inline-touching-normal
+  - repo: https://github.com/Drapersniper/pre-commit-hooks
+    rev: 65b40c60f8d76371255f80bcb20096eb7bb952f6
+    hooks:
+    - id: add-hash-to-file
+      args:
+        - "--tree"
+        - "audio"
+        - "hash.py"
