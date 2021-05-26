@@ -18,6 +18,7 @@ jobs:
       - name: Install pre-commit
         run: |
           pip install -U pre-commit
+
       # Load cached pre-commit environment
       - name: set PY
         run: echo "PY=$(python -VV | sha256sum | cut -d' ' -f1)" >> $GITHUB_ENV
@@ -34,6 +35,7 @@ jobs:
           echo "::add-matcher::.github/workflows/matchers/check-yaml.json"
           echo "::add-matcher::.github/workflows/matchers/codespell.json"
           echo "::add-matcher::.github/workflows/matchers/flake8.json"
+
       # Run pre-commit
       - name: Run pre-commit
         run: |

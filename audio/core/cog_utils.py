@@ -4,20 +4,11 @@ from base64 import b64decode
 from io import BytesIO
 from typing import Final
 
-from redbot import VersionInfo
 from redbot.core import commands
 from redbot.core.i18n import Translator
 
+from ..__version__ import __version__ as __version__  # noqa: F401
 from ..converters import get_lazy_converter, get_lazy_multiline_converter, get_playlist_converter
-
-VERSION = VersionInfo.from_json(
-    {"major": 3, "minor": 0, "micro": 0, "releaselevel": "alpha", "serial": 2}
-)
-
-HASH = "4f99f32afbb830e013a1113a6b99e689a9b7e999"  # FIXME: Add last HASH
-
-__version__ = f"{VERSION}-{HASH}"
-
 
 __author__ = ["aikaterna", "Draper"]
 
