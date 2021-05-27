@@ -1,7 +1,6 @@
 import asyncio
 import asyncio.subprocess  # disables for # https://github.com/PyCQA/pylint/issues/1469
 import contextlib
-import datetime
 import itertools
 import logging
 import pathlib

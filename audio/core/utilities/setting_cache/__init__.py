@@ -97,9 +97,7 @@ class SettingCacheManager:
     managed_lavalink_server_auto_update: LavalinkAutoUpdateManager = cache_factory(
         LavalinkAutoUpdateManager
     )
-    managed_lavalink_meta: LavalinkJarMetaManager = cache_factory(
-        LavalinkJarMetaManager
-    )
+    managed_lavalink_meta: LavalinkJarMetaManager = cache_factory(LavalinkJarMetaManager)
     vc_restricted: VCRestrictedManager = cache_factory(VCRestrictedManager)
     auto_deafen: AutoDeafenManager = cache_factory(AutoDeafenManager)
     max_queue_size: MaxQueueSizerManager = cache_factory(MaxQueueSizerManager)

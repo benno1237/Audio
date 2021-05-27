@@ -2,8 +2,6 @@ from __future__ import annotations
 
 from typing import Dict, Optional, Tuple
 
-import discord
-
 from .abc import CacheBase
 
 
