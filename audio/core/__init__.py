@@ -127,6 +127,10 @@ class Audio(
             max_queue_size=10_000,
             notify=True,
             **self._default_lavalink_settings,
+            lavalink__jar__url=None,
+            lavalink__jar__build=None,
+            lavalink__managed=True,
+            lavalink__autoupdate=False,
         )
 
         default_guild = dict(

@@ -27,6 +27,7 @@ from .local_cache_level import LocalCacheLevelManager
 from .localpath import LocalPathManager
 from .lyrics import PreferLyricsManager
 from .managed_lavalink_auto_update import LavalinkAutoUpdateManager
+from .managed_lavalink_jar import LavalinkJarMetaManager
 from .managed_lavalink_server import ManagedLavalinkManager
 from .max_queue_size import MaxQueueSizerManager
 from .max_track_length import MaxTrackLengthManager
@@ -92,9 +93,12 @@ class SettingCacheManager:
     notify: NotifyManager = cache_factory(NotifyManager)
     status: StatusManager = cache_factory(StatusManager)
     url_restrict: URLRestrictManager = cache_factory(URLRestrictManager)
-    external_lavalink_server: ManagedLavalinkManager = cache_factory(ManagedLavalinkManager)
+    use_managed_lavalink: ManagedLavalinkManager = cache_factory(ManagedLavalinkManager)
     managed_lavalink_server_auto_update: LavalinkAutoUpdateManager = cache_factory(
         LavalinkAutoUpdateManager
+    )
+    managed_lavalink_meta: LavalinkJarMetaManager = cache_factory(
+        LavalinkJarMetaManager
     )
     vc_restricted: VCRestrictedManager = cache_factory(VCRestrictedManager)
     auto_deafen: AutoDeafenManager = cache_factory(AutoDeafenManager)

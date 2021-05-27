@@ -127,11 +127,11 @@ class MiscellaneousUtilities(MixinMeta, metaclass=CompositeMetaClass):
         }
 
     async def update_external_status(self) -> bool:
-        external = await self.config_cache.external_lavalink_server.get_global()
-        if not external:
+        external = await self.config_cache.use_managed_lavalink.get_global()
+        if external:
             if self.player_manager is not None:
                 await self.player_manager.shutdown()
-            await self.config_cache.external_lavalink_server.set_global(True)
+            await self.config_cache.use_managed_lavalink.set_global(False)
             return True
         else:
             return False
@@ -354,6 +354,14 @@ class MiscellaneousUtilities(MixinMeta, metaclass=CompositeMetaClass):
                         },
                     )
             await self.config.schema_version.set(4)
+
+        if from_version < 5 <= to_version:
+            async with self.config.all() as global_data:
+                use_external_lavalink = global_data["use_external_lavalink"]
+                if "lavalink" not in global_data:
+                    global_data["lavalink"] = {}
+                global_data["lavalink"]["use_managed"] = not use_external_lavalink
+            await self.config.schema_version.set(5)
 
         if database_entries:
             await self.api_interface.local_cache_api.lavalink.insert(database_entries)

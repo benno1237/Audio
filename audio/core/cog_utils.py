@@ -12,7 +12,7 @@ from ..converters import get_lazy_converter, get_lazy_multiline_converter, get_p
 
 __author__ = ["aikaterna", "Draper"]
 
-_SCHEMA_VERSION: Final[int] = 4
+_SCHEMA_VERSION: Final[int] = 5
 _OWNER_NOTIFICATION: Final[int] = 1
 
 LazyGreedyConverter = get_lazy_converter("--")

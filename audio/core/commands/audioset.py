@@ -2069,8 +2069,8 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
 
         Enter nothing to reset to default.
         """
-        external = await self.config_cache.external_lavalink_server.get_context_value(ctx.guild)
-        if external:
+        internal = await self.config_cache.use_managed_lavalink.get_context_value(ctx.guild)
+        if not internal:
             return await self.send_embed_msg(
                 ctx,
                 title=_("Invalid Environment"),
@@ -2130,17 +2130,17 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
                     ),
                 )
 
-    @command_audioset_lavalink.command(name="external", aliases=["managed"])
+    @command_audioset_lavalink.command(name="managed", aliases=["external"])
     async def command_audioset_lavalink_external(self, ctx: commands.Context):
         """Toggle using external Lavalink servers."""
-        external = await self.config_cache.external_lavalink_server.get_context_value(ctx.guild)
-        await self.config_cache.external_lavalink_server.set_global(not external)
+        managed = await self.config_cache.use_managed_lavalink.get_context_value(ctx.guild)
+        await self.config_cache.use_managed_lavalink.set_global(not managed)
 
-        if external:
+        if not managed:
             embed = discord.Embed(
                 title=_("Setting Changed"),
-                description=_("External Lavalink server: {true_or_false}.").format(
-                    true_or_false=ENABLED_TITLE if not external else DISABLED_TITLE
+                description=_("Managed Lavalink server: {true_or_false}.").format(
+                    true_or_false=ENABLED_TITLE if not managed else DISABLED_TITLE
                 ),
             )
             await self.send_embed_msg(ctx, embed=embed)
@@ -2153,11 +2153,11 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
                     ctx,
                     title=_("Failed To Shutdown Lavalink"),
                     description=_(
-                        "External Lavalink server: {true_or_false}\n"
+                        "Managed Lavalink server: {true_or_false}\n"
                         "For it to take effect please reload "
                         "Audio (`{prefix}reload audio`)."
                     ).format(
-                        true_or_false=ENABLED_TITLE if not external else DISABLED_TITLE,
+                        true_or_false=ENABLED_TITLE if not managed else DISABLED_TITLE,
                         prefix=ctx.prefix,
                     ),
                 )
@@ -2165,8 +2165,8 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
                 await self.send_embed_msg(
                     ctx,
                     title=_("Setting Changed"),
-                    description=_("External Lavalink server: {true_or_false}.").format(
-                        true_or_false=ENABLED_TITLE if not external else DISABLED_TITLE
+                    description=_("Managed Lavalink server: {true_or_false}.").format(
+                        true_or_false=ENABLED_TITLE if not managed else DISABLED_TITLE
                     ),
                 )
         try:
@@ -2254,13 +2254,138 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
                 ),
             )
 
+    @command_audioset_lavalink.group(name="downloader")
+    async def command_audioset_lavalink_downloader(self, ctx: commands.Context):
+        """Configure the managed Lavalibk downloading options."""
+
+    @command_audioset_lavalink_downloader.command(name="build")
+    async def command_audioset_lavalink_downloader_build(
+        self, ctx: commands.Context, build: int = None
+    ):
+        """Set the build ID to check against when downloading the JAR.
+
+        Note if you set this, we will download this version and will not keep it up to date.
+        """
+        if not await self.config_cache.use_managed_lavalink.get_global():
+            return await self.send_embed_msg(
+                ctx,
+                title=_("Setting Not Changed"),
+                description=_(
+                    "You are only able to set this if you are running a managed Lavalink server."
+                ),
+            )
+        await self.config_cache.managed_lavalink_meta.set_global_build(build)
+        if build:
+            await self.send_embed_msg(
+                ctx,
+                title=_("Setting Changed"),
+                description=_("Lavalink downloader will get build: {build}.").format(build=build),
+            )
+        else:
+            await self.send_embed_msg(
+                ctx,
+                title=_("Setting Changed"),
+                description=_("Lavalink downloader attempt to get the latest known version."),
+            )
+
+    @command_audioset_lavalink_downloader.command(name="url")
+    async def command_audioset_lavalink_downloader_url(
+        self, ctx: commands.Context, url: str = None
+    ):
+        """Set the build ID to check against when downloading the JAR.
+
+        Note if you set this, we will download this version and will not keep it up to date.
+        """
+        if not await self.config_cache.use_managed_lavalink.get_global():
+            return await self.send_embed_msg(
+                ctx,
+                title=_("Setting Not Changed"),
+                description=_(
+                    "You are only able to set this if you are running a managed Lavalink server."
+                ),
+            )
+        await self.config_cache.managed_lavalink_meta.set_global_build(url)
+        if url:
+            await self.send_embed_msg(
+                ctx,
+                title=_("Setting Changed"),
+                description=_("Lavalink downloader will get the following jar: <{url}>.").format(
+                    url=url
+                ),
+            )
+        else:
+            await self.send_embed_msg(
+                ctx,
+                title=_("Setting Changed"),
+                description=_("Lavalink downloader attempt to get the latest known version."),
+            )
+
+    @command_audioset_lavalink_downloader.command(name="stable")
+    async def command_audioset_lavalink_downloader_stable(self, ctx: commands.Context):
+        """Toggle between the pre-release track and the stable track.
+
+        Note This only takes affect if auto-update is enabled and you have not set a URL/Build number.
+        """
+        if not await self.config_cache.use_managed_lavalink.get_global():
+            return await self.send_embed_msg(
+                ctx,
+                title=_("Setting Not Changed"),
+                description=_(
+                    "You are only able to set this if you are running a managed Lavalink server."
+                ),
+            )
+        state = await self.config_cache.managed_lavalink_meta.get_global_stable()
+        await self.config_cache.managed_lavalink_meta.set_global_stable(not state)
+
+        if not state:
+            await self.send_embed_msg(
+                ctx,
+                title=_("Setting Changed"),
+                description=_("Lavalink downloader will use the stable track for JARs."),
+            )
+        else:
+            await self.send_embed_msg(
+                ctx,
+                title=_("Setting Changed"),
+                description=_("Lavalink downloader will use the pre-release track for JARs."),
+            )
+
+    @command_audioset_lavalink_downloader.command(name="update")
+    async def command_audioset_lavalink_downloader_update(self, ctx: commands.Context):
+        """Toggle between the auto-update functionality."""
+        if not await self.config_cache.use_managed_lavalink.get_global():
+            return await self.send_embed_msg(
+                ctx,
+                title=_("Setting Not Changed"),
+                description=_(
+                    "You are only able to set this if you are running a managed Lavalink server."
+                ),
+            )
+        state = await self.config_cache.managed_lavalink_server_auto_update.get_global()
+        await self.config_cache.managed_lavalink_server_auto_update.set_global(not state)
+
+        if not state:
+            await self.send_embed_msg(
+                ctx,
+                title=_("Setting Changed"),
+                description=_(
+                    "Lavalink downloader will now auto-update upon cog reload and bot restart."
+                ),
+            )
+        else:
+            await self.send_embed_msg(
+                ctx,
+                title=_("Setting Changed"),
+                description=_(
+                    "Lavalink downloader will no longer auto-update and will depend on Red version updates."
+                ),
+            )
+
     @command_audioset_lavalink.command(name="info", aliases=["settings"])
     async def command_audioset_lavalink_info(self, ctx: commands.Context):
         """Display Lavalink settings."""
         configs = await self.config.all()
-        use_external_lavalink_server = (
-            await self.config_cache.external_lavalink_server.get_global()
-        )
+        managed = await self.config_cache.use_managed_lavalink.get_global()
         local_path = await self.config_cache.localpath.get_global()
         host = configs["host"]
         password = configs["password"]
@@ -2279,34 +2404,51 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
             + "---        \n"
             + _("Cog version:            [{version}]\n")
             + _("Red-Lavalink:           [{lavalink_version}]\n")
-            + _("External server:        [{use_external_lavalink}]\n")
+            + _("Managed Lavalink:       [{managed}]\n")
         ).format(
             version=__version__,
             lavalink_version=lavalink.__version__,
-            use_external_lavalink=ENABLED_TITLE
-            if use_external_lavalink_server
-            else DISABLED_TITLE,
+            managed=ENABLED_TITLE if managed else DISABLED_TITLE,
         )
-        if (
-            not use_external_lavalink_server
-            and self.player_manager
-            and self.player_manager.ll_build
-        ):
-            msg += _(
-                "Lavalink build:         [{llbuild}]\n"
-                "Lavalink branch:        [{llbranch}]\n"
-                "Release date:           [{build_time}]\n"
-                "Lavaplayer version:     [{lavaplayer}]\n"
-                "Java version:           [{jvm}]\n"
-                "Java Executable:        [{jv_exec}]\n"
-            ).format(
-                build_time=self.player_manager.build_time,
-                llbuild=self.player_manager.ll_build,
-                llbranch=self.player_manager.ll_branch,
-                lavaplayer=self.player_manager.lavaplayer,
-                jvm=self.player_manager.jvm,
-                jv_exec=self.player_manager.path,
+        if managed:
+            if self.player_manager and self.player_manager.ll_build:
+                msg += _(
+                    "Lavalink build:         [{llbuild}]\n"
+                    "Lavalink branch:        [{llbranch}]\n"
+                    "Release date:           [{build_time}]\n"
+                    "Lavaplayer version:     [{lavaplayer}]\n"
+                    "Java version:           [{jvm}]\n"
+                    "Java Executable:        [{jv_exec}]\n"
+                    "Lavalink build:         [{build}]\n"
+                ).format(
+                    build_time=self.player_manager.build_time,
+                    llbuild=self.player_manager.ll_build,
+                    llbranch=self.player_manager.ll_branch,
+                    lavaplayer=self.player_manager.lavaplayer,
+                    jvm=self.player_manager.jvm,
+                    jv_exec=self.player_manager.path,
+                )
+            msg += _("Lavalink auto-update:   [{update}]\n").format(
+                update=await self.config_cache.managed_lavalink_server_auto_update.get_global(),
             )
+
+            custom_url = await self.config_cache.managed_lavalink_meta.get_global_url()
+            if custom_url:
+                msg += _(
+                    "Lavalink build:         [{build}]\n" "Lavalink URL:           [{url}]\n"
+                ).format(
+                    build=await self.config_cache.managed_lavalink_meta.get_global_build(),
+                    url=custom_url,
+                )
+            else:
+                if await self.config_cache.managed_lavalink_meta.get_global_stable():
+                    user_friendly = _("Stable")
+                else:
+                    user_friendly = _("Alpha")
+                msg += _("Download track:         [{track}]\n").format(
+                    track=user_friendly,
+                )
+
         msg += _("Localtracks path:       [{localpath}]\n").format(localpath=local_path)
 
         try:
