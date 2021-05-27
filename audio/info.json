@@ -12,7 +12,8 @@
         "Testing"
     ],
     "requirements": [
-        "git+https://github.com/Drapersniper/Red-Lavalink.git@edge#egg=Red-Lavalink"
+        "git+https://github.com/Drapersniper/Red-Lavalink.git@edge#egg=Red-Lavalink",
+        "PyYAML==5.4.1"
     ],
     "min_bot_version": "3.3.10",
     "end_user_data_statement": "This cog stores metadata and partial messages for playlists and equalizer configuration."

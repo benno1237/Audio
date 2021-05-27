@@ -127,8 +127,8 @@ class MiscellaneousUtilities(MixinMeta, metaclass=CompositeMetaClass):
         }
 
     async def update_external_status(self) -> bool:
-        external = await self.config_cache.use_managed_lavalink.get_global()
-        if external:
+        managed = await self.config_cache.use_managed_lavalink.get_global()
+        if managed:
             if self.player_manager is not None:
                 await self.player_manager.shutdown()
             await self.config_cache.use_managed_lavalink.set_global(False)
@@ -287,7 +287,7 @@ class MiscellaneousUtilities(MixinMeta, metaclass=CompositeMetaClass):
         time_now = int(datetime.datetime.now(datetime.timezone.utc).timestamp())
         if from_version == to_version:
             return
-        if from_version < 2 <= to_version:
+        if from_version < 2 <= to_version:  # Migrate playlists over to SQL databases.
             all_guild_data = await self.config.all_guilds()
             all_playlist = {}
             async for guild_id, guild_data in AsyncIter(all_guild_data.items()):
@@ -332,7 +332,9 @@ class MiscellaneousUtilities(MixinMeta, metaclass=CompositeMetaClass):
                 await self.config.guild(
                     cast(discord.Guild, discord.Object(id=guild_id))
                 ).clear_raw("playlists")
-        if from_version < 3 <= to_version:
+        if (
+            from_version < 3 <= to_version
+        ):  # Something to do with playlists ... i cant remember why this was needed.
             for scope in PlaylistScope.list():
                 scope_playlist = await get_all_playlist_for_migration23(
                     self.bot, self.playlist_api, self.config, scope
@@ -342,7 +344,7 @@ class MiscellaneousUtilities(MixinMeta, metaclass=CompositeMetaClass):
                 await self.config.custom(scope).clear()
             await self.config.schema_version.set(3)
 
-        if from_version < 4 <= to_version:
+        if from_version < 4 <= to_version:  # Migrate DJ Roles to new namespace
             all_guild_data = await self.config.all_guilds()
             async for guild_id, guild_data in AsyncIter(all_guild_data.items()):
                 temp_dj_id = guild_data.pop("dj_role", None)
@@ -355,13 +357,122 @@ class MiscellaneousUtilities(MixinMeta, metaclass=CompositeMetaClass):
                     )
             await self.config.schema_version.set(4)
 
-        if from_version < 5 <= to_version:
+        if from_version < 5 <= to_version:  # Migrate managed node toggle to new namespace
             async with self.config.all() as global_data:
-                use_external_lavalink = global_data["use_external_lavalink"]
+                use_external_lavalink = global_data.pop("use_external_lavalink")
                 if "lavalink" not in global_data:
                     global_data["lavalink"] = {}
-                global_data["lavalink"]["use_managed"] = not use_external_lavalink
+                global_data["lavalink"]["managed"] = not use_external_lavalink
+                del global_data["use_external_lavalink"]
             await self.config.schema_version.set(5)
+
+        if from_version < 6 <= to_version:  # Migrate node connection info to new namespace
+            async with self.config.all() as global_data:
+                host = global_data.pop("host", "localhost")
+                ws_port = global_data.pop("ws_port", 2333)
+                global_data.pop("rest_port", None)
+                password = global_data.pop("password", "youshallnotpass")
+                if "lavalink" not in global_data:
+                    global_data["lavalink"] = {}
+                if "nodes" not in global_data["lavalink"]:
+                    global_data["lavalink"]["nodes"] = {}
+                global_data["lavalink"]["nodes"]["primary"] = {
+                    "host": host,
+                    "port": ws_port,
+                    "rest_uri": f"http://{host}:{ws_port}",
+                    "password": password,
+                    "identifier": "primary",
+                    "region": "",
+                    "shard_id": -1,
+                    "search_only": False,
+                }
+            await self.config.schema_version.set(6)
+
+        if (
+            from_version < 7 <= to_version
+        ):  # Cleanup old entries what been added over the last few years
+            global_keys = {
+                "schema_version",
+                "bundled_playlist_version",
+                "owner_notification",
+                "cache_level",
+                "cache_age",
+                "auto_deafen",
+                "daily_playlists",
+                "daily_playlists_override",
+                "global_db_enabled",
+                "global_db_get_timeout",
+                "localpath",
+                "status",
+                "restrict",
+                "url_keyword_blacklist",
+                "url_keyword_whitelist",
+                "java_exc_path",
+                "volume",
+                "disconnect",
+                "persist_queue",
+                "emptydc_enabled",
+                "emptydc_timer",
+                "emptypause_enabled",
+                "emptypause_timer",
+                "thumbnail",
+                "maxlength",
+                "vc_restricted",
+                "jukebox",
+                "jukebox_price",
+                "country_code",
+                "prefer_lyrics",
+                "max_queue_size",
+                "notify",
+                "lavalink",
+            }
+            guild_keys = {
+                "auto_play",
+                "currently_auto_playing_in",
+                "auto_deafen",
+                "autoplaylist",
+                "persist_queue",
+                "disconnect",
+                "dj_enabled",
+                "dj_roles",
+                "daily_playlists",
+                "emptydc_enabled",
+                "emptydc_timer",
+                "emptypause_enabled",
+                "emptypause_timer",
+                "jukebox",
+                "restrict",
+                "jukebox_price",
+                "maxlength",
+                "notify",
+                "prefer_lyrics",
+                "repeat",
+                "shuffle",
+                "shuffle_bumped",
+                "thumbnail",
+                "volume",
+                "vote_enabled",
+                "vote_percent",
+                "max_queue_size",
+                "room_lock",
+                "url_keyword_blacklist",
+                "url_keyword_whitelist",
+                "country_code",
+                "vc_restricted",
+                "whitelisted_text",
+                "whitelisted_vc",
+            }
+            async with self.config.all() as global_data:
+                for k in list(global_data.keys()):
+                    if k not in global_keys:
+                        del global_data[k]
+
+            async with self.config._get_base_group(self.config.GUILD).all() as guild_data:
+                for gid, gvalue in list(guild_data.items()):
+                    for k in list(gvalue.keys()):
+                        if k not in guild_keys:
+                            del guild_data[gid][k]
+            await self.config.schema_version.set(7)
 
         if database_entries:
             await self.api_interface.local_cache_api.lavalink.insert(database_entries)

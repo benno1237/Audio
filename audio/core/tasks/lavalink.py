@@ -35,17 +35,15 @@ class LavalinkTasks(MixinMeta, metaclass=CompositeMetaClass):
         retry_count = 0
         lazy_external = False
         while retry_count < max_retries:
-            configs = await self.config.all()
-            external = configs["use_external_lavalink"]
-            java_exec = configs["java_exc_path"]
+            external = await self.config_cache.use_managed_lavalink.get_global()
+            java_exec = str(await self.config_cache.java_exec.get_global())
+            host = await self.config_cache.node_config.get_host(node_identifier="primary")
+            password = await self.config_cache.node_config.get_password(node_identifier="primary")
+            port = await self.config_cache.node_config.get_port(node_identifier="primary")
             if external is False:
-                settings = self._default_lavalink_settings
-                host = settings["host"]
-                password = settings["password"]
-                ws_port = settings["ws_port"]
                 if self.player_manager is not None:
                     await self.player_manager.shutdown()
-                self.player_manager = ServerManager(host, password, ws_port, self.config_cache)
+                self.player_manager = ServerManager(host, password, port, self.config_cache)
                 try:
                     await self.player_manager.start(java_exec)
                 except ShouldAutoRecover:
@@ -56,9 +54,6 @@ class LavalinkTasks(MixinMeta, metaclass=CompositeMetaClass):
                         "Managed Lavalink server cannot be started due to port 2333 "
                         "already being taken, attempting to connect to existing server."
                     )
-                    host = configs["host"]
-                    password = configs["password"]
-                    ws_port = configs["ws_port"]
                     lazy_external = True
                     break
                 except LavalinkDownloadFailed as exc:
@@ -92,9 +87,6 @@ class LavalinkTasks(MixinMeta, metaclass=CompositeMetaClass):
                 else:
                     break
             else:
-                host = configs["host"]
-                password = configs["password"]
-                ws_port = configs["ws_port"]
                 break
         else:
             log.critical(
@@ -113,7 +105,7 @@ class LavalinkTasks(MixinMeta, metaclass=CompositeMetaClass):
                     bot=self.bot,
                     host=host,
                     password=password,
-                    ws_port=ws_port,
+                    ws_port=port,
                     timeout=timeout,
                     resume_key=f"Red-Core-Audio-{self.bot.user.id}-{data_manager.instance_name}",
                 )
@@ -149,7 +141,7 @@ class LavalinkTasks(MixinMeta, metaclass=CompositeMetaClass):
                     "set the correct host, password and port using `[p]llset ...` on this bot.",
                     host,
                     password,
-                    ws_port,
+                    port,
                 )
             return
         if external:

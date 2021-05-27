@@ -20,6 +20,7 @@ from .emptypause import EmptyPauseManager
 from .emptypause_timer import EmptyPauseTimerManager
 from .globaldb import GlobalDBManager
 from .globaldb_timeout import GlobalDBTimeoutManager
+from .java_exec import JavaExecPathManager
 from .jukebox import JukeboxManager
 from .jukebox_price import JukeboxPriceManager
 from .local_cache_age import LocalCacheAgeManager
@@ -29,8 +30,10 @@ from .lyrics import PreferLyricsManager
 from .managed_lavalink_auto_update import LavalinkAutoUpdateManager
 from .managed_lavalink_jar import LavalinkJarMetaManager
 from .managed_lavalink_server import ManagedLavalinkManager
+from .managed_node_yaml import ManagedNodeYamlManager
 from .max_queue_size import MaxQueueSizerManager
 from .max_track_length import MaxTrackLengthManager
+from .node_config import NodeConfigManager
 from .notify import NotifyManager
 from .persist_queue import PersistentQueueManager
 from .repeat import RepeatManager
@@ -86,6 +89,7 @@ class SettingCacheManager:
     channel_restrict: ChannelRestrictManager = cache_factory(ChannelRestrictManager)
     volume: VolumeManager = cache_factory(VolumeManager)
     local_cache_age: LocalCacheAgeManager = cache_factory(LocalCacheAgeManager)
+    java_exec: JavaExecPathManager = cache_factory(JavaExecPathManager)
     jukebox: JukeboxManager = cache_factory(JukeboxManager)
     jukebox_price: JukeboxPriceManager = cache_factory(JukeboxPriceManager)
     max_track_length: MaxTrackLengthManager = cache_factory(MaxTrackLengthManager)
@@ -98,6 +102,8 @@ class SettingCacheManager:
         LavalinkAutoUpdateManager
     )
     managed_lavalink_meta: LavalinkJarMetaManager = cache_factory(LavalinkJarMetaManager)
+    managed_lavalink_yaml: ManagedNodeYamlManager = cache_factory(ManagedNodeYamlManager)
+    node_config: NodeConfigManager = cache_factory(NodeConfigManager)
     vc_restricted: VCRestrictedManager = cache_factory(VCRestrictedManager)
     auto_deafen: AutoDeafenManager = cache_factory(AutoDeafenManager)
     max_queue_size: MaxQueueSizerManager = cache_factory(MaxQueueSizerManager)

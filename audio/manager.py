@@ -13,6 +13,7 @@ import tempfile
 from typing import ClassVar, Final, List, Optional, Pattern, Tuple
 
 import aiohttp
+import yaml
 from tqdm import tqdm
 
 try:
@@ -220,10 +221,7 @@ class ServerManager:
 
         await self.maybe_download_jar()
 
-        # Copy the application.yml across.
-        # For people to customise their Lavalink server configuration they need to run it
-        # externally
-        shutil.copyfile(BUNDLED_APP_YML, LAVALINK_APP_YML)
+        await self.process_settings()
 
         args = await self._get_jar_args()
         self._proc = await asyncio.subprocess.create_subprocess_exec(  # pylint:disable=no-member
@@ -300,6 +298,59 @@ class ServerManager:
             return major, minor
 
         raise RuntimeError(f"The output of `{self._java_exc} -version` was unexpected.")
+
+    async def process_settings(self):
+        # Copy the application.yml across.
+        # For people to customise their Lavalink server configuration they need to run it
+        # externally
+        try:
+            with open(BUNDLED_APP_YML, "r") as f:
+                data = yaml.safe_load(f)
+            data["lavalink"]["server"][
+                "bufferDurationMs"
+            ] = await self.config_cache.managed_lavalink_yaml.get_lavalink_buffer()
+            data["lavalink"]["server"][
+                "playerUpdateInterval"
+            ] = await self.config_cache.managed_lavalink_yaml.get_lavalink_update_intervals()
+            data["lavalink"]["server"][
+                "youtubeSearchEnabled"
+            ] = await self.config_cache.managed_lavalink_yaml.get_lavalink_ytsearch()
+            data["lavalink"]["server"][
+                "soundcloudSearchEnabled"
+            ] = await self.config_cache.managed_lavalink_yaml.get_lavalink_scsearch()
+            data["lavalink"]["server"]["sources"][
+                "http"
+            ] = await self.config_cache.managed_lavalink_yaml.get_source_http()
+            data["lavalink"]["server"]["sources"][
+                "local"
+            ] = await self.config_cache.managed_lavalink_yaml.get_source_local()
+            data["lavalink"]["server"]["sources"][
+                "bandcamp"
+            ] = await self.config_cache.managed_lavalink_yaml.get_source_bandcamp()
+            data["lavalink"]["server"]["sources"][
+                "soundcloud"
+            ] = await self.config_cache.managed_lavalink_yaml.get_source_soundcloud()
+            data["lavalink"]["server"]["sources"][
+                "twitch"
+            ] = await self.config_cache.managed_lavalink_yaml.get_source_twitch()
+            data["lavalink"]["server"]["sources"][
+                "youtube"
+            ] = await self.config_cache.managed_lavalink_yaml.get_source_youtube()
+
+            data["lavalink"]["server"][
+                "password"
+            ] = await self.config_cache.managed_lavalink_yaml.get_lavalink_password()
+            data["server"][
+                "address"
+            ] = await self.config_cache.managed_lavalink_yaml.get_server_address()
+            data["server"][
+                "port"
+            ] = await self.config_cache.managed_lavalink_yaml.get_server_port()
+
+            with open(LAVALINK_APP_YML, "w") as f:
+                yaml.safe_dump(data, f)
+        except Exception:
+            raise RuntimeError("The value provided for the setting YAML is incorrect.")
 
     async def _wait_for_launcher(self) -> None:
         log.debug("Waiting for Lavalink server to be ready")
