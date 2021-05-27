@@ -45,7 +45,7 @@ class LavalinkTasks(MixinMeta, metaclass=CompositeMetaClass):
                 ws_port = settings["ws_port"]
                 if self.player_manager is not None:
                     await self.player_manager.shutdown()
-                self.player_manager = ServerManager(host, password, ws_port)
+                self.player_manager = ServerManager(host, password, ws_port, self.config_cache)
                 try:
                     await self.player_manager.start(java_exec)
                 except ShouldAutoRecover:

@@ -1,6 +1,7 @@
 import asyncio
 import asyncio.subprocess  # disables for # https://github.com/PyCQA/pylint/issues/1469
 import contextlib
+import datetime
 import itertools
 import logging
 import pathlib
@@ -92,7 +93,7 @@ LAVALINK_JAR_ENDPOINT: Final[
 ] = "https://api.github.com/repos/Cog-Creators/Lavalink-Jars/releases"
 
 
-async def get_latest_lavalink_release(stable=True):
+async def get_latest_lavalink_release(stable=True, date=False):
     async with aiohttp.ClientSession() as session:
         async with session.get(LAVALINK_JAR_ENDPOINT) as resp:
             if resp.status != 200:
@@ -103,7 +104,7 @@ async def get_latest_lavalink_release(stable=True):
                     filter(lambda d: d["prerelease"] is False and d["draft"] is False, data)
                 )
             data = sorted(data, key=lambda k: k["published_at"], reverse=True)[0] or {}
-            return (
+            output = (
                 data.get("name"),
                 data.get("tag_name"),
                 next(
@@ -115,6 +116,15 @@ async def get_latest_lavalink_release(stable=True):
                     None,
                 ),
             )
+            if not date:
+                return output
+            else:
+                return (
+                    output[0],
+                    output[1],
+                    output[2],
+                    data.get("published_at", datetime.datetime.now()),
+                )
 
 
 class ServerManager:

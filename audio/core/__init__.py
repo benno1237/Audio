@@ -131,6 +131,7 @@ class Audio(
             lavalink__jar__build=None,
             lavalink__managed=True,
             lavalink__autoupdate=False,
+            lavalink__jar__stable=True,
         )
 
         default_guild = dict(

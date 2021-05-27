@@ -23,6 +23,7 @@ from redbot.core.utils.predicates import MessagePredicate, ReactionPredicate
 from ...audio_dataclasses import LocalPath
 from ...converters import ScopeParser
 from ...errors import MissingGuild, TooManyMatches
+from ...manager import get_latest_lavalink_release
 from ...utils import CacheLevel, PlaylistScope, has_internal_server
 from ..abc import MixinMeta
 from ..cog_utils import (
@@ -2254,7 +2255,7 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
                 ),
             )
 
-    @command_audioset_lavalink.group(name="downloader")
+    @command_audioset_lavalink.group(name="downloader", aliases=["dl"])
     async def command_audioset_lavalink_downloader(self, ctx: commands.Context):
         """Configure the managed Lavalibk downloading options."""
 
@@ -2292,7 +2293,7 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
     async def command_audioset_lavalink_downloader_url(
         self, ctx: commands.Context, url: str = None
     ):
-        """Set the build ID to check against when downloading the JAR.
+        """Set the **direct** URL to download the JAR from.
 
         Note if you set this, we will download this version and will not keep it up to date.
         """
@@ -2380,6 +2381,33 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
                     "Lavalink downloader will no longer auto-update and will depend on Red version updates."
                 ),
             )
+
+    @command_audioset_lavalink_downloader.command(name="check")
+    async def command_audioset_lavalink_downloader_check(self, ctx: commands.Context):
+        """See the latest version of Red's Lavalink server."""
+
+        name, tag, url, date = await get_latest_lavalink_release(date=True)
+        version, build = tag.split("_")
+        msg = "----" + _("Release Builds") + "----        \n"
+        msg += _("Release Version:  [{version}]\n").format(version=version)
+        msg += _("Release Build:    [{build}]\n").format(build=build)
+        msg += _("Release Date:     [{published}]\n").format(published=date)
+        msg += _("Release URL:      [{url}]\n\n").format(url=url)
+
+        if await self.config_cache.managed_lavalink_meta.get_global_stable():
+            with contextlib.suppress(Exception):
+                alpha_name, alpha_tag, alpha_url, alpha_date = await get_latest_lavalink_release(
+                    False, date=True
+                )
+                alpha_version, alpha_build = alpha_tag.split("_")
+                if int(alpha_build) > int(build):
+                    msg += "----" + _("Alpha Builds") + "----        \n"
+                    msg += _("Alpha Version:  [{version}]\n").format(version=alpha_version)
+                    msg += _("Alpha Build:    [{build}]\n").format(build=alpha_build)
+                    msg += _("Alpha Date:     [{published}]\n").format(published=alpha_date)
+                    msg += _("Alpha URL:      [{url}]\n\n").format(url=alpha_url)
+
+        await self.send_embed_msg(ctx, description=box(msg, lang="ini"))
 
     @command_audioset_lavalink.command(name="info", aliases=["settings"])
     async def command_audioset_lavalink_info(self, ctx: commands.Context):
