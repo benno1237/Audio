@@ -11,7 +11,7 @@ class AudioError(Exception):
 
 
 class ShouldAutoRecover(AudioError, RuntimeError):
-    """Spawning a Lavalink server failed, this error is raised when the bot should attempt to connect to external."""
+    """Spawning a Lavalink Nonde failed, this error is raised when the bot should attempt to connect to external."""
 
 
 class LavalinkDownloadFailed(AudioError, RuntimeError):

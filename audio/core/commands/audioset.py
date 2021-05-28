@@ -2009,7 +2009,7 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
 
     @command_audioset_lavalink.command(name="restart")
     async def command_audioset_lavalink_restart(self, ctx: commands.Context):
-        """Restarts the lavalink connection."""
+        """Restarts the node connection."""
         async with ctx.typing():
             await lavalink.close(self.bot)
             if self.player_manager is not None:
@@ -2051,7 +2051,7 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         await self.config_cache.node_config.set_host(node_identifier=node, set_to=host)
         footer = None
         if await self.update_external_status():
-            footer = _("External Lavalink server set to True.")
+            footer = _("External node set to True.")
         await self.send_embed_msg(
             ctx,
             title=_("Setting Changed"),
@@ -2087,7 +2087,7 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
 
         footer = None
         if await self.update_external_status():
-            footer = _("External Lavalink server set to True.")
+            footer = _("External node set to True.")
         await self.send_embed_msg(
             ctx,
             title=_("Setting Changed"),
@@ -2110,7 +2110,7 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
     async def command_audioset_lavalink_node_port(
         self, ctx: commands.Context, port: int, node: str = "primary"
     ):
-        """Set the Lavalink websocket port for the node."""
+        """Set the node websocket port for the node."""
         if node not in (nodes := await self.config_cache.node_config.get_all_identifiers()):
             return await self.send_embed_msg(
                 ctx,
@@ -2122,7 +2122,7 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         await self.config_cache.node_config.set_port(node_identifier=node, set_to=port)
         footer = None
         if await self.update_external_status():
-            footer = _("External Lavalink server set to True.")
+            footer = _("External node set to True.")
         await self.send_embed_msg(
             ctx,
             title=_("Setting Changed"),
@@ -2160,7 +2160,7 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         rest_uri = await self.config_cache.node_config.get_rest_uri(node_identifier=node)
         footer = None
         if await self.update_external_status():
-            footer = _("External Lavalink server set to True.")
+            footer = _("External node set to True.")
         await self.send_embed_msg(
             ctx,
             title=_("Setting Changed"),
@@ -2199,7 +2199,7 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
 
         footer = None
         if await self.update_external_status():
-            footer = _("External Lavalink server set to True.")
+            footer = _("External node set to True.")
         await self.send_embed_msg(
             ctx,
             title=_("Setting Changed"),
@@ -2239,7 +2239,7 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         shard_id = await self.config_cache.node_config.get_shard_id(node_identifier=node)
         footer = None
         if await self.update_external_status():
-            footer = _("External Lavalink server set to True.")
+            footer = _("External node set to True.")
         if shard_id != -1:
             await self.send_embed_msg(
                 ctx,
@@ -2287,7 +2287,7 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         await self.config_cache.node_config.set_search_only(node_identifier=node, set_to=not state)
         footer = None
         if await self.update_external_status():
-            footer = _("External Lavalink server set to True.")
+            footer = _("External node set to True.")
         await self.send_embed_msg(
             ctx,
             title=_("Setting Changed"),
@@ -2314,7 +2314,7 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
 
     @command_audioset_lavalink_managed.command(name="logs")
     async def command_audioset_lavalink_logs(self, ctx: commands.Context):
-        """Sends the Lavalink server logs to your DMs."""
+        """Sends the managed node logs to your DMs."""
         if not await self.config_cache.use_managed_lavalink.get_context_value(ctx.guild):
             return await self.send_embed_msg(
                 ctx,
@@ -2438,7 +2438,7 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         if not managed:
             embed = discord.Embed(
                 title=_("Setting Changed"),
-                description=_("Managed Lavalink server: {true_or_false}.").format(
+                description=_("Managed node: {true_or_false}.").format(
                     true_or_false=ENABLED_TITLE if not managed else DISABLED_TITLE
                 ),
             )
@@ -2452,7 +2452,7 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
                     ctx,
                     title=_("Failed To Shutdown Lavalink"),
                     description=_(
-                        "Managed Lavalink server: {true_or_false}\n"
+                        "Managed node: {true_or_false}\n"
                         "For it to take effect please reload "
                         "Audio (`{prefix}reload audio`)."
                     ).format(
@@ -2464,7 +2464,7 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
                 await self.send_embed_msg(
                     ctx,
                     title=_("Setting Changed"),
-                    description=_("Managed Lavalink server: {true_or_false}.").format(
+                    description=_("Managed node: {true_or_false}.").format(
                         true_or_false=ENABLED_TITLE if not managed else DISABLED_TITLE
                     ),
                 )
@@ -2497,9 +2497,7 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
             return await self.send_embed_msg(
                 ctx,
                 title=_("Setting Not Changed"),
-                description=_(
-                    "You are only able to set this if you are running a managed Lavalink server."
-                ),
+                description=_("You are only able to set this if you are running a managed node."),
             )
         await self.config_cache.managed_lavalink_meta.set_global_build(build)
         if build:
@@ -2529,9 +2527,7 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
             return await self.send_embed_msg(
                 ctx,
                 title=_("Setting Not Changed"),
-                description=_(
-                    "You are only able to set this if you are running a managed Lavalink server."
-                ),
+                description=_("You are only able to set this if you are running a node."),
             )
         await self.config_cache.managed_lavalink_meta.set_global_build(url)
         if url:
@@ -2569,9 +2565,7 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
             return await self.send_embed_msg(
                 ctx,
                 title=_("Setting Not Changed"),
-                description=_(
-                    "You are only able to set this if you are running a managed Lavalink server."
-                ),
+                description=_("You are only able to set this if you are running a managed node."),
             )
 
         await self.config_cache.managed_lavalink_yaml.set_server_address(set_to=host)
@@ -2580,7 +2574,7 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
             ctx,
             title=_("Setting Changed"),
             description=_(
-                "Lavalink server will now accept connection on {host}.\n\n"
+                "Managed node will now accept connection on {host}.\n\n"
                 "Run `{p}{cmd}` for it to take effect."
             ).format(
                 host=host, p=ctx.prefix, cmd=self.command_audioset_lavalink_restart.qualified_name
@@ -2601,9 +2595,7 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
             return await self.send_embed_msg(
                 ctx,
                 title=_("Setting Not Changed"),
-                description=_(
-                    "You are only able to set this if you are running a managed Lavalink server."
-                ),
+                description=_("You are only able to set this if you are running a managed node."),
             )
 
         await self.config_cache.managed_lavalink_yaml.set_lavalink_password(set_to=password)
@@ -2612,7 +2604,7 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
             ctx,
             title=_("Setting Changed"),
             description=_(
-                "Lavalink server will now accept {password} as the authorization token.\n\n"
+                "Managed node will now accept {password} as the authorization token.\n\n"
                 "Run `{p}{cmd}` for it to take effect."
             ).format(
                 password=password,
@@ -2633,9 +2625,7 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
             return await self.send_embed_msg(
                 ctx,
                 title=_("Setting Not Changed"),
-                description=_(
-                    "You are only able to set this if you are running a managed Lavalink server."
-                ),
+                description=_("You are only able to set this if you are running a managed node."),
             )
 
         await self.config_cache.managed_lavalink_yaml.set_server_port(set_to=port)
@@ -2644,7 +2634,7 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
             ctx,
             title=_("Setting Changed"),
             description=_(
-                "Lavalink server will now accept connection on {port}.\n\n"
+                "Managed node will now accept connection on {port}.\n\n"
                 "Run `{p}{cmd}` for it to take effect."
             ).format(
                 port=port, p=ctx.prefix, cmd=self.command_audioset_lavalink_restart.qualified_name
@@ -2662,9 +2652,7 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
             return await self.send_embed_msg(
                 ctx,
                 title=_("Setting Not Changed"),
-                description=_(
-                    "You are only able to set this if you are running a managed Lavalink server."
-                ),
+                description=_("You are only able to set this if you are running a managed node."),
             )
 
         state = await self.config_cache.managed_lavalink_yaml.get_source_http()
@@ -2674,7 +2662,7 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
                 ctx,
                 title=_("Setting Changed"),
                 description=_(
-                    "Lavalink will allow playback from direct URLs.\n\n"
+                    "Managed node will allow playback from direct URLs.\n\n"
                     "Run `{p}{cmd}` for it to take effect."
                 ).format(p=ctx.prefix, cmd=self.command_audioset_lavalink_restart.qualified_name),
             )
@@ -2683,7 +2671,7 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
                 ctx,
                 title=_("Setting Changed"),
                 description=_(
-                    "Lavalink will not play from direct URLs anymore.\n\n"
+                    "Managed node will not play from direct URLs anymore.\n\n"
                     "Run `{p}{cmd}` for it to take effect."
                 ).format(p=ctx.prefix, cmd=self.command_audioset_lavalink_restart.qualified_name),
             )
@@ -2697,9 +2685,7 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
             return await self.send_embed_msg(
                 ctx,
                 title=_("Setting Not Changed"),
-                description=_(
-                    "You are only able to set this if you are running a managed Lavalink server."
-                ),
+                description=_("You are only able to set this if you are running a managed node."),
             )
 
         state = await self.config_cache.managed_lavalink_yaml.get_source_bandcamp()
@@ -2709,7 +2695,7 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
                 ctx,
                 title=_("Setting Changed"),
                 description=_(
-                    "Lavalink will allow playback from Bandcamp.\n\n"
+                    "Managed node will allow playback from Bandcamp.\n\n"
                     "Run `{p}{cmd}` for it to take effect."
                 ).format(p=ctx.prefix, cmd=self.command_audioset_lavalink_restart.qualified_name),
             )
@@ -2718,7 +2704,7 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
                 ctx,
                 title=_("Setting Changed"),
                 description=_(
-                    "Lavalink will not play from Bandcamp anymore.\n\n"
+                    "Managed node will not play from Bandcamp anymore.\n\n"
                     "Run `{p}{cmd}` for it to take effect."
                 ).format(p=ctx.prefix, cmd=self.command_audioset_lavalink_restart.qualified_name),
             )
@@ -2730,9 +2716,7 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
             return await self.send_embed_msg(
                 ctx,
                 title=_("Setting Not Changed"),
-                description=_(
-                    "You are only able to set this if you are running a managed Lavalink server."
-                ),
+                description=_("You are only able to set this if you are running a managed node."),
             )
 
         state = await self.config_cache.managed_lavalink_yaml.get_source_local()
@@ -2742,7 +2726,7 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
                 ctx,
                 title=_("Setting Changed"),
                 description=_(
-                    "Lavalink will allow playback from local files.\n\n"
+                    "Managed node will allow playback from local files.\n\n"
                     "Run `{p}{cmd}` for it to take effect."
                 ).format(p=ctx.prefix, cmd=self.command_audioset_lavalink_restart.qualified_name),
             )
@@ -2751,7 +2735,7 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
                 ctx,
                 title=_("Setting Changed"),
                 description=_(
-                    "Lavalink will not play from local files anymore.\n\n"
+                    "Managed node will not play from local files anymore.\n\n"
                     "Run `{p}{cmd}` for it to take effect."
                 ).format(p=ctx.prefix, cmd=self.command_audioset_lavalink_restart.qualified_name),
             )
@@ -2765,9 +2749,7 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
             return await self.send_embed_msg(
                 ctx,
                 title=_("Setting Not Changed"),
-                description=_(
-                    "You are only able to set this if you are running a managed Lavalink server."
-                ),
+                description=_("You are only able to set this if you are running a managed node."),
             )
 
         state = await self.config_cache.managed_lavalink_yaml.get_source_soundcloud()
@@ -2777,7 +2759,7 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
                 ctx,
                 title=_("Setting Changed"),
                 description=_(
-                    "Lavalink will allow playback from Soundcloud.\n\n"
+                    "Managed node will allow playback from Soundcloud.\n\n"
                     "Run `{p}{cmd}` for it to take effect."
                 ).format(p=ctx.prefix, cmd=self.command_audioset_lavalink_restart.qualified_name),
             )
@@ -2786,7 +2768,7 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
                 ctx,
                 title=_("Setting Changed"),
                 description=_(
-                    "Lavalink will not play from Soundcloud anymore.\n\n"
+                    "Managed node will not play from Soundcloud anymore.\n\n"
                     "Run `{p}{cmd}` for it to take effect."
                 ).format(p=ctx.prefix, cmd=self.command_audioset_lavalink_restart.qualified_name),
             )
@@ -2798,9 +2780,7 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
             return await self.send_embed_msg(
                 ctx,
                 title=_("Setting Not Changed"),
-                description=_(
-                    "You are only able to set this if you are running a managed Lavalink server."
-                ),
+                description=_("You are only able to set this if you are running a managed node."),
             )
 
         state = await self.config_cache.managed_lavalink_yaml.get_source_youtube()
@@ -2810,7 +2790,7 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
                 ctx,
                 title=_("Setting Changed"),
                 description=_(
-                    "Lavalink will allow playback from YouTube.\n\n"
+                    "Managed node will allow playback from YouTube.\n\n"
                     "Run `{p}{cmd}` for it to take effect."
                 ).format(p=ctx.prefix, cmd=self.command_audioset_lavalink_restart.qualified_name),
             )
@@ -2819,7 +2799,7 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
                 ctx,
                 title=_("Setting Changed"),
                 description=_(
-                    "Lavalink will not play from YouTube anymore.\n\n"
+                    "Managed node will not play from YouTube anymore.\n\n"
                     "Run `{p}{cmd}` for it to take effect."
                 ).format(p=ctx.prefix, cmd=self.command_audioset_lavalink_restart.qualified_name),
             )
@@ -2831,9 +2811,7 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
             return await self.send_embed_msg(
                 ctx,
                 title=_("Setting Not Changed"),
-                description=_(
-                    "You are only able to set this if you are running a managed Lavalink server."
-                ),
+                description=_("You are only able to set this if you are running a managed node."),
             )
 
         state = await self.config_cache.managed_lavalink_yaml.get_source_twitch()
@@ -2843,7 +2821,7 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
                 ctx,
                 title=_("Setting Changed"),
                 description=_(
-                    "Lavalink will allow playback from Twitch.\n\n"
+                    "Managed node will allow playback from Twitch.\n\n"
                     "Run `{p}{cmd}` for it to take effect."
                 ).format(p=ctx.prefix, cmd=self.command_audioset_lavalink_restart.qualified_name),
             )
@@ -2852,7 +2830,7 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
                 ctx,
                 title=_("Setting Changed"),
                 description=_(
-                    "Lavalink will not play from Twitch anymore.\n\n"
+                    "Managed node will not play from Twitch anymore.\n\n"
                     "Run `{p}{cmd}` for it to take effect."
                 ).format(p=ctx.prefix, cmd=self.command_audioset_lavalink_restart.qualified_name),
             )
@@ -2869,9 +2847,7 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
             return await self.send_embed_msg(
                 ctx,
                 title=_("Setting Not Changed"),
-                description=_(
-                    "You are only able to set this if you are running a managed Lavalink server."
-                ),
+                description=_("You are only able to set this if you are running a managed node."),
             )
         state = await self.config_cache.managed_lavalink_meta.get_global_stable()
         await self.config_cache.managed_lavalink_meta.set_global_stable(not state)
@@ -2880,13 +2856,13 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
             await self.send_embed_msg(
                 ctx,
                 title=_("Setting Changed"),
-                description=_("Lavalink downloader will use the stable track for JARs."),
+                description=_("Managed node downloader will use the stable track for JARs."),
             )
         else:
             await self.send_embed_msg(
                 ctx,
                 title=_("Setting Changed"),
-                description=_("Lavalink downloader will use the pre-release track for JARs."),
+                description=_("Managed node downloader will use the pre-release track for JARs."),
             )
 
     @command_audioset_lavalink_managed_downloader.command(name="update")
@@ -2896,9 +2872,7 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
             return await self.send_embed_msg(
                 ctx,
                 title=_("Setting Not Changed"),
-                description=_(
-                    "You are only able to set this if you are running a managed Lavalink server."
-                ),
+                description=_("You are only able to set this if you are running a managed node."),
             )
         state = await self.config_cache.managed_lavalink_server_auto_update.get_global()
         await self.config_cache.managed_lavalink_server_auto_update.set_global(not state)
@@ -2908,7 +2882,7 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
                 ctx,
                 title=_("Setting Changed"),
                 description=_(
-                    "Lavalink downloader will now auto-update upon cog reload and bot restart."
+                    "Managed node downloader will now auto-update upon cog reload and bot restart."
                 ),
             )
         else:
@@ -2916,7 +2890,7 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
                 ctx,
                 title=_("Setting Changed"),
                 description=_(
-                    "Lavalink downloader will no longer auto-update and will depend on Red version updates."
+                    "Managed node downloader will no longer auto-update and will depend on Red version updates."
                 ),
             )
 
@@ -2949,7 +2923,7 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
 
     @command_audioset_lavalink.command(name="info", aliases=["settings"])
     async def command_audioset_lavalink_info(self, ctx: commands.Context, node: str = "primary"):
-        """Display Lavalink settings."""
+        """Display node settings."""
         if node not in (nodes := await self.config_cache.node_config.get_all_identifiers()):
             return await self.send_embed_msg(
                 ctx,
@@ -2991,7 +2965,9 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
             lavalink_version=lavalink.__version__,
             managed=ENABLED_TITLE if managed else DISABLED_TITLE,
         )
+        print(0, managed)
         if managed:
+            print(1, self.player_manager, self.player_manager.ll_build)
             if self.player_manager and self.player_manager.ll_build:
                 msg += _(
                     "Lavalink build:         [{llbuild}]\n"

@@ -32,16 +32,17 @@ class DpyEvents(MixinMeta, metaclass=CompositeMetaClass):
         # so that we have a better way to handle the tasks
         if self.command_audioset_lavalink in [ctx.command, ctx.command.root_parent]:
             pass
-
         elif self.lavalink_connect_task and self.lavalink_connect_task.cancelled():
-            await ctx.send(
-                _(
-                    "You have attempted to run Audio's Lavalink server on an unsupported"
-                    " architecture. Only settings related commands will be available."
+            # This message does not need to be shown to non Owners,
+            if await ctx.bot.is_owner(ctx.author):
+                await ctx.send(
+                    _(
+                        "You have attempted to run our Lavalink node on an unsupported"
+                        " architecture. Only settings related commands will be available."
+                    )
                 )
-            )
             raise RuntimeError(
-                "Not running audio command due to invalid machine architecture for Lavalink."
+                "Not running Audio command due to invalid machine architecture for Lavalink."
             )
 
         current_perms = ctx.channel.permissions_for(ctx.me)
