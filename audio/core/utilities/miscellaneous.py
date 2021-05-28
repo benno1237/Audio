@@ -359,11 +359,10 @@ class MiscellaneousUtilities(MixinMeta, metaclass=CompositeMetaClass):
 
         if from_version < 5 <= to_version:  # Migrate managed node toggle to new namespace
             async with self.config.all() as global_data:
-                use_external_lavalink = global_data.pop("use_external_lavalink")
+                use_external_lavalink = global_data.pop("use_external_lavalink", False)
                 if "lavalink" not in global_data:
                     global_data["lavalink"] = {}
                 global_data["lavalink"]["managed"] = not use_external_lavalink
-                del global_data["use_external_lavalink"]
             await self.config.schema_version.set(5)
 
         if from_version < 6 <= to_version:  # Migrate node connection info to new namespace
