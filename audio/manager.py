@@ -98,7 +98,7 @@ async def get_latest_lavalink_release(stable=True, date=False):
     async with aiohttp.ClientSession() as session:
         async with session.get(LAVALINK_JAR_ENDPOINT) as resp:
             if resp.status != 200:
-                return
+                return "", "0_0", "0", None
             data = await resp.json(loads=json.loads)
             if stable:
                 data = list(
@@ -116,6 +116,7 @@ async def get_latest_lavalink_release(stable=True, date=False):
                     ),
                     None,
                 ),
+                None,
             )
             if not date:
                 return output
@@ -197,7 +198,7 @@ class ServerManager:
         else:
             if await self.config_cache.managed_lavalink_server_auto_update.get_global():
                 with contextlib.suppress(Exception):
-                    name, tag, url = await get_latest_lavalink_release()
+                    name, tag, url, _nothing = await get_latest_lavalink_release()
                     if name and "_" in name:
                         tag = name
                         version, build = name.split("_")
