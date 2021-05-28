@@ -30,7 +30,7 @@ from .utils import task_callback
 _ = Translator("Audio", pathlib.Path(__file__))
 log = logging.getLogger("red.Audio.manager")
 JAR_VERSION: Final[str] = "3.3.2.3"
-JAR_BUILD: Final[int] = 1234
+JAR_BUILD: Final[int] = 1235
 LAVALINK_DOWNLOAD_URL: Final[str] = (
     "https://github.com/Drapersniper/Lavalink-Jars/releases/download/"
     f"{JAR_VERSION}_{JAR_BUILD}/"
@@ -304,6 +304,9 @@ class ServerManager:
         try:
             with open(BUNDLED_APP_YML, "r") as f:
                 data = yaml.safe_load(f)
+            data["lavalink"]["server"][
+                "jdanas"
+            ] = await self.config_cache.managed_lavalink_yaml.get_jda_nsa()
             data["lavalink"]["server"][
                 "bufferDurationMs"
             ] = await self.config_cache.managed_lavalink_yaml.get_lavalink_buffer()
