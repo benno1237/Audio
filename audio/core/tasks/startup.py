@@ -6,6 +6,7 @@ from pathlib import Path
 from typing import Optional
 
 import lavalink
+from dislash import slash_commands
 from lavalink.filters import Volume
 from redbot.core.data_manager import cog_data_path
 from redbot.core.i18n import Translator
@@ -31,6 +32,11 @@ class StartUpTasks(MixinMeta, metaclass=CompositeMetaClass):
         # If it waits for ready in startup, we cause a deadlock during initial load
         # as initial load happens before the bot can ever be ready.
         lavalink.set_logging_level(self.bot._cli_flags.logging_level)
+        if not hasattr(self.bot, "slash"):
+            self.bot.slash = slash_commands.SlashClient(self.bot)
+        elif not isinstance(self.bot.slash, slash_commands.SlashClient):
+            raise RuntimeError("Audio requires `bot.slash` to be a `SlashClient` object.")
+
         self.cog_init_task = self.bot.loop.create_task(self.initialize())
         self.cog_init_task.add_done_callback(task_callback)
 
