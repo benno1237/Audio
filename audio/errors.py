@@ -1,6 +1,7 @@
 from pathlib import Path
 
 import aiohttp
+from redbot.core.commands import UserFeedbackCheckFailure
 from redbot.core.i18n import Translator
 
 _ = Translator("Audio", Path(__file__))
@@ -123,3 +124,10 @@ class InvalidLocalTrack(LocalTrackError):
 
 class InvalidLocalTrackFolder(LocalTrackError):
     """Base exception for local track errors."""
+
+
+class CommandRejected(AudioError, UserFeedbackCheckFailure):
+    """An Audio command is rejected."""
+
+    def __init__(self, message: str, reason: str):
+        super().__init__()
