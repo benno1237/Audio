@@ -131,3 +131,5 @@ class CommandRejected(AudioError, UserFeedbackCheckFailure):
 
     def __init__(self, message: str, reason: str):
         super().__init__()
+        self.message = message
+        self.reason = reason
