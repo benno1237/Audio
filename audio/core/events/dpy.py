@@ -15,7 +15,7 @@ from redbot.core.i18n import Translator
 from redbot.core.utils.chat_formatting import box, humanize_list
 
 from ...audio_logging import debug_exc_log
-from ...errors import TrackEnqueueError
+from ...errors import CommandRejected, TrackEnqueueError
 from ..abc import MixinMeta
 from ..cog_utils import HUMANIZED_PERM, CompositeMetaClass
 
@@ -30,19 +30,59 @@ class DpyEvents(MixinMeta, metaclass=CompositeMetaClass):
         # check for unsupported arch
         # Check on this needs refactoring at a later date
         # so that we have a better way to handle the tasks
+        is_owner = await ctx.bot.is_owner(ctx.author)
         if self.command_audioset_lavalink in [ctx.command, ctx.command.root_parent]:
             pass
-
         elif self.lavalink_connect_task and self.lavalink_connect_task.cancelled():
-            await ctx.send(
-                _(
-                    "You have attempted to run Audio's Lavalink server on an unsupported"
-                    " architecture. Only settings related commands will be available."
+            # This message does not need to be shown to non Owners,
+            if is_owner:
+                await ctx.send(
+                    _(
+                        "You have attempted to run our Lavalink node on an unsupported"
+                        " architecture. Only settings related commands will be available."
+                    )
                 )
-            )
             raise RuntimeError(
-                "Not running audio command due to invalid machine architecture for Lavalink."
+                "Not running Audio command due to invalid machine architecture for Lavalink."
             )
+        not_deafened_commands = [  # TODO: Add the missing ones to the ABC
+            self.command_play,
+            self.command_prev,
+            self.command_playlist,
+            self.command_autoplay,
+            self.command_bump,
+            self.command_bumpplay,
+            self.command_disconnect,
+            self.command_effects,
+            self.command_equalizer,
+            self.command_genre,
+            self.command_local,
+            self.command_pause,
+            self.command_playmix,
+            self.command_search,
+            self.command_seek,
+            self.command_sing,
+            self.command_skip,
+            self.command_stop,
+            self.command_summon,
+            self.command_volume,
+        ]
+        if not is_owner and ctx.guild:
+            dj_enabled = await self.config_cache.dj_status.get_context_value(ctx.guild)
+
+            if not (
+                ctx.author.id == ctx.guild.owner_id
+                or (dj_enabled and await self._has_dj_role(ctx, ctx.author))
+                or await self.bot.is_mod(ctx.author)
+            ) and any(
+                command in not_deafened_commands
+                for command in [ctx.command, ctx.command.root_parent]
+            ):
+                voice: discord.VoiceState = ctx.author.voice
+                if ctx.author.voice:
+                    if voice.self_deaf or voice.deaf:
+                        msg = _("You are unable to run this command while deafened.")
+                        raise CommandRejected(message=msg, reason="deafened")
 
         current_perms = ctx.channel.permissions_for(ctx.me)
         surpass_ignore = (
@@ -112,7 +152,15 @@ class DpyEvents(MixinMeta, metaclass=CompositeMetaClass):
     async def cog_command_error(self, ctx: commands.Context, error: Exception) -> None:
         error = getattr(error, "original", error)
         handled = False
-        if isinstance(error, commands.ArgParserFailure):
+        if isinstance(error, CommandRejected):
+            handled = True
+            await self.send_embed_msg(
+                ctx,
+                title=_("Unable To Run Command"),
+                description=error.message,
+                error=True,
+            )
+        elif isinstance(error, commands.ArgParserFailure):
             handled = True
             msg = _("`{user_input}` is not a valid value for `{command}`").format(
                 user_input=error.user_input,

@@ -1,0 +1,71 @@
+default_language_version:
+  python: python3.8
+exclude: ^redbot/vendored/
+repos:
+  - repo: https://github.com/psf/black
+    rev: '20.8b1'
+    hooks:
+      - id: black
+  - repo: https://github.com/Pierre-Sassoulas/black-disable-checker
+    rev: '0.0.1'
+    hooks:
+      - id: black-disable-checker
+  - repo: https://github.com/pycqa/isort
+    rev: '5.8.0'
+    hooks:
+      - id: isort
+  - repo: https://gitlab.com/pycqa/flake8
+    rev: '3.9.0'
+    hooks:
+      - id: flake8
+        exclude: ^tests/
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v3.4.0
+    hooks:
+      # `.gitattributes` should technically already handle this
+      # but autocrlf can result in local files keeping the CRLF
+      # which is problematic for codespell
+      - id: end-of-file-fixer
+        # po files are auto-generated so let's not touch them
+        exclude_types: [pofile]
+      - id: mixed-line-ending
+        args:
+          - "--fix=lf"
+      # this is a lot of noise, so I'm not sure if we want this...
+      # - id: fix-encoding-pragma
+
+      # Trailing whitespace is evil
+      - id: trailing-whitespace
+
+      # Syntax validation
+      - id: check-ast
+      - id: check-json
+      - id: check-toml
+      # can be switched to yamllint when this issue gets resolved:
+      # https://github.com/adrienverge/yamllint/issues/238
+      - id: check-yaml
+
+      # JSON auto-formatter
+      - id: pretty-format-json
+        args:
+          - "--autofix"
+          - "--indent=4"
+          - "--no-sort-keys"
+
+      # Checks for git-related issues
+      - id: check-case-conflict
+      - id: check-merge-conflict
+  - repo: https://github.com/pre-commit/pygrep-hooks
+    rev: v1.8.0
+    hooks:
+      - id: python-check-blanket-noqa
+      - id: rst-directive-colons
+      - id: rst-inline-touching-normal
+  - repo: https://github.com/Drapersniper/pre-commit-hooks
+    rev: b2f6c50e3c3ac874d8ffccc9735f95512e51d513
+    hooks:
+    - id: add-hash-to-file
+      args:
+        - "--tree"
+        - "audio"
+        - "hash.py"

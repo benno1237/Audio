@@ -80,14 +80,13 @@ class PlayerUtilities(MixinMeta, metaclass=CompositeMetaClass):
             )
 
     async def _can_instaskip(self, ctx: commands.Context, member: discord.Member) -> bool:
-        dj_enabled = await self.config_cache.dj_status.get_context_value(ctx.guild)
-
         if member.bot:
             return True
 
         if member.id == ctx.guild.owner_id:
             return True
 
+        dj_enabled = await self.config_cache.dj_status.get_context_value(ctx.guild)
         if dj_enabled and await self._has_dj_role(ctx, member):
             return True
 

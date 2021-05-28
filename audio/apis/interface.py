@@ -13,7 +13,7 @@ from typing import TYPE_CHECKING, Callable, List, MutableMapping, Optional, Tupl
 import aiohttp
 import discord
 import lavalink
-from lavalink.rest_api import LoadResult, LoadType, Track
+from lavalink.rest_api import LoadResult, LoadType
 
 try:
     from redbot import json
@@ -785,7 +785,7 @@ class AudioAPIInterface:
                 youtube_url = await self.fetch_youtube_query(
                     ctx, track_info, current_cache_level=current_cache_level
                 )
-            except YouTubeApiError as err:
+            except YouTubeApiError:
                 youtube_url = None
         else:
             if cache_enabled:

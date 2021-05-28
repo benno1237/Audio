@@ -1,11 +1,25 @@
 {
-  "author": ["aikaterna", "Draper", "Preda", "kennnyshiwa"],
-  "install_msg": "Audio for BB8.",
-  "name": "Audio",
-  "short": "Red's Audio early access",
-  "description": "This is a heavily modded version of Red's core Audio cog used for testing and development.",
-  "tags": ["Audio", "Dev", "Testing"],
-  "requirements": ["git+https://github.com/Drapersniper/Red-Lavalink.git@edge#egg=Red-Lavalink"],
-  "min_bot_version": "3.3.10",
-  "end_user_data_statement": "This cog stores metadata and partial messages for playlists and equalizer configuration."
+    "author": [
+        "Draper#6666",
+        "aikaterna",
+        "Draper",
+        "Preda",
+        "kennnyshiwa"
+    ],
+    "install_msg": "Audio for BB8.",
+    "name": "Audio",
+    "short": "Red's Audio early access",
+    "description": "This is a heavily modded version of Red's core Audio cog used for testing and development.",
+    "tags": [
+        "Audio",
+        "Dev",
+        "Testing"
+    ],
+    "requirements": [
+        "git+https://github.com/Drapersniper/Red-Lavalink.git@edge#egg=Red-Lavalink",
+        "PyYAML==5.4.1",
+        "dislash.py~=1.0.3"
+    ],
+    "min_bot_version": "3.3.10",
+    "end_user_data_statement": "This cog stores metadata and partial messages for playlists and equalizer configuration."
 }
