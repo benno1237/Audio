@@ -35,12 +35,12 @@ class LavalinkTasks(MixinMeta, metaclass=CompositeMetaClass):
         retry_count = 0
         lazy_external = False
         while retry_count < max_retries:
-            external = await self.config_cache.use_managed_lavalink.get_global()
+            managed = await self.config_cache.use_managed_lavalink.get_global()
             java_exec = str(await self.config_cache.java_exec.get_global())
             host = await self.config_cache.node_config.get_host(node_identifier="primary")
             password = await self.config_cache.node_config.get_password(node_identifier="primary")
             port = await self.config_cache.node_config.get_port(node_identifier="primary")
-            if external is False:
+            if managed is True:
                 if self.player_manager is not None:
                     await self.player_manager.shutdown()
                 self.player_manager = ServerManager(host, password, port, self.config_cache)
@@ -111,7 +111,7 @@ class LavalinkTasks(MixinMeta, metaclass=CompositeMetaClass):
                 )
             except asyncio.TimeoutError:
                 log.error("Connecting to node timed out, retrying...")
-                if external is False and self.player_manager is not None:
+                if managed is True and self.player_manager is not None:
                     await self.player_manager.shutdown()
                 retry_count += 1
                 await asyncio.sleep(1)  # prevent busylooping
@@ -144,6 +144,6 @@ class LavalinkTasks(MixinMeta, metaclass=CompositeMetaClass):
                     port,
                 )
             return
-        if external:
+        if managed is False:
             await asyncio.sleep(5)
         self._restore_task = asyncio.create_task(self.restore_players())

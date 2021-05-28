@@ -35,7 +35,7 @@ class PlayerCommands(MixinMeta, metaclass=CompositeMetaClass):
         """Play the specified track or search for a close match.
 
         To play a local track, the query should be `<parentfolder>\\<filename>`.
-        If you are the bot owner, use `[p]audioset info` to display your localtracks path.
+        If you are the bot owner, use `[p]audioset ll info` to display your localtracks path.
 
         To play multiple tracks with a single command use the following syntax (Shift + Enter usually will cause you to start a new line):
 

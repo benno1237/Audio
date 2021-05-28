@@ -1137,7 +1137,7 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
     async def command_audioset_guild_dc(self, ctx: commands.Context):
         """Toggle the bot auto-disconnecting when done playing.
 
-        This setting takes precedence over `[p]audioset emptydisconnect`.
+        This setting takes precedence over `[p]audioset server emptydisconnect`.
         """
 
         if await self.config_cache.disconnect.get_global() is True:
@@ -1207,7 +1207,7 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
     async def command_audioset_guild_emptydisconnect(self, ctx: commands.Context, seconds: int):
         """Auto-disconnect from channel when bot is alone in it for x seconds, 0 to disable.
 
-        `[p]audioset dc` takes precedence over this setting.
+        `[p]audioset server dc` takes precedence over this setting.
         """
 
         if await self.config_cache.empty_dc.get_global() is True:
@@ -1384,9 +1384,9 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
     ):
         """Add a role from DJ mode allowlist.
 
-        See roles with `[p]audioset role list`
-        Remove roles with `[p]audioset role remove`
-        See DJs with `[p]audioset role members`
+        See roles with `[p]audioset server role list`
+        Remove roles with `[p]audioset server role remove`
+        See DJs with `[p]audioset server role members`
         """
         await self.config_cache.dj_roles.add_guild(ctx.guild, {role_name})
         await self.send_embed_msg(
@@ -1401,9 +1401,9 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
     ):
         """Remove a role from DJ mode allowlist.
 
-        Add roles with `[p]audioset role add`
-        See roles with `[p]audioset role list`
-        See DJs with `[p]audioset role members`
+        Add roles with `[p]audioset server role add`
+        See roles with `[p]audioset server role list`
+        See DJs with `[p]audioset server role members`
         """
         await self.config_cache.dj_roles.remove_guild(ctx.guild, {role_name})
         await self.send_embed_msg(
@@ -1416,9 +1416,9 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
     async def command_audioset_guild_role_list(self, ctx: commands.Context):
         """Show all roles from DJ mode allowlist.
 
-        Add roles with `[p]audioset role add`
-        Remove roles with `[p]audioset role remove`
-        See DJs with `[p]audioset role members`
+        Add roles with `[p]audioset server role add`
+        Remove roles with `[p]audioset server role remove`
+        See DJs with `[p]audioset server role members`
         """
         roles = await self.config_cache.dj_roles.get_context_value(ctx.guild)
         roles = sorted(roles, key=attrgetter("position"), reverse=True)
@@ -1430,9 +1430,9 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
     async def command_audioset_guild_role_members(self, ctx: commands.Context):
         """Show all users with DJ permission.
 
-        Add roles with `[p]audioset role add`
-        Remove roles with `[p]audioset role remove`
-        See roles with `[p]audioset role list`
+        Add roles with `[p]audioset server role add`
+        Remove roles with `[p]audioset serverrole remove`
+        See roles with `[p]audioset server role list`
         """
         djs = await self.config_cache.dj_roles.get_allowed_members(ctx.guild)
         djs = sorted(djs, key=attrgetter("top_role.position", "display_name"), reverse=True)
@@ -1703,7 +1703,7 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         """Set a playlist to auto-play songs from.
 
         **Usage**:
-        ​ ​ ​ ​ `[p]audioset autoplay playlist_name_OR_id [args]`
+        ​ ​ ​ ​ `[p]audioset server autoplay playlist_name_OR_id [args]`
 
         **Args**:
         ​ ​ ​ ​ The following are all optional:
@@ -1726,9 +1726,9 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         ​ ​ ​ ​ Exact guild name
 
         Example use:
-        ​ ​ ​ ​ `[p]audioset autoplay MyGuildPlaylist`
-        ​ ​ ​ ​ `[p]audioset autoplay MyGlobalPlaylist --scope Global`
-        ​ ​ ​ ​ `[p]audioset autoplay PersonalPlaylist --scope User --author Draper`
+        ​ ​ ​ ​ `[p]audioset server autoplay MyGuildPlaylist`
+        ​ ​ ​ ​ `[p]audioset server autoplay MyGlobalPlaylist --scope Global`
+        ​ ​ ​ ​ `[p]audioset server autoplay PersonalPlaylist --scope User --author Draper`
         """
         if self.playlist_api is None:
             return await self.send_embed_msg(
@@ -2965,18 +2965,16 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
             lavalink_version=lavalink.__version__,
             managed=ENABLED_TITLE if managed else DISABLED_TITLE,
         )
-        print(0, managed)
         if managed:
-            print(1, self.player_manager, self.player_manager.ll_build)
             if self.player_manager and self.player_manager.ll_build:
+                msg += "----" + _("Managed Node Info") + "----        \n"
                 msg += _(
-                    "Lavalink build:         [{llbuild}]\n"
-                    "Lavalink branch:        [{llbranch}]\n"
+                    "Build:                  [{llbuild}]\n"
+                    "Branch:                 [{llbranch}]\n"
                     "Release date:           [{build_time}]\n"
-                    "Lavaplayer version:     [{lavaplayer}]\n"
+                    "Lavaplayer:             [{lavaplayer}]\n"
                     "Java version:           [{jvm}]\n"
-                    "Java Executable:        [{jv_exec}]\n"
-                    "Lavalink build:         [{build}]\n"
+                    "Java executable:        [{jv_exec}]\n"
                 ).format(
                     build_time=self.player_manager.build_time,
                     llbuild=self.player_manager.ll_build,
@@ -3006,6 +3004,7 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
                     track=user_friendly,
                 )
 
+        msg = "----" + _("Miscellaneous Settings") + "----        \n"
         msg += _("Localtracks path:       [{localpath}]\n").format(localpath=local_path)
 
         try:
