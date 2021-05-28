@@ -2943,13 +2943,17 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         search_only = await self.config_cache.node_config.get_search_only(node_identifier=node)
 
         msg = "----" + _("Connection Settings") + "----        \n"
-        msg += _("Host:             [{host}]\n").format(host=host)
-        msg += _("Port:             [{port}]\n").format(port=port)
-        msg += _("Password:         [{password}]\n").format(password=password)
-        msg += _("Dedicated shard:  [{shard}]\n").format(shard=shard if shard >= 0 else _("All"))
-        msg += _("Region:           [{region}]\n").format(region=region if region else _("All"))
-        msg += _("Rest URI:         [{rest_uri}]\n").format(rest_uri=rest_uri)
-        msg += _("Search Mode:      [{search}]\n").format(
+        msg += _("Host:                   [{host}]\n").format(host=host)
+        msg += _("Port:                   [{port}]\n").format(port=port)
+        msg += _("Password:               [{password}]\n").format(password=password)
+        msg += _("Dedicated shard:        [{shard}]\n").format(
+            shard=shard if shard >= 0 else _("All")
+        )
+        msg += _("Region:                 [{region}]\n").format(
+            region=region if region else _("All")
+        )
+        msg += _("Rest URI:               [{rest_uri}]\n").format(rest_uri=rest_uri)
+        msg += _("Search Mode:            [{search}]\n").format(
             search=ENABLED_TITLE if search_only else DISABLED_TITLE
         )
 
@@ -2967,7 +2971,7 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         )
         if managed:
             if self.player_manager and self.player_manager.ll_build:
-                msg += "----" + _("Managed Node Info") + "----        \n"
+                msg += "\n----" + _("Managed Node Info") + "----        \n"
                 msg += _(
                     "Build:                  [{llbuild}]\n"
                     "Branch:                 [{llbranch}]\n"
@@ -3004,7 +3008,7 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
                     track=user_friendly,
                 )
 
-        msg = "----" + _("Miscellaneous Settings") + "----        \n"
+        msg += "\n----" + _("Miscellaneous Settings") + "----        \n"
         msg += _("Localtracks path:       [{localpath}]\n").format(localpath=local_path)
 
         try:
