@@ -21,7 +21,7 @@ _RE_YT_LIST_PLAYLIST: Final[Pattern] = re.compile(
     r"^(https?://)?(www\.)?(youtube\.com|youtu\.?be)(/playlist\?).*(list=)(.*)(&|$)"
 )
 _MIN_SLASH_SUPPORT = VersionInfo.from_json(
-    {"major": 3, "minor": 0, "micro": 1, "releaselevel": "alpha"}
+    {"major": 3, "minor": 1, "micro": 0, "releaselevel": "alpha"}
 )
 
 
@@ -89,6 +89,6 @@ class ValidationUtilities(MixinMeta, metaclass=CompositeMetaClass):
 
             from ...__version__ import version_info
 
-            return _MIN_SLASH_SUPPORT >= version_info
+            return _MIN_SLASH_SUPPORT <= version_info
         except ImportError:
             return False
