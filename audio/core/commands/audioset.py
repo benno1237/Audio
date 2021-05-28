@@ -2641,6 +2641,37 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
             ),
         )
 
+    @command_audioset_lavalink_managed_config_server.command(name="jdanas", aliases=["jda"])
+    async def command_audioset_lavalink_managed_config_server_jdanas(self, ctx: commands.Context):
+        """Toggle JDA-NAS on or off."""
+        if not await self.config_cache.use_managed_lavalink.get_global():
+            return await self.send_embed_msg(
+                ctx,
+                title=_("Setting Not Changed"),
+                description=_("You are only able to set this if you are running a managed node."),
+            )
+
+        state = await self.config_cache.managed_lavalink_yaml.get_jda_nsa()
+        await self.config_cache.managed_lavalink_yaml.set_jda_nsa(not state)
+        if not state:
+            await self.send_embed_msg(
+                ctx,
+                title=_("Setting Changed"),
+                description=_(
+                    "Managed node will now start with JDA-NAS enabled.\n\n"
+                    "Run `{p}{cmd}` for it to take effect."
+                ).format(p=ctx.prefix, cmd=self.command_audioset_lavalink_restart.qualified_name),
+            )
+        else:
+            await self.send_embed_msg(
+                ctx,
+                title=_("Setting Changed"),
+                description=_(
+                    "Managed node will now start with JDA-NAS disabled.\n\n"
+                    "Run `{p}{cmd}` for it to take effect."
+                ).format(p=ctx.prefix, cmd=self.command_audioset_lavalink_restart.qualified_name),
+            )
+
     @command_audioset_lavalink_managed_config.group(name="source")
     async def command_audioset_lavalink_managed_config_source(self, ctx: commands.Context):
         """Toggle audio sources on/off."""
@@ -2800,37 +2831,6 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
                 title=_("Setting Changed"),
                 description=_(
                     "Managed node will not play from YouTube anymore.\n\n"
-                    "Run `{p}{cmd}` for it to take effect."
-                ).format(p=ctx.prefix, cmd=self.command_audioset_lavalink_restart.qualified_name),
-            )
-
-    @command_audioset_lavalink_managed_config_source.command(name="jdanas", aliases=["jda"])
-    async def command_audioset_lavalink_managed_config_source_jdanas(self, ctx: commands.Context):
-        """Toggle JDA-NAS on or off."""
-        if not await self.config_cache.use_managed_lavalink.get_global():
-            return await self.send_embed_msg(
-                ctx,
-                title=_("Setting Not Changed"),
-                description=_("You are only able to set this if you are running a managed node."),
-            )
-
-        state = await self.config_cache.managed_lavalink_yaml.get_jda_nsa()
-        await self.config_cache.managed_lavalink_yaml.set_jda_nsa(not state)
-        if not state:
-            await self.send_embed_msg(
-                ctx,
-                title=_("Setting Changed"),
-                description=_(
-                    "Managed node will now start with JDA-NAS enabled.\n\n"
-                    "Run `{p}{cmd}` for it to take effect."
-                ).format(p=ctx.prefix, cmd=self.command_audioset_lavalink_restart.qualified_name),
-            )
-        else:
-            await self.send_embed_msg(
-                ctx,
-                title=_("Setting Changed"),
-                description=_(
-                    "Managed node will now start with JDA-NAS disabled.\n\n"
                     "Run `{p}{cmd}` for it to take effect."
                 ).format(p=ctx.prefix, cmd=self.command_audioset_lavalink_restart.qualified_name),
             )
