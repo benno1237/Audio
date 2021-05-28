@@ -533,3 +533,7 @@ class MixinMeta(ABC):
     @abstractmethod
     def can_join_and_speak(self, channel: discord.VoiceChannel) -> bool:
         raise NotImplementedError()
+
+    @staticmethod
+    def is_slash_compatible() -> bool:
+        raise NotImplementedError()

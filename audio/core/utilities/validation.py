@@ -6,6 +6,7 @@ from typing import TYPE_CHECKING, Final, Optional, Pattern, Union
 from urllib.parse import urlparse
 
 import discord
+from redbot import VersionInfo
 from redbot.core.commands import Context
 
 from ...audio_dataclasses import Query
@@ -77,3 +78,14 @@ class ValidationUtilities(MixinMeta, metaclass=CompositeMetaClass):
             )
 
         return await cache.blacklist_whitelist.allowed_by_whitelist_blacklist(query, guild=guild)
+
+    @staticmethod
+    def is_slash_compatible() -> bool:
+        try:
+            from dislash import slash_commands  # noqa: F401
+
+            from ...__version__ import version_info
+
+            return VersionInfo.from_json({"major": 3, "minor": 0, "micro": 1}) >= version_info
+        except ImportError:
+            return False
