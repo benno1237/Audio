@@ -30,9 +30,9 @@ from .utils import task_callback
 _ = Translator("Audio", pathlib.Path(__file__))
 log = logging.getLogger("red.Audio.manager")
 JAR_VERSION: Final[str] = "3.3.2.3"
-JAR_BUILD: Final[int] = 1232
+JAR_BUILD: Final[int] = 1234
 LAVALINK_DOWNLOAD_URL: Final[str] = (
-    "https://github.com/Cog-Creators/Lavalink-Jars/releases/download/"
+    "https://github.com/Drapersniper/Lavalink-Jars/releases/download/"
     f"{JAR_VERSION}_{JAR_BUILD}/"
     "Lavalink.jar"
 )
@@ -91,7 +91,7 @@ LAVALINK_LAVAPLAYER_LINE: Final[Pattern] = re.compile(rb"Lavaplayer\s+(?P<lavapl
 LAVALINK_BUILD_TIME_LINE: Final[Pattern] = re.compile(rb"Build time:\s+(?P<build_time>\d+[.\d+]*)")
 LAVALINK_JAR_ENDPOINT: Final[
     str
-] = "https://api.github.com/repos/Cog-Creators/Lavalink-Jars/releases"
+] = "https://api.github.com/repos/Drapersniper/Lavalink-Jars/releases"
 
 
 async def get_latest_lavalink_release(stable=True, date=False):
