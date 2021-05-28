@@ -73,7 +73,6 @@ class DpyEvents(MixinMeta, metaclass=CompositeMetaClass):
             if not (
                 ctx.author.id == ctx.guild.owner_id
                 or (dj_enabled and await self._has_dj_role(ctx, ctx.author))
-                or await self.bot.is_owner(ctx.author)
                 or await self.bot.is_mod(ctx.author)
             ) and any(
                 command in not_deafened_commands
