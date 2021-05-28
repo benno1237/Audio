@@ -2038,7 +2038,7 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
 
         Note: Currently `node` may only be set to "primary".
         """
-        if node not in (  # TODO: Remove all of these when multi-node support is added
+        if node not in (  # TODO: Reenable when LL.py is merged in
             nodes := await self.config_cache.node_config.get_all_identifiers()
         ):
             return await self.send_embed_msg(
