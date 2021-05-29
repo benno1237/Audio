@@ -33,8 +33,9 @@ class JavaExecPathManager(CacheBase):
     async def set_global(self, set_to: Optional[Path]) -> None:
         gid = None
         if set_to is not None:
+            set_to = str(set_to.absolute())
             await self._config.java_exc_path.set(set_to)
-            self._cached_global[gid] = str(set_to.absolute())
+            self._cached_global[gid] = set_to
         else:
             await self._config.java_exc_path.clear()
             self._cached_global[gid] = self._config.defaults["GLOBAL"]["java_exc_path"]
