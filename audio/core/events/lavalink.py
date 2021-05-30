@@ -278,11 +278,12 @@ class LavalinkEvents(MixinMeta, metaclass=CompositeMetaClass):
                     else:
                         error = extra.get("message").replace("\n", "")
                         cause = extra.get("cause", "").replace("\n", "")
-                        if cause:
+                        song = current_track or prev_song
+                        if cause and song:
                             log.warning(
                                 "Track failed to play: error: %s | ID: %s",
                                 cause,
-                                current_track.track_identifier,
+                                song.track_identifier,
                             )
                         embed = discord.Embed(
                             title=_("Track Error"),
