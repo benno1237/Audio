@@ -153,7 +153,18 @@ class EffectsCommands(MixinMeta, metaclass=CompositeMetaClass):
         timescale.speed = speed
         timescale.pitch = pitch
         timescale.rate = rate
-        await player.set_timescale(timescale)
+        await player.set_filters(
+            low_pass=None,  # Timescale breaks if it applied with lowpass
+            equalizer=player.equalizer if player.equalizer.changed else None,
+            karaoke=player.karaoke if player.karaoke.changed else None,
+            tremolo=player.tremolo if player.tremolo.changed else None,
+            vibrato=player.vibrato if player.vibrato.changed else None,
+            distortion=player.distortion if player.distortion.changed else None,
+            timescale=timescale,
+            channel_mix=player.channel_mix if player.channel_mix.changed else None,
+            volume=player.volume,
+            reset_not_set=True,
+        )
         await ctx.invoke(self.command_effects)
 
     @command_effects.command(name="tremolo")
@@ -544,6 +555,18 @@ class EffectsCommands(MixinMeta, metaclass=CompositeMetaClass):
             name="Nightcore",
         )
         ts = filters.Timescale(speed=1.17, pitch=1.2, rate=1)
+        await player.set_filters(
+            low_pass=None,  # Timescale breaks if it applied with lowpass
+            equalizer=eq,
+            karaoke=player.karaoke if player.karaoke.changed else None,
+            tremolo=player.tremolo if player.tremolo.changed else None,
+            vibrato=player.vibrato if player.vibrato.changed else None,
+            distortion=player.distortion if player.distortion.changed else None,
+            timescale=ts,
+            channel_mix=player.channel_mix if player.channel_mix.changed else None,
+            volume=player.volume,
+            reset_not_set=True,
+        )
         await player.set_filters(equalizer=eq, timescale=ts)
         async with self.config.custom("EQUALIZER", ctx.guild.id).all() as eq_data:
             eq_data["eq_bands"] = player.equalizer.get()
@@ -585,7 +608,18 @@ class EffectsCommands(MixinMeta, metaclass=CompositeMetaClass):
         )
         ts = filters.Timescale(speed=0.70, pitch=0.75, rate=1)
         tm = filters.Tremolo(frequency=14, depth=0.25)
-        await player.set_filters(equalizer=eq, timescale=ts, tremolo=tm)
+        await player.set_filters(
+            low_pass=None,  # Timescale breaks if it applied with lowpass
+            equalizer=eq,
+            karaoke=player.karaoke if player.karaoke.changed else None,
+            tremolo=tm,
+            vibrato=player.vibrato if player.vibrato.changed else None,
+            distortion=player.distortion if player.distortion.changed else None,
+            timescale=ts,
+            channel_mix=player.channel_mix if player.channel_mix.changed else None,
+            volume=player.volume,
+            reset_not_set=True,
+        )
         async with self.config.custom("EQUALIZER", ctx.guild.id).all() as eq_data:
             eq_data["eq_bands"] = player.equalizer.get()
             eq_data["name"] = player.equalizer.name
@@ -644,7 +678,18 @@ class EffectsCommands(MixinMeta, metaclass=CompositeMetaClass):
             offset=-0.27,
             scale=-1.2,
         )
-        await player.set_filters(equalizer=eq, timescale=ts, tremolo=tm, vibrato=vb, distortion=dt)
+        await player.set_filters(
+            low_pass=None,  # Timescale breaks if it applied with lowpass
+            equalizer=eq,
+            karaoke=player.karaoke if player.karaoke.changed else None,
+            tremolo=tm,
+            vibrato=vb,
+            distortion=dt,
+            timescale=ts,
+            channel_mix=player.channel_mix if player.channel_mix.changed else None,
+            volume=player.volume,
+            reset_not_set=True,
+        )
         async with self.config.custom("EQUALIZER", ctx.guild.id).all() as eq_data:
             eq_data["eq_bands"] = player.equalizer.get()
             eq_data["name"] = player.equalizer.name
@@ -695,7 +740,7 @@ class EffectsCommands(MixinMeta, metaclass=CompositeMetaClass):
         channel_mix.left_to_right = left_to_right
         channel_mix.right_to_left = right_to_left
         channel_mix.right_to_right = right_to_right
-        await player.set_channel_mix(channel_mix)
+        await player.set_filters(channel_mix=channel_mix)
         await ctx.invoke(self.command_effects)
 
     @command_effects.command(name="lowpass")
@@ -730,5 +775,16 @@ class EffectsCommands(MixinMeta, metaclass=CompositeMetaClass):
 
         low_pass = player.low_pass
         low_pass.smoothing = smoothing
-        await player.set_low_pass(low_pass)
+        await player.set_filters(
+            low_pass=low_pass,
+            equalizer=player.equalizer if player.equalizer.changed else None,
+            karaoke=player.karaoke if player.karaoke.changed else None,
+            tremolo=player.tremolo if player.tremolo.changed else None,
+            vibrato=player.vibrato if player.vibrato.changed else None,
+            distortion=player.distortion if player.distortion.changed else None,
+            timescale=None,  # Timescale breaks if it applied with lowpass
+            channel_mix=player.channel_mix if player.channel_mix.changed else None,
+            volume=player.volume,
+            reset_not_set=True,
+        )
         await ctx.invoke(self.command_effects)
