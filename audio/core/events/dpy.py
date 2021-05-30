@@ -117,7 +117,7 @@ class DpyEvents(MixinMeta, metaclass=CompositeMetaClass):
                     )
                 text = text.strip()
                 if current_perms.send_messages and current_perms.read_messages:
-                    await ctx.send(box(text=text, lang="ini"))
+                    await ctx.send(box(text=text, lang="yaml"))
                 else:
                     log.info(
                         "Missing write permission in %d, Owner ID: %d",

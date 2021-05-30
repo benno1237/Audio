@@ -6,7 +6,7 @@ import logging
 import re
 import struct
 from pathlib import Path
-from typing import Any, Final, Mapping, MutableMapping, Pattern, Union, cast
+from typing import Any, Final, Mapping, MutableMapping, Optional, Pattern, Union, cast
 
 import discord
 import lavalink
@@ -23,7 +23,7 @@ from redbot.core.utils import AsyncIter
 from redbot.core.utils.chat_formatting import humanize_number
 
 from ...apis.playlist_interface import get_all_playlist_for_migration23
-from ...utils import PlaylistScope, task_callback
+from ...utils import PlaylistScope
 from ..abc import MixinMeta
 from ..cog_utils import CompositeMetaClass, DataReader
 
@@ -36,11 +36,13 @@ _prefer_lyrics_cache = {}
 class MiscellaneousUtilities(MixinMeta, metaclass=CompositeMetaClass):
     async def _clear_react(
         self, message: discord.Message, emoji: MutableMapping = None
-    ) -> asyncio.Task:
+    ) -> Optional[asyncio.Task]:
         """Non blocking version of clear_react."""
-        task = self.bot.loop.create_task(self.clear_react(message, emoji))
-        task.add_done_callback(task_callback)
-        return task
+        if message.author.id != self.bot.user.id:  # TODO: Reconsider this API spam
+            return
+        else:
+            with contextlib.suppress(discord.HTTPException):
+                return await message.delete(delay=15)
 
     async def maybe_charge_requester(self, ctx: commands.Context, jukebox_price: int) -> bool:
         jukebox = await self.config_cache.jukebox.get_context_value(ctx.guild)
@@ -67,42 +69,55 @@ class MiscellaneousUtilities(MixinMeta, metaclass=CompositeMetaClass):
             return True
 
     async def send_embed_msg(
-        self, ctx: commands.Context, author: Mapping[str, str] = None, **kwargs
+        self, ctx: commands.Context, author: Mapping[str, str] = None, no_embed=False, **kwargs
     ) -> discord.Message:
         colour = kwargs.get("colour") or kwargs.get("color") or await self.bot.get_embed_color(ctx)
         delete_after = kwargs.get("delete_after")
-        title = kwargs.get("title", EmptyEmbed) or EmptyEmbed
         _type = kwargs.get("type", "rich") or "rich"
         url = kwargs.get("url", EmptyEmbed) or EmptyEmbed
-        description = kwargs.get("description", EmptyEmbed) or EmptyEmbed
         timestamp = kwargs.get("timestamp")
         footer = kwargs.get("footer")
         thumbnail = kwargs.get("thumbnail")
-        contents = dict(title=title, type=_type, url=url, description=description)
-        if hasattr(kwargs.get("embed"), "to_dict"):
-            embed = kwargs.get("embed")
-            if embed is not None:
-                embed = embed.to_dict()
+        if not no_embed:
+            title = kwargs.get("title", EmptyEmbed) or EmptyEmbed
+            description = kwargs.get("description", EmptyEmbed) or EmptyEmbed
+            contents = dict(title=title, type=_type, url=url, description=description)
+            if hasattr(kwargs.get("embed"), "to_dict"):
+                embed = kwargs.get("embed")
+                if embed is not None:
+                    embed = embed.to_dict()
+            else:
+                embed = {}
+            colour = embed.get("color") if embed.get("color") else colour
+            contents.update(embed)
+            if timestamp and isinstance(timestamp, datetime.datetime):
+                contents["timestamp"] = timestamp
+            embed = discord.Embed.from_dict(contents)
+            embed.color = colour
+            if footer:
+                embed.set_footer(text=footer)
+            if thumbnail:
+                embed.set_thumbnail(url=thumbnail)
+            if author:
+                name = author.get("name")
+                url = author.get("url")
+                if name and url:
+                    embed.set_author(name=name, icon_url=url)
+                elif name:
+                    embed.set_author(name=name)
+            return await ctx.send(embed=embed, delete_after=delete_after)
         else:
-            embed = {}
-        colour = embed.get("color") if embed.get("color") else colour
-        contents.update(embed)
-        if timestamp and isinstance(timestamp, datetime.datetime):
-            contents["timestamp"] = timestamp
-        embed = discord.Embed.from_dict(contents)
-        embed.color = colour
-        if footer:
-            embed.set_footer(text=footer)
-        if thumbnail:
-            embed.set_thumbnail(url=thumbnail)
-        if author:
-            name = author.get("name")
-            url = author.get("url")
-            if name and url:
-                embed.set_author(name=name, icon_url=url)
-            elif name:
-                embed.set_author(name=name)
-        return await ctx.send(embed=embed, delete_after=delete_after)
+            title = kwargs.get("title", "")
+            description = kwargs.get("description", "")
+            footer = kwargs.get("footer", "")
+            if title:
+                title = f"{title}\n\n"
+            if description:
+                description = f"{description}\n\n"
+            if footer:
+                footer = f"{footer}"
+            content = f"{title}{description}\n\n{footer}"
+            return await ctx.send(content=content, delete_after=delete_after)
 
     def _has_notify_perms(self, channel: discord.TextChannel) -> bool:
         perms = channel.permissions_for(channel.guild.me)
@@ -146,19 +161,16 @@ class MiscellaneousUtilities(MixinMeta, metaclass=CompositeMetaClass):
 
         return functools.reduce(_getattr, [obj] + attr.split("."))
 
-    async def remove_react(
-        self,
-        message: discord.Message,
-        react_emoji: Union[discord.Emoji, discord.Reaction, discord.PartialEmoji, str],
-        react_user: discord.abc.User,
-    ) -> None:
-        with contextlib.suppress(discord.HTTPException):
-            await message.remove_reaction(react_emoji, react_user)
-
     async def clear_react(self, message: discord.Message, emoji: MutableMapping = None) -> None:
+
         try:
+            if (
+                message.guild
+                and not message.channel.permissions_for(message.guild.me).manage_messages
+            ):
+                raise ValueError
             await message.clear_reactions()
-        except discord.Forbidden:
+        except (discord.Forbidden, ValueError):
             if not emoji:
                 return
             with contextlib.suppress(discord.HTTPException):

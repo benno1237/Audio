@@ -10,6 +10,7 @@ from typing import TYPE_CHECKING, Any, List, Mapping, MutableMapping, Optional, 
 import aiohttp
 import discord
 import lavalink
+from lavalink.filters import Equalizer
 from redbot.core import Config, commands
 from redbot.core.bot import Red
 from redbot.core.commands import Context
@@ -136,15 +137,6 @@ class MixinMeta(ABC):
         raise NotImplementedError()
 
     @abstractmethod
-    async def remove_react(
-        self,
-        message: discord.Message,
-        react_emoji: Union[discord.Emoji, discord.Reaction, discord.PartialEmoji, str],
-        react_user: discord.abc.User,
-    ) -> None:
-        raise NotImplementedError()
-
-    @abstractmethod
     async def command_equalizer(self, ctx: commands.Context):
         raise NotImplementedError()
 
@@ -221,7 +213,11 @@ class MixinMeta(ABC):
 
     @abstractmethod
     async def send_embed_msg(
-        self, ctx: commands.Context, author: Mapping[str, str] = None, **kwargs
+        self,
+        ctx: commands.Context,
+        author: Mapping[str, str] = None,
+        no_embed: bool = False,
+        **kwargs,
     ) -> discord.Message:
         raise NotImplementedError()
 
@@ -353,15 +349,8 @@ class MixinMeta(ABC):
         player: lavalink.Player,
         message: discord.Message,
         selected: int,
+        equalizer: Equalizer,
     ) -> None:
-        raise NotImplementedError()
-
-    @abstractmethod
-    async def _apply_gains(self, guild_id: int, gains: List[float]) -> None:
-        NotImplementedError()
-
-    @abstractmethod
-    async def _apply_gain(self, guild_id: int, band: int, gain: float) -> None:
         raise NotImplementedError()
 
     @abstractmethod
