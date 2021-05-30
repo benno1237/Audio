@@ -246,7 +246,7 @@ class ServerManager:
         (java_available, java_version) = await self._has_java()
 
         if not java_available:
-            raise RuntimeError("You must install Java 11 for Lavalink to run.")
+            raise RuntimeError("You must install Java 11 or 13 for Lavalink to run.")
 
         return [
             self._java_exc,
