@@ -80,10 +80,12 @@ class EffectsCommands(MixinMeta, metaclass=CompositeMetaClass):
         Eliminate part of a band, usually targeting vocals.
 
         Defaults:
-        level: 1.0
-        mono = 1.0
-        band = 220.0
-        width = 100.0
+        level: -1
+        mono = -1
+        band = -1
+        width = -1
+
+        Set all arguments to `-1` to turn off this filter.
         """
         if not self._player_check(ctx):
             ctx.command.reset_cooldown(ctx)
@@ -108,11 +110,15 @@ class EffectsCommands(MixinMeta, metaclass=CompositeMetaClass):
             )
 
         karaoke = player.karaoke
-        karaoke.level = level
-        karaoke.mono_level = mono
-        karaoke.filter_band = band
-        karaoke.filter_width = width
-        await player.set_karaoke(karaoke)
+
+        if all(a == -1 for a in [width, band, mono, level]):
+            karaoke.reset()
+        else:
+            karaoke.level = level
+            karaoke.mono_level = mono
+            karaoke.filter_band = band
+            karaoke.filter_width = width
+        await player.set_filters(karaoke=karaoke)
         await ctx.invoke(self.command_effects)
 
     @command_effects.command(name="timescale")
@@ -123,9 +129,11 @@ class EffectsCommands(MixinMeta, metaclass=CompositeMetaClass):
         Changes the speed, pitch, and rate for tracks.
 
         Defaults:
-        speed: 1.0
-        pitch = 1.0
-        rate = 1.0
+        speed: -1
+        pitch = -1
+        rate = -1
+
+        Set all arguments to `-1` to turn off this filter.
         """
         if not self._player_check(ctx):
             ctx.command.reset_cooldown(ctx)
@@ -150,9 +158,13 @@ class EffectsCommands(MixinMeta, metaclass=CompositeMetaClass):
             )
 
         timescale = player.timescale
-        timescale.speed = speed
-        timescale.pitch = pitch
-        timescale.rate = rate
+
+        if all(a == -1 for a in [speed, pitch, rate]):
+            timescale.reset()
+        else:
+            timescale.speed = speed
+            timescale.pitch = pitch
+            timescale.rate = rate
         await player.set_filters(
             low_pass=None,  # Timescale breaks if it applied with lowpass
             equalizer=player.equalizer if player.equalizer.changed else None,
@@ -173,12 +185,14 @@ class EffectsCommands(MixinMeta, metaclass=CompositeMetaClass):
         Uses amplification to create a shuddering effect, where the volume quickly oscillates.
 
         Defaults:
-        frequency: 2.0
-        depth = 0.5
+        frequency: -1
+        depth = -1
 
         Constraints:
         frequency > 0
         depth >0 and <=1
+
+        Set all arguments to `-1` to turn off this filter.
         """
         if not self._player_check(ctx):
             ctx.command.reset_cooldown(ctx)
@@ -203,27 +217,30 @@ class EffectsCommands(MixinMeta, metaclass=CompositeMetaClass):
             )
 
         tremolo = player.tremolo
-        try:
-            tremolo.frequency = frequency
-        except ValueError:
-            ctx.command.reset_cooldown(ctx)
-            return await self.send_embed_msg(
-                ctx,
-                title=_("Unable To Set Effect"),
-                description=_("Tremolo frequency must be greater than 0."),
-            )
-        try:
-            tremolo.depth = depth
-        except ValueError:
-            ctx.command.reset_cooldown(ctx)
-            return await self.send_embed_msg(
-                ctx,
-                title=_("Unable To Set Effect"),
-                description=_(
-                    "Tremolo depth must be greater than 0 and less than or equals to 1."
-                ),
-            )
-        await player.set_tremolo(tremolo)
+        if all(a == -1 for a in [frequency, depth]):
+            tremolo.reset()
+        else:
+            try:
+                tremolo.frequency = frequency
+            except ValueError:
+                ctx.command.reset_cooldown(ctx)
+                return await self.send_embed_msg(
+                    ctx,
+                    title=_("Unable To Set Effect"),
+                    description=_("Tremolo frequency must be greater than 0."),
+                )
+            try:
+                tremolo.depth = depth
+            except ValueError:
+                ctx.command.reset_cooldown(ctx)
+                return await self.send_embed_msg(
+                    ctx,
+                    title=_("Unable To Set Effect"),
+                    description=_(
+                        "Tremolo depth must be greater than 0 and less than or equals to 1."
+                    ),
+                )
+        await player.set_filters(tremolo=tremolo)
         await ctx.invoke(self.command_effects)
 
     @command_effects.command(name="vibrato")
@@ -232,12 +249,14 @@ class EffectsCommands(MixinMeta, metaclass=CompositeMetaClass):
         Uses amplification to create a shuddering effect, where the pitch quickly oscillates.
 
         Defaults:
-        frequency: 2.0
-        depth = 0.5
+        frequency: -1
+        depth = -1
 
         Constraints:
         frequency > 0 and <= 14
         depth >0 and <=1
+
+        Set all arguments to `-1` to turn off this filter.
         """
         if not self._player_check(ctx):
             ctx.command.reset_cooldown(ctx)
@@ -262,29 +281,32 @@ class EffectsCommands(MixinMeta, metaclass=CompositeMetaClass):
             )
 
         vibrato = player.vibrato
-        try:
-            vibrato.frequency = frequency
-        except ValueError:
-            ctx.command.reset_cooldown(ctx)
-            return await self.send_embed_msg(
-                ctx,
-                title=_("Unable To Set Effect"),
-                description=_(
-                    "Vibrato frequency must be greater than 0 and less than or equals to 14."
-                ),
-            )
-        try:
-            vibrato.depth = depth
-        except ValueError:
-            ctx.command.reset_cooldown(ctx)
-            return await self.send_embed_msg(
-                ctx,
-                title=_("Unable To Set Effect"),
-                description=_(
-                    "Vibrato depth must be greater than 0 and less than or equals to 1."
-                ),
-            )
-        await player.set_vibrato(vibrato)
+        if all(a == -1 for a in [frequency, depth]):
+            vibrato.reset()
+        else:
+            try:
+                vibrato.frequency = frequency
+            except ValueError:
+                ctx.command.reset_cooldown(ctx)
+                return await self.send_embed_msg(
+                    ctx,
+                    title=_("Unable To Set Effect"),
+                    description=_(
+                        "Vibrato frequency must be greater than 0 and less than or equals to 14."
+                    ),
+                )
+            try:
+                vibrato.depth = depth
+            except ValueError:
+                ctx.command.reset_cooldown(ctx)
+                return await self.send_embed_msg(
+                    ctx,
+                    title=_("Unable To Set Effect"),
+                    description=_(
+                        "Vibrato depth must be greater than 0 and less than or equals to 1."
+                    ),
+                )
+        await player.set_filters(vibrato=vibrato)
         await ctx.invoke(self.command_effects)
 
     @command_effects.command(name="rotation")
@@ -293,7 +315,9 @@ class EffectsCommands(MixinMeta, metaclass=CompositeMetaClass):
         Rotates the sound around the stereo channels/user headphone
 
         Default:
-        frequency: 0
+        frequency: -1
+
+        Set all arguments to `-1` to turn off this filter.
         """
         if not self._player_check(ctx):
             ctx.command.reset_cooldown(ctx)
@@ -318,7 +342,10 @@ class EffectsCommands(MixinMeta, metaclass=CompositeMetaClass):
             )
 
         rotation = player.rotation
-        rotation.hertz = frequency
+        if frequency == -1:
+            rotation.reset()
+        else:
+            rotation.hertz = frequency
         await player.set_rotation(rotation)
         await ctx.invoke(self.command_effects)
 
@@ -338,14 +365,16 @@ class EffectsCommands(MixinMeta, metaclass=CompositeMetaClass):
         """Distortion effect. It can generate some pretty unique audio effects.
 
         Default:
-        soffset: 0
-        sscale: 1
-        coffset: 0
-        cscale: 1
-        toffset: 0
-        tscale: 1
-        offset: 0
-        scale: 1
+        soffset: -1
+        sscale: -1
+        coffset: -1
+        cscale: -1
+        toffset: -1
+        tscale: -1
+        offset: -1
+        scale: -1
+
+        Set all arguments to `-1` to turn off this filter.
         """
         if not self._player_check(ctx):
             ctx.command.reset_cooldown(ctx)
@@ -370,15 +399,20 @@ class EffectsCommands(MixinMeta, metaclass=CompositeMetaClass):
             )
 
         distortion = player.distortion
-        distortion.scale = scale
-        distortion.offset = offset
-        distortion.sin_offset = soffset
-        distortion.sin_scale = sscale
-        distortion.cos_scale = cscale
-        distortion.cos_offset = coffset
-        distortion.tan_offset = toffset
-        distortion.tan_scale = tscale
-        await player.set_distortion(distortion)
+        if all(
+            a == -1 for a in [scale, offset, soffset, sscale, cscale, coffset, toffset, tscale]
+        ):
+            distortion.reset()
+        else:
+            distortion.scale = scale
+            distortion.offset = offset
+            distortion.sin_offset = soffset
+            distortion.sin_scale = sscale
+            distortion.cos_scale = cscale
+            distortion.cos_offset = coffset
+            distortion.tan_offset = toffset
+            distortion.tan_scale = tscale
+        await player.set_filters(distortion=distortion)
         await ctx.invoke(self.command_effects)
 
     @command_effects.command(name="reset", aliases=["clear"])
@@ -708,10 +742,12 @@ class EffectsCommands(MixinMeta, metaclass=CompositeMetaClass):
         Mixes both channels (left and right), with a configurable factor on how much each channel affects the other.
 
         Defaults:
-        left_to_right: 1.0
-        left_to_right = 0.0
-        right_to_left = 0.0
-        right_to_right = 1.0
+        left_to_right: -1
+        left_to_right = -1
+        right_to_left = -1
+        right_to_right = -1
+
+        Set all arguments to `-1` to turn off this filter.
         """
         if not self._player_check(ctx):
             ctx.command.reset_cooldown(ctx)
@@ -736,10 +772,14 @@ class EffectsCommands(MixinMeta, metaclass=CompositeMetaClass):
             )
 
         channel_mix = player.channel_mix
-        channel_mix.left_to_left = left_to_left
-        channel_mix.left_to_right = left_to_right
-        channel_mix.right_to_left = right_to_left
-        channel_mix.right_to_right = right_to_right
+
+        if all(a == -1 for a in [left_to_left, left_to_right, right_to_left, right_to_right]):
+            channel_mix.reset()
+        else:
+            channel_mix.left_to_left = left_to_left
+            channel_mix.left_to_right = left_to_right
+            channel_mix.right_to_left = right_to_left
+            channel_mix.right_to_right = right_to_right
         await player.set_filters(channel_mix=channel_mix)
         await ctx.invoke(self.command_effects)
 
@@ -749,7 +789,10 @@ class EffectsCommands(MixinMeta, metaclass=CompositeMetaClass):
         Higher frequencies get suppressed, while lower frequencies pass through this filter
 
         Default:
-        smoothing: 20.0
+        smoothing: -1
+
+        Set all arguments to `-1` to turn off this filter.
+
         """
         if not self._player_check(ctx):
             ctx.command.reset_cooldown(ctx)
@@ -774,7 +817,10 @@ class EffectsCommands(MixinMeta, metaclass=CompositeMetaClass):
             )
 
         low_pass = player.low_pass
-        low_pass.smoothing = smoothing
+        if smoothing == -1:
+            low_pass.reset()
+        else:
+            low_pass.smoothing = smoothing
         await player.set_filters(
             low_pass=low_pass,
             equalizer=player.equalizer if player.equalizer.changed else None,
