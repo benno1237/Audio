@@ -9,6 +9,17 @@ from redbot.core.i18n import Translator
 from redbot.core.utils.chat_formatting import box
 from tabulate import tabulate
 
+from ...converters import (
+    ChannelMixConverter,
+    DistortionConverter,
+    KaraokeConverter,
+    LowPassConverter,
+    OffConverter,
+    RotationConverter,
+    TimescaleConverter,
+    TremoloConverter,
+    VibratoConverter,
+)
 from ..abc import MixinMeta
 from ..cog_utils import CompositeMetaClass
 
@@ -72,20 +83,12 @@ class EffectsCommands(MixinMeta, metaclass=CompositeMetaClass):
             description=box(tabulate(data)),
         )
 
-    @command_effects.command(name="karaoke")
+    @command_effects.command(name="karaoke", usage="off OR <level> <mono> <band> <width>")
     async def command_effects_karaoke(
-        self, ctx: commands.Context, level: float, mono: float, band: float, width: float
+        self, ctx: commands.Context, *, user_input: KaraokeConverter
     ):
         """
         Eliminate part of a band, usually targeting vocals.
-
-        Defaults:
-        level: -1
-        mono = -1
-        band = -1
-        width = -1
-
-        Set all arguments to `-1` to turn off this filter.
         """
         if not self._player_check(ctx):
             ctx.command.reset_cooldown(ctx)
@@ -110,10 +113,11 @@ class EffectsCommands(MixinMeta, metaclass=CompositeMetaClass):
             )
 
         karaoke = player.karaoke
-
-        if all(a == -1 for a in [width, band, mono, level]):
+        enabled, settings = user_input
+        if not enabled:
             karaoke.reset()
         else:
+            level, mono, band, width = settings
             karaoke.level = level
             karaoke.mono_level = mono
             karaoke.filter_band = band
@@ -121,19 +125,12 @@ class EffectsCommands(MixinMeta, metaclass=CompositeMetaClass):
         await player.set_filters(karaoke=karaoke)
         await ctx.invoke(self.command_effects)
 
-    @command_effects.command(name="timescale")
+    @command_effects.command(name="timescale", usage="off OR <speed> <pitch> <rate>")
     async def command_effects_timescale(
-        self, ctx: commands.Context, speed: float, pitch: float, rate: float
+        self, ctx: commands.Context, *, user_input: TimescaleConverter
     ):
         """
         Changes the speed, pitch, and rate for tracks.
-
-        Defaults:
-        speed: -1
-        pitch = -1
-        rate = -1
-
-        Set all arguments to `-1` to turn off this filter.
         """
         if not self._player_check(ctx):
             ctx.command.reset_cooldown(ctx)
@@ -158,10 +155,12 @@ class EffectsCommands(MixinMeta, metaclass=CompositeMetaClass):
             )
 
         timescale = player.timescale
+        enabled, settings = user_input
 
-        if all(a == -1 for a in [speed, pitch, rate]):
+        if not enabled:
             timescale.reset()
         else:
+            speed, pitch, rate = settings
             timescale.speed = speed
             timescale.pitch = pitch
             timescale.rate = rate
@@ -182,20 +181,16 @@ class EffectsCommands(MixinMeta, metaclass=CompositeMetaClass):
         )
         await ctx.invoke(self.command_effects)
 
-    @command_effects.command(name="tremolo")
-    async def command_effects_tremolo(self, ctx: commands.Context, frequency: float, depth: float):
+    @command_effects.command(name="tremolo", usage="off OR <frequency> <depth>")
+    async def command_effects_tremolo(
+        self, ctx: commands.Context, *, user_input: TremoloConverter
+    ):
         """
         Uses amplification to create a shuddering effect, where the volume quickly oscillates.
 
-        Defaults:
-        frequency: -1
-        depth = -1
-
         Constraints:
         frequency > 0
-        depth >0 and <=1
-
-        Set all arguments to `-1` to turn off this filter.
+        depth >0 and <=1ter.
         """
         if not self._player_check(ctx):
             ctx.command.reset_cooldown(ctx)
@@ -218,11 +213,13 @@ class EffectsCommands(MixinMeta, metaclass=CompositeMetaClass):
                 title=_("Unable To Manage Tracks"),
                 description=_("You need the DJ role to change effects."),
             )
+        enabled, settings = user_input
 
         tremolo = player.tremolo
-        if all(a == -1 for a in [frequency, depth]):
+        if not enabled:
             tremolo.reset()
         else:
+            frequency, depth = settings
             try:
                 tremolo.frequency = frequency
             except ValueError:
@@ -246,20 +243,16 @@ class EffectsCommands(MixinMeta, metaclass=CompositeMetaClass):
         await player.set_filters(tremolo=tremolo)
         await ctx.invoke(self.command_effects)
 
-    @command_effects.command(name="vibrato")
-    async def command_effects_vibrato(self, ctx: commands.Context, frequency: float, depth: float):
+    @command_effects.command(name="vibrato", usage="off OR <frequency> <depth>")
+    async def command_effects_vibrato(
+        self, ctx: commands.Context, *, user_input: VibratoConverter
+    ):
         """
         Uses amplification to create a shuddering effect, where the pitch quickly oscillates.
-
-        Defaults:
-        frequency: -1
-        depth = -1
 
         Constraints:
         frequency > 0 and <= 14
         depth >0 and <=1
-
-        Set all arguments to `-1` to turn off this filter.
         """
         if not self._player_check(ctx):
             ctx.command.reset_cooldown(ctx)
@@ -282,11 +275,14 @@ class EffectsCommands(MixinMeta, metaclass=CompositeMetaClass):
                 title=_("Unable To Manage Tracks"),
                 description=_("You need the DJ role to change effects."),
             )
+        enabled, settings = user_input
 
         vibrato = player.vibrato
-        if all(a == -1 for a in [frequency, depth]):
+        if not enabled:
             vibrato.reset()
         else:
+            frequency, depth = settings
+
             try:
                 vibrato.frequency = frequency
             except ValueError:
@@ -312,15 +308,12 @@ class EffectsCommands(MixinMeta, metaclass=CompositeMetaClass):
         await player.set_filters(vibrato=vibrato)
         await ctx.invoke(self.command_effects)
 
-    @command_effects.command(name="rotation")
-    async def command_effects_rotation(self, ctx: commands.Context, frequency: float):
+    @command_effects.command(name="rotation", usage="off OR <frequency>")
+    async def command_effects_rotation(
+        self, ctx: commands.Context, *, user_input: RotationConverter
+    ):
         """
         Rotates the sound around the stereo channels/user headphone
-
-        Default:
-        frequency: -1
-
-        Set all arguments to `-1` to turn off this filter.
         """
         if not self._player_check(ctx):
             ctx.command.reset_cooldown(ctx)
@@ -343,42 +336,25 @@ class EffectsCommands(MixinMeta, metaclass=CompositeMetaClass):
                 title=_("Unable To Manage Tracks"),
                 description=_("You need the DJ role to change effects."),
             )
+        enabled, settings = user_input
 
         rotation = player.rotation
-        if frequency == -1:
+        if enabled:
             rotation.reset()
         else:
+            (frequency,) = settings
             rotation.hertz = frequency
-        await player.set_rotation(rotation)
+        await player.set_filters(rotation=rotation)
         await ctx.invoke(self.command_effects)
 
-    @command_effects.command(name="distortion")
+    @command_effects.command(
+        name="distortion",
+        usage="off OR <scale> <offset> <sin-offset> <sin-scale> <cos-scale> <cos-offset> <tan-offset> <tan-scale>",
+    )
     async def command_effects_distortion(
-        self,
-        ctx: commands.Context,
-        soffset: float,
-        sscale: float,
-        coffset: float,
-        cscale: float,
-        toffset: float,
-        tscale: float,
-        offset: float,
-        scale: float,
+        self, ctx: commands.Context, *, user_input: DistortionConverter
     ):
-        """Distortion effect. It can generate some pretty unique audio effects.
-
-        Default:
-        soffset: -1
-        sscale: -1
-        coffset: -1
-        cscale: -1
-        toffset: -1
-        tscale: -1
-        offset: -1
-        scale: -1
-
-        Set all arguments to `-1` to turn off this filter.
-        """
+        """Distortion effect. It can generate some pretty unique audio effects."""
         if not self._player_check(ctx):
             ctx.command.reset_cooldown(ctx)
             return await self.send_embed_msg(ctx, title=_("Nothing playing."))
@@ -402,11 +378,12 @@ class EffectsCommands(MixinMeta, metaclass=CompositeMetaClass):
             )
 
         distortion = player.distortion
-        if all(
-            a == -1 for a in [scale, offset, soffset, sscale, cscale, coffset, toffset, tscale]
-        ):
+        enabled, settings = user_input
+
+        if not enabled:
             distortion.reset()
         else:
+            scale, offset, soffset, sscale, cscale, coffset, toffset, tscale = settings
             distortion.scale = scale
             distortion.offset = offset
             distortion.sin_offset = soffset
@@ -418,7 +395,7 @@ class EffectsCommands(MixinMeta, metaclass=CompositeMetaClass):
         await player.set_filters(distortion=distortion)
         await ctx.invoke(self.command_effects)
 
-    @command_effects.command(name="reset", aliases=["clear"])
+    @command_effects.command(name="reset", aliases=["off", "disable", "clear", "remove"])
     async def command_effects_reset(self, ctx: commands.Context):
         """Reset all effects."""
         if not self._player_check(ctx):
@@ -456,8 +433,10 @@ class EffectsCommands(MixinMeta, metaclass=CompositeMetaClass):
         await player.set_filters()
         await ctx.invoke(self.command_effects)
 
-    @command_effects.command(name="bassboost", aliases=["baseboost"])
-    async def command_effects_bassboost(self, ctx: commands.Context):
+    @command_effects.command(name="bassboost", aliases=["baseboost"], usage="[off]")
+    async def command_effects_bassboost(
+        self, ctx: commands.Context, *, state: OffConverter = True
+    ):
         """This effect emphasizes Punchy Bass and Crisp Mid-High tones.
 
         Not suitable for tracks with Deep/Low Bass."""
@@ -483,15 +462,19 @@ class EffectsCommands(MixinMeta, metaclass=CompositeMetaClass):
                 description=_("You need the DJ role to apply effects."),
             )
 
-        eq = Equalizer.boost()
+        if state:
+            eq = Equalizer.boost()
+        else:
+            eq = player.equalizer
+            eq.reset()
         await player.set_filters(equalizer=eq)
         async with self.config.custom("EQUALIZER", ctx.guild.id).all() as eq_data:
             eq_data["eq_bands"] = player.equalizer.get()
             eq_data["name"] = player.equalizer.name
         await ctx.invoke(self.command_effects)
 
-    @command_effects.command(name="piano")
-    async def command_effects_piano(self, ctx: commands.Context):
+    @command_effects.command(name="piano", usage="[off]")
+    async def command_effects_piano(self, ctx: commands.Context, *, state: OffConverter = True):
         """This effect is suitable for Piano tracks, or tacks with an emphasis on Female Vocals.
 
         Could also be used as a Bass Cutoff."""
@@ -517,15 +500,19 @@ class EffectsCommands(MixinMeta, metaclass=CompositeMetaClass):
                 description=_("You need the DJ role to apply effectss."),
             )
 
-        eq = Equalizer.piano()
+        if state:
+            eq = Equalizer.piano()
+        else:
+            eq = player.equalizer
+            eq.reset()
         await player.set_filters(equalizer=eq)
         async with self.config.custom("EQUALIZER", ctx.guild.id).all() as eq_data:
             eq_data["eq_bands"] = player.equalizer.get()
             eq_data["name"] = player.equalizer.name
         await ctx.invoke(self.command_effects)
 
-    @command_effects.command(name="metal")
-    async def command_effects_metal(self, ctx: commands.Context):
+    @command_effects.command(name="metal", usage="[off]")
+    async def command_effects_metal(self, ctx: commands.Context, *, state: OffConverter = True):
         """Experimental Metal/Rock Equalizer.
 
         Expect clipping on Bassy songs."""
@@ -551,15 +538,21 @@ class EffectsCommands(MixinMeta, metaclass=CompositeMetaClass):
                 description=_("You need the DJ role to apply effects."),
             )
 
-        eq = Equalizer.metal()
+        if state:
+            eq = Equalizer.metal()
+        else:
+            eq = player.equalizer
+            eq.reset()
         await player.set_filters(equalizer=eq)
         async with self.config.custom("EQUALIZER", ctx.guild.id).all() as eq_data:
             eq_data["eq_bands"] = player.equalizer.get()
             eq_data["name"] = player.equalizer.name
         await ctx.invoke(self.command_effects)
 
-    @command_effects.command(name="nightcore")
-    async def command_effects_nightcore(self, ctx: commands.Context):
+    @command_effects.command(name="nightcore", usage="[off]")
+    async def command_effects_nightcore(
+        self, ctx: commands.Context, *, state: OffConverter = True
+    ):
         """Apply the nightcore effect."""
         if not self._player_check(ctx):
             ctx.command.reset_cooldown(ctx)
@@ -583,16 +576,22 @@ class EffectsCommands(MixinMeta, metaclass=CompositeMetaClass):
                 description=_("You need the DJ role to apply effects."),
             )
 
-        eq = filters.Equalizer(
-            levels=[
-                {"band": 0, "gain": -0.075},
-                {"band": 1, "gain": 0.125},
-                {"band": 2, "gain": 0.125},
-            ],
-            name="Nightcore",
-        )
-        ts = filters.Timescale(speed=1.17, pitch=1.2, rate=1)
-        player.low_pass.reset()
+        if state:
+            eq = filters.Equalizer(
+                levels=[
+                    {"band": 0, "gain": -0.075},
+                    {"band": 1, "gain": 0.125},
+                    {"band": 2, "gain": 0.125},
+                ],
+                name="Nightcore",
+            )
+            ts = filters.Timescale(speed=1.17, pitch=1.2, rate=1)
+            player.low_pass.reset()
+        else:
+            eq = player.equalizer
+            ts = player.timescale
+            ts.reset()
+            eq.reset()
         await player.set_filters(
             low_pass=None,  # Timescale breaks if it applied with lowpass
             equalizer=eq,
@@ -610,8 +609,10 @@ class EffectsCommands(MixinMeta, metaclass=CompositeMetaClass):
             eq_data["name"] = player.equalizer.name
         await ctx.invoke(self.command_effects)
 
-    @command_effects.command(name="vaporwave")
-    async def command_effects_vaporwave(self, ctx: commands.Context):
+    @command_effects.command(name="vaporwave", usage="[off]")
+    async def command_effects_vaporwave(
+        self, ctx: commands.Context, *, state: OffConverter = True
+    ):
         """Apply the vaporwave effect."""
         if not self._player_check(ctx):
             ctx.command.reset_cooldown(ctx)
@@ -635,17 +636,26 @@ class EffectsCommands(MixinMeta, metaclass=CompositeMetaClass):
                 description=_("You need the DJ role to apply effects."),
             )
 
-        eq = filters.Equalizer(
-            levels=[
-                {"band": 0, "gain": -0.075},
-                {"band": 1, "gain": 0.125},
-                {"band": 2, "gain": 0.125},
-            ],
-            name="Vaporwave",
-        )
-        ts = filters.Timescale(speed=0.70, pitch=0.75, rate=1)
-        tm = filters.Tremolo(frequency=14, depth=0.25)
-        player.low_pass.reset()
+        if state:
+            eq = filters.Equalizer(
+                levels=[
+                    {"band": 0, "gain": -0.075},
+                    {"band": 1, "gain": 0.125},
+                    {"band": 2, "gain": 0.125},
+                ],
+                name="Vaporwave",
+            )
+            ts = filters.Timescale(speed=0.70, pitch=0.75, rate=1)
+            tm = filters.Tremolo(frequency=14, depth=0.25)
+            player.low_pass.reset()
+        else:
+            eq = player.equalizer
+            ts = player.timescale
+            tm = player.tremolo
+            ts.reset()
+            eq.reset()
+            tm.reset()
+
         await player.set_filters(
             low_pass=None,  # Timescale breaks if it applied with lowpass
             equalizer=eq,
@@ -663,8 +673,8 @@ class EffectsCommands(MixinMeta, metaclass=CompositeMetaClass):
             eq_data["name"] = player.equalizer.name
         await ctx.invoke(self.command_effects)
 
-    @command_effects.command(name="synth")
-    async def command_effects_synth(self, ctx: commands.Context):
+    @command_effects.command(name="synth", usage="[off]")
+    async def command_effects_synth(self, ctx: commands.Context, *, state: OffConverter = True):
         """Apply the synth effect."""
         if not self._player_check(ctx):
             ctx.command.reset_cooldown(ctx)
@@ -688,35 +698,48 @@ class EffectsCommands(MixinMeta, metaclass=CompositeMetaClass):
                 description=_("You need the DJ role to apply effects."),
             )
 
-        eq = filters.Equalizer(
-            levels=[
-                {"band": 0, "gain": -0.075},
-                {"band": 1, "gain": 0.325},
-                {"band": 2, "gain": 0.325},
-                {"band": 4, "gain": 0.25},
-                {"band": 5, "gain": 0.25},
-                {"band": 7, "gain": -0.35},
-                {"band": 8, "gain": -0.35},
-                {"band": 11, "gain": 0.8},
-                {"band": 12, "gain": 0.45},
-                {"band": 13, "gain": -0.025},
-            ],
-            name="Synth",
-        )
-        ts = filters.Timescale(speed=1.0, pitch=1.1, rate=1.00)
-        tm = filters.Tremolo(frequency=4, depth=0.25)
-        vb = filters.Vibrato(frequency=11, depth=0.3)
-        dt = filters.Distortion(
-            sin_offset=0,
-            sin_scale=-0.25,
-            cos_offset=0,
-            cos_scale=-0.5,
-            tan_offset=-2.75,
-            tan_scale=-0.7,
-            offset=-0.27,
-            scale=-1.2,
-        )
-        player.low_pass.reset()
+        if state:
+            eq = filters.Equalizer(
+                levels=[
+                    {"band": 0, "gain": -0.075},
+                    {"band": 1, "gain": 0.325},
+                    {"band": 2, "gain": 0.325},
+                    {"band": 4, "gain": 0.25},
+                    {"band": 5, "gain": 0.25},
+                    {"band": 7, "gain": -0.35},
+                    {"band": 8, "gain": -0.35},
+                    {"band": 11, "gain": 0.8},
+                    {"band": 12, "gain": 0.45},
+                    {"band": 13, "gain": -0.025},
+                ],
+                name="Synth",
+            )
+            ts = filters.Timescale(speed=1.0, pitch=1.1, rate=1.00)
+            tm = filters.Tremolo(frequency=4, depth=0.25)
+            vb = filters.Vibrato(frequency=11, depth=0.3)
+            dt = filters.Distortion(
+                sin_offset=0,
+                sin_scale=-0.25,
+                cos_offset=0,
+                cos_scale=-0.5,
+                tan_offset=-2.75,
+                tan_scale=-0.7,
+                offset=-0.27,
+                scale=-1.2,
+            )
+            player.low_pass.reset()
+        else:
+            eq = player.equalizer
+            ts = player.timescale
+            tm = player.tremolo
+            vb = player.vibrato
+            dt = player.distortion
+            ts.reset()
+            eq.reset()
+            tm.reset()
+            vb.reset()
+            dt.reset()
+
         await player.set_filters(
             low_pass=None,  # Timescale breaks if it applied with lowpass
             equalizer=eq,
@@ -734,25 +757,15 @@ class EffectsCommands(MixinMeta, metaclass=CompositeMetaClass):
             eq_data["name"] = player.equalizer.name
         await ctx.invoke(self.command_effects)
 
-    @command_effects.command(name="channelmix")
+    @command_effects.command(
+        name="channelmix",
+        usage="off OR <left_to_left> <left_to_right> <right_to_left> <right_to_right>",
+    )
     async def command_effects_channelmix(
-        self,
-        ctx: commands.Context,
-        left_to_left: float,
-        left_to_right: float,
-        right_to_left: float,
-        right_to_right: float,
+        self, ctx: commands.Context, *, user_input: ChannelMixConverter
     ):
         """
         Mixes both channels (left and right), with a configurable factor on how much each channel affects the other.
-
-        Defaults:
-        left_to_right: -1
-        left_to_right = -1
-        right_to_left = -1
-        right_to_right = -1
-
-        Set all arguments to `-1` to turn off this filter.
         """
         if not self._player_check(ctx):
             ctx.command.reset_cooldown(ctx)
@@ -777,10 +790,12 @@ class EffectsCommands(MixinMeta, metaclass=CompositeMetaClass):
             )
 
         channel_mix = player.channel_mix
+        enabled, settings = user_input
 
-        if all(a == -1 for a in [left_to_left, left_to_right, right_to_left, right_to_right]):
+        if not enabled:
             channel_mix.reset()
         else:
+            left_to_left, left_to_right, right_to_left, right_to_right = settings
             channel_mix.left_to_left = left_to_left
             channel_mix.left_to_right = left_to_right
             channel_mix.right_to_left = right_to_left
@@ -788,16 +803,12 @@ class EffectsCommands(MixinMeta, metaclass=CompositeMetaClass):
         await player.set_filters(channel_mix=channel_mix)
         await ctx.invoke(self.command_effects)
 
-    @command_effects.command(name="lowpass")
-    async def command_effects_lowpass(self, ctx: commands.Context, smoothing: float):
+    @command_effects.command(name="lowpass", usage="off OR <smoothing>")
+    async def command_effects_lowpass(
+        self, ctx: commands.Context, *, user_input: LowPassConverter
+    ):
         """
         Higher frequencies get suppressed, while lower frequencies pass through this filter
-
-        Default:
-        smoothing: -1
-
-        Set all arguments to `-1` to turn off this filter.
-
         """
         if not self._player_check(ctx):
             ctx.command.reset_cooldown(ctx)
@@ -822,9 +833,12 @@ class EffectsCommands(MixinMeta, metaclass=CompositeMetaClass):
             )
 
         low_pass = player.low_pass
-        if smoothing == -1:
+        enabled, settings = user_input
+
+        if not enabled:
             low_pass.reset()
         else:
+            (smoothing,) = settings
             low_pass.smoothing = smoothing
             player.timescale.reset()
 
