@@ -95,7 +95,7 @@ LAVALINK_JAR_ENDPOINT: Final[
 
 
 async def get_latest_lavalink_release(stable=True, date=False):
-    async with aiohttp.ClientSession() as session:
+    async with aiohttp.ClientSession(json_serialize=json.dumps) as session:
         async with session.get(LAVALINK_JAR_ENDPOINT) as resp:
             if resp.status != 200:
                 return "", "0_0", "0", None

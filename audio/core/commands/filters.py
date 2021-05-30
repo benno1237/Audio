@@ -37,8 +37,8 @@ class EffectsCommands(MixinMeta, metaclass=CompositeMetaClass):
         channel_mix = player.channel_mix
         t_effect = _("Effect")
         t_activated = _("State")
-        t_yes = _("Active")
-        t_no = _("Deactivate")
+        t_yes = _("Activated")
+        t_no = _("Deactivated")
 
         data = [
             {
