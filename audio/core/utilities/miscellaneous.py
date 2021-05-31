@@ -527,6 +527,7 @@ class MiscellaneousUtilities(MixinMeta, metaclass=CompositeMetaClass):
                 "isStream": is_stream,
                 "uri": uri,
                 "isSeekable": not is_stream,
+                "sourceName": source,
             },
         }
 

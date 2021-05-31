@@ -10,6 +10,7 @@ from typing import TYPE_CHECKING, Any, List, Mapping, MutableMapping, Optional, 
 import aiohttp
 import discord
 import lavalink
+from lavalink import Track
 from lavalink.filters import Equalizer
 from redbot.core import Config, commands
 from redbot.core.bot import Red
@@ -75,11 +76,13 @@ class MixinMeta(ABC):
         raise NotImplementedError()
 
     @abstractmethod
-    async def update_bot_presence(self, track: lavalink.Track, playing_servers: int) -> None:
+    async def update_bot_presence(
+        self, track: lavalink.Track, track_string: str, playing_servers: int
+    ) -> None:
         raise NotImplementedError()
 
     @abstractmethod
-    async def get_active_player_count(self) -> Tuple[str, int]:
+    async def get_active_player_count(self) -> Tuple[Optional[Track], Optional[str], int]:
         raise NotImplementedError()
 
     @abstractmethod

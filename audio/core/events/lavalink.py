@@ -193,14 +193,14 @@ class LavalinkEvents(MixinMeta, metaclass=CompositeMetaClass):
                 )
                 player.store("notify_message", notify_message)
         if event_type == lavalink.LavalinkEvents.TRACK_START and status:
-            player_check = await self.get_active_player_count()
-            await self.update_bot_presence(*player_check)
+            current, get_single_title, playing_servers = await self.get_active_player_count()
+            await self.update_bot_presence(current, get_single_title, playing_servers)
 
         if event_type == lavalink.LavalinkEvents.TRACK_END and status:
             await asyncio.sleep(1)
             if not player.is_playing:
-                player_check = await self.get_active_player_count()
-                await self.update_bot_presence(*player_check)
+                current, get_single_title, playing_servers = await self.get_active_player_count()
+                await self.update_bot_presence(current, get_single_title, playing_servers)
 
         if event_type == lavalink.LavalinkEvents.QUEUE_END:
             if not autoplay:
@@ -214,8 +214,8 @@ class LavalinkEvents(MixinMeta, metaclass=CompositeMetaClass):
                     await player.disconnect()
                     self._ll_guild_updates.discard(guild.id)
             if status:
-                player_check = await self.get_active_player_count()
-                await self.update_bot_presence(*player_check)
+                current, get_single_title, playing_servers = await self.get_active_player_count()
+                await self.update_bot_presence(current, get_single_title, playing_servers)
 
         if event_type in [
             lavalink.LavalinkEvents.TRACK_EXCEPTION,
