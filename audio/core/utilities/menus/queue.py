@@ -33,14 +33,12 @@ class QueueSource(menus.ListPageSource):
     async def format_page(
         self, menu: SimpleHybridMenu, entries: List[lavalink.Track]
     ) -> discord.Embed:
-        # player = lavalink.get_player(menu.ctx.guild.id)
-        # menu._source = QueueSource(player.queue.copy(), self.config_cache)
-        # entries = await self.get_page(menu.current_page)
+        player = lavalink.get_player(menu.ctx.guild.id)
+        menu._source = QueueSource(player.queue.copy(), self.config_cache)
+        entries = await self.get_page(menu.current_page)
         shuffle = await self.config_cache.shuffle.get_context_value(menu.ctx.guild)
         repeat = await self.config_cache.repeat.get_context_value(menu.ctx.guild)
         autoplay = await self.config_cache.autoplay.get_context_value(menu.ctx.guild)
-        player = lavalink.get_player(menu.ctx.guild.id)
-        print("menu.current_page", menu.current_page, len(entries))
         page_num = menu.current_page + 1
         queue_num_pages = self.get_max_pages()
         queue_idx_start = (page_num - 1) * self.per_page
