@@ -190,7 +190,7 @@ class EffectsCommands(MixinMeta, metaclass=CompositeMetaClass):
 
         Constraints:
         frequency > 0
-        depth >0 and <=1ter.
+        depth > 0 and <= 1
         """
         if not self._player_check(ctx):
             ctx.command.reset_cooldown(ctx)
