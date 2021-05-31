@@ -3,6 +3,7 @@ from typing import List, Tuple
 
 import discord
 import lavalink
+from redbot.core.commands import Context
 from redbot.core.i18n import Translator
 from redbot.core.utils import AsyncIter
 from redbot.core.utils._dpy_menus_utils import HybridMenu, SimpleHybridMenu
@@ -22,14 +23,24 @@ class QueueSource(menus.ListPageSource):
         super().__init__(entries, per_page=15)
         self.config_cache = cache
 
+    async def get_page(self, page_number):
+        if self.per_page == 1:
+            return self.entries[page_number]
+        else:
+            base = page_number * self.per_page
+            return self.entries[base : base + self.per_page]
+
     async def format_page(
         self, menu: SimpleHybridMenu, entries: List[lavalink.Track]
     ) -> discord.Embed:
-
+        # player = lavalink.get_player(menu.ctx.guild.id)
+        # menu._source = QueueSource(player.queue.copy(), self.config_cache)
+        # entries = await self.get_page(menu.current_page)
         shuffle = await self.config_cache.shuffle.get_context_value(menu.ctx.guild)
         repeat = await self.config_cache.repeat.get_context_value(menu.ctx.guild)
         autoplay = await self.config_cache.autoplay.get_context_value(menu.ctx.guild)
         player = lavalink.get_player(menu.ctx.guild.id)
+        print("menu.current_page", menu.current_page, len(entries))
         page_num = menu.current_page + 1
         queue_num_pages = self.get_max_pages()
         queue_idx_start = (page_num - 1) * self.per_page
@@ -58,8 +69,7 @@ class QueueSource(menus.ListPageSource):
             queue_list += _("Requester: **{user}**").format(user=player.current.requester.mention)
             queue_list += f"\n\n{arrow}`{pos}`/`{dur}`\n\n"
 
-        async for i, track in AsyncIter(entries).enumerate(start=queue_idx_start):
-            track_idx = i + 1
+        async for track_idx, track in AsyncIter(entries).enumerate(start=queue_idx_start + 1):
             track_description = await menu.ctx.cog.get_track_description(
                 track, menu.ctx.cog.local_folder_current_path, shorten=True
             )
@@ -145,7 +155,29 @@ class QueueSearchSource(menus.ListPageSource):
 class QueueMenu(HybridMenu, inherit_buttons=True):
     def __init__(self, *args, **kwargs):
         super(QueueMenu, self).__init__(*args, **kwargs)
+        self.current_page = kwargs.get("page", 0)
         self._antispam = {}
+
+    async def send_initial_message(
+        self, ctx: Context, channel: discord.abc.Messageable, page: int = 0
+    ):
+        """
+
+        The default implementation of :meth:`Menu.send_initial_message`
+        for the interactive pagination session.
+
+        This implementation shows the first page of the source.
+        """
+        self.current_page = min(page, self._source.get_max_pages() - 1)
+        page = await self._source.get_page(self.current_page)
+        kwargs = await self._get_kwargs_from_page(page)
+        return await channel.send(**kwargs)
+
+    def _skip_double_triangle_buttons(self):
+        return False
+
+    def _skip_single_arrows(self):
+        return False
 
     async def _shuffle(self):
         self._antispam[self.ctx.guild.id][self.ctx.author.id].stamp()
