@@ -53,7 +53,7 @@ class EqualizerCommands(MixinMeta, metaclass=CompositeMetaClass):
         await self._eq_msg_clear(player.fetch("eq_message"))
         eq_message = await self.send_embed_msg(
             ctx=ctx,
-            description=box(player.equalizer.visualise(), lang="yaml"),
+            description=box(player.equalizer.visualise(), lang="ini"),
             no_embed=True,
         )
 

@@ -65,7 +65,7 @@ class EqualizerUtilities(MixinMeta, metaclass=CompositeMetaClass):
             selector = f'{" " * 8}{"   " * selected}^^'
             try:
                 await message.edit(
-                    content=box(f"{player.equalizer.visualise()}\n{selector}", lang="yaml")
+                    content=box(f"{player.equalizer.visualise()}\n{selector}", lang="ini")
                 )
             except discord.errors.NotFound:
                 break

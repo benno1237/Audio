@@ -422,10 +422,10 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
             if i != total:
                 text += "\n"
                 if i % 10 == 0:
-                    pages.append(box(text, lang="yaml"))
+                    pages.append(box(text, lang="ini"))
                     text = ""
             else:
-                pages.append(box(text, lang="yaml"))
+                pages.append(box(text, lang="ini"))
         embed_colour = await ctx.embed_colour()
         pages = list(
             discord.Embed(title=_("Global Allowlist"), description=page, colour=embed_colour)
@@ -498,10 +498,10 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
             if i != total:
                 text += "\n"
                 if i % 10 == 0:
-                    pages.append(box(text, lang="yaml"))
+                    pages.append(box(text, lang="ini"))
                     text = ""
             else:
-                pages.append(box(text, lang="yaml"))
+                pages.append(box(text, lang="ini"))
         embed_colour = await ctx.embed_colour()
         pages = list(
             discord.Embed(title=_("Global Denylist"), description=page, colour=embed_colour)
@@ -606,7 +606,7 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
                 lavalink_status=ENABLED_TITLE if has_lavalink_cache else DISABLED_TITLE,
             )
             await self.send_embed_msg(
-                ctx, title=_("Cache Settings"), description=box(msg, lang="yaml"), no_embed=True
+                ctx, title=_("Cache Settings"), description=box(msg, lang="ini"), no_embed=True
             )
             return await ctx.send_help()
         if level not in [5, 3, 2, 1, 0, -1, -2, -3]:
@@ -652,7 +652,7 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         )
 
         await self.send_embed_msg(
-            ctx, title=_("Cache Settings"), description=box(msg, lang="yaml"), no_embed=True
+            ctx, title=_("Cache Settings"), description=box(msg, lang="ini"), no_embed=True
         )
         await self.config_cache.local_cache_level.set_global(newcache.value)
 
@@ -829,7 +829,7 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
             num_seconds=self.get_time_string(global_api_get_timeout),
         )
 
-        await self.send_embed_msg(ctx, description=box(msg, lang="yaml"), no_embed=True)
+        await self.send_embed_msg(ctx, description=box(msg, lang="ini"), no_embed=True)
 
     # --------------------------- CHANNEL COMMANDS ----------------------------
 
@@ -883,7 +883,7 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
                 vol=volume,
             )
         )
-        await self.send_embed_msg(ctx, description=box(msg, lang="yaml"), no_embed=True)
+        await self.send_embed_msg(ctx, description=box(msg, lang="ini"), no_embed=True)
 
     # --------------------------- SERVER COMMANDS ----------------------------
 
@@ -931,10 +931,10 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
             if i != total:
                 text += "\n"
                 if i % 10 == 0:
-                    pages.append(box(text, lang="yaml"))
+                    pages.append(box(text, lang="ini"))
                     text = ""
             else:
-                pages.append(box(text, lang="yaml"))
+                pages.append(box(text, lang="ini"))
         embed_colour = await ctx.embed_colour()
         pages = list(
             discord.Embed(title=_("Allowlist"), description=page, colour=embed_colour)
@@ -1010,10 +1010,10 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
             if i != total:
                 text += "\n"
                 if i % 10 == 0:
-                    pages.append(box(text, lang="yaml"))
+                    pages.append(box(text, lang="ini"))
                     text = ""
             else:
-                pages.append(box(text, lang="yaml"))
+                pages.append(box(text, lang="ini"))
         embed_colour = await ctx.embed_colour()
         pages = list(
             discord.Embed(title=_("Denylist"), description=page, colour=embed_colour)
@@ -1924,7 +1924,7 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
                 + _("Playlist scope:   [{pscope}]\n")
             ).format(pname=pname, pid=pid, pscope=pscope)
 
-        await self.send_embed_msg(ctx, description=box(msg, lang="yaml"), no_embed=True)
+        await self.send_embed_msg(ctx, description=box(msg, lang="ini"), no_embed=True)
 
     # --------------------------- Lavalink COMMANDS ----------------------------
 
@@ -2952,7 +2952,7 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
                     msg += _("Alpha Date:     [{published}]\n").format(published=alpha_date)
                     msg += _("Alpha URL:      [{url}]\n\n").format(url=alpha_url)
 
-        await self.send_embed_msg(ctx, description=box(msg, lang="yaml"), no_embed=True)
+        await self.send_embed_msg(ctx, description=box(msg, lang="ini"), no_embed=True)
 
     @command_audioset_lavalink.command(name="info", aliases=["settings"])
     async def command_audioset_lavalink_info(self, ctx: commands.Context, node: str = "primary"):
@@ -3045,7 +3045,7 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         msg += _("Localtracks path:       [{localpath}]\n").format(localpath=local_path)
 
         try:
-            await self.send_embed_msg(ctx.author, description=box(msg, lang="yaml"), no_embed=True)
+            await self.send_embed_msg(ctx.author, description=box(msg, lang="ini"), no_embed=True)
         except discord.HTTPException:
             await ctx.send(_("I need to be able to DM you to send you this info."))
 
@@ -3212,7 +3212,7 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
                 country_code=country_code if country_code else _("Not set"),
             )
         )
-        await self.send_embed_msg(ctx, description=box(msg, lang="yaml"), no_embed=True)
+        await self.send_embed_msg(ctx, description=box(msg, lang="ini"), no_embed=True)
 
     # --------------------------- GENERIC COMMANDS ----------------------------
     @command_audioset.command(name="info", aliases=["settings"])
@@ -3338,7 +3338,7 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
                 + _("Playlist scope:   [{pscope}]\n")
             ).format(pname=pname, pid=pid, pscope=pscope)
 
-        await self.send_embed_msg(ctx, description=box(msg, lang="yaml"), no_embed=True)
+        await self.send_embed_msg(ctx, description=box(msg, lang="ini"), no_embed=True)
 
     # --------------------------- GENERIC COMMANDS ----------------------------
 
