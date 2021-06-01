@@ -62,7 +62,7 @@ repos:
       - id: rst-directive-colons
       - id: rst-inline-touching-normal
   - repo: https://github.com/Drapersniper/pre-commit-hooks
-    rev: b2f6c50e3c3ac874d8ffccc9735f95512e51d513
+    rev: 906ecd9e1ad871a68f652213ecd444fa787fb9ca
     hooks:
     - id: add-hash-to-file
       args:
