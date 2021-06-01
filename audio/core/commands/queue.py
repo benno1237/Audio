@@ -1,20 +1,27 @@
 import asyncio
+import contextlib
 import logging
+import math
 from pathlib import Path
-from typing import Optional
+from typing import MutableMapping, Optional
 
 import discord
 import lavalink
 from redbot.core import commands
 from redbot.core.i18n import Translator
 from redbot.core.utils import AsyncIter
-from redbot.core.utils._dpy_menus_utils import SimpleHybridMenu
-from redbot.core.utils.menus import start_adding_reactions
+from redbot.core.utils.menus import (
+    DEFAULT_CONTROLS,
+    close_menu,
+    menu,
+    next_page,
+    prev_page,
+    start_adding_reactions,
+)
 from redbot.core.utils.predicates import ReactionPredicate
 
 from ..abc import MixinMeta
 from ..cog_utils import CompositeMetaClass
-from ..utilities.menus.queue import QueueMenu, QueueSearchSource, QueueSource
 
 log = logging.getLogger("red.cogs.Audio.cog.Commands.queue")
 _ = Translator("Audio", Path(__file__))
@@ -26,6 +33,28 @@ class QueueCommands(MixinMeta, metaclass=CompositeMetaClass):
     @commands.bot_has_permissions(embed_links=True, add_reactions=True)
     async def command_queue(self, ctx: commands.Context, *, page: int = 1):
         """List the songs in the queue."""
+
+        async def _queue_menu(
+            ctx: commands.Context,
+            pages: list,
+            controls: MutableMapping,
+            message: discord.Message,
+            page: int,
+            timeout: float,
+            emoji: str,
+        ):
+            if message:
+                await ctx.send_help(self.command_queue)
+                with contextlib.suppress(discord.HTTPException):
+                    await message.delete()
+                return None
+
+        queue_controls = {
+            "\N{LEFTWARDS BLACK ARROW}\N{VARIATION SELECTOR-16}": prev_page,
+            "\N{CROSS MARK}": close_menu,
+            "\N{BLACK RIGHTWARDS ARROW}\N{VARIATION SELECTOR-16}": next_page,
+            "\N{INFORMATION SOURCE}\N{VARIATION SELECTOR-16}": _queue_menu,
+        }
 
         if not self._player_check(ctx):
             return await self.send_embed_msg(ctx, title=_("There's nothing in the queue."))
@@ -42,7 +71,9 @@ class QueueCommands(MixinMeta, metaclass=CompositeMetaClass):
                 await self.get_track_description(player.current, self.local_folder_current_path)
                 or ""
             )
-            song += _("\n Requested by: **{track.requester}**").format(track=player.current)
+            song += _("\n Requested by: **{track.requester.mention}**").format(
+                track=player.current
+            )
             song += f"\n\n{arrow}`{pos}`/`{dur}`"
             embed = discord.Embed(description=song)
             embed.set_author(
@@ -131,9 +162,16 @@ class QueueCommands(MixinMeta, metaclass=CompositeMetaClass):
         elif not player.current and not player.queue:
             return await self.send_embed_msg(ctx, title=_("There's nothing in the queue."))
 
-        await QueueMenu(source=QueueSource(player.queue, self.config_cache), cog=self).start(
-            ctx=ctx, wait=False, page=page - 1
-        )
+        async with ctx.typing():
+            limited_queue = player.queue[:500]  # TODO: Improve when Toby menu's are merged
+            len_queue_pages = math.ceil(len(limited_queue) / 15)
+            queue_page_list = []
+            async for page_num in AsyncIter(range(1, len_queue_pages + 1)):
+                embed = await self._build_queue_page(ctx, limited_queue, player, page_num)
+                queue_page_list.append(embed)
+            if page > len_queue_pages:
+                page = len_queue_pages
+        return await menu(ctx, queue_page_list, queue_controls, page=(page - 1))
 
     @command_queue.command(name="clear", aliases=["wipe", "reset"])
     async def command_queue_clear(self, ctx: commands.Context):
@@ -255,9 +293,12 @@ class QueueCommands(MixinMeta, metaclass=CompositeMetaClass):
         if not search_list:
             return await self.send_embed_msg(ctx, title=_("No matches."))
 
-        await SimpleHybridMenu(
-            source=QueueSearchSource(search_list, self.config_cache), cog=self
-        ).start(ctx=ctx, wait=False)
+        len_search_pages = math.ceil(len(search_list) / 15)
+        search_page_list = []
+        async for page_num in AsyncIter(range(1, len_search_pages + 1)):
+            embed = await self._build_queue_search_page(ctx, page_num, search_list)
+            search_page_list.append(embed)
+        await menu(ctx, search_page_list, DEFAULT_CONTROLS)
 
     @command_queue.command(name="shuffle")
     @commands.cooldown(1, 30, commands.BucketType.guild)

@@ -339,7 +339,7 @@ class EffectsCommands(MixinMeta, metaclass=CompositeMetaClass):
         enabled, settings = user_input
 
         rotation = player.rotation
-        if enabled:
+        if not enabled:
             rotation.reset()
         else:
             (frequency,) = settings
@@ -393,368 +393,6 @@ class EffectsCommands(MixinMeta, metaclass=CompositeMetaClass):
             distortion.tan_offset = toffset
             distortion.tan_scale = tscale
         await player.set_filters(distortion=distortion)
-        await ctx.invoke(self.command_effects)
-
-    @command_effects.command(name="reset", aliases=["off", "disable", "clear", "remove"])
-    async def command_effects_reset(self, ctx: commands.Context):
-        """Reset all effects."""
-        if not self._player_check(ctx):
-            ctx.command.reset_cooldown(ctx)
-            return await self.send_embed_msg(ctx, title=_("Nothing playing."))
-
-        player = lavalink.get_player(ctx.guild.id)
-        dj_enabled = await self.config_cache.dj_status.get_context_value(ctx.guild)
-        can_skip = await self._can_instaskip(ctx, ctx.author)
-        if (not ctx.author.voice or ctx.author.voice.channel != player.channel) and not can_skip:
-            ctx.command.reset_cooldown(ctx)
-            return await self.send_embed_msg(
-                ctx,
-                title=_("Unable To Manage Tracks"),
-                description=_("You must be in the voice channel to change effects."),
-            )
-        if dj_enabled and not can_skip and not await self.is_requester_alone(ctx):
-            ctx.command.reset_cooldown(ctx)
-            return await self.send_embed_msg(
-                ctx,
-                title=_("Unable To Manage Tracks"),
-                description=_("You need the DJ role to change effects."),
-            )
-
-        player.equalizer.reset()
-        player.karaoke.reset()
-        player.timescale.reset()
-        player.tremolo.reset()
-        player.vibrato.reset()
-        player.rotation.reset()
-        player.distortion.reset()
-        player.low_pass.reset()
-        player.channel_mix.reset()
-
-        await player.set_filters()
-        await ctx.invoke(self.command_effects)
-
-    @command_effects.command(name="bassboost", aliases=["baseboost"], usage="[off]")
-    async def command_effects_bassboost(
-        self, ctx: commands.Context, *, state: OffConverter = True
-    ):
-        """This effect emphasizes Punchy Bass and Crisp Mid-High tones.
-
-        Not suitable for tracks with Deep/Low Bass."""
-        if not self._player_check(ctx):
-            ctx.command.reset_cooldown(ctx)
-            return await self.send_embed_msg(ctx, title=_("Nothing playing."))
-
-        player = lavalink.get_player(ctx.guild.id)
-        dj_enabled = await self.config_cache.dj_status.get_context_value(ctx.guild)
-        can_skip = await self._can_instaskip(ctx, ctx.author)
-        if (not ctx.author.voice or ctx.author.voice.channel != player.channel) and not can_skip:
-            ctx.command.reset_cooldown(ctx)
-            return await self.send_embed_msg(
-                ctx,
-                title=_("Unable To Manage Tracks"),
-                description=_("You must be in the voice channel to apply effects."),
-            )
-        if dj_enabled and not can_skip and not await self.is_requester_alone(ctx):
-            ctx.command.reset_cooldown(ctx)
-            return await self.send_embed_msg(
-                ctx,
-                title=_("Unable To Manage Tracks"),
-                description=_("You need the DJ role to apply effects."),
-            )
-
-        if state:
-            eq = Equalizer.boost()
-        else:
-            eq = player.equalizer
-            eq.reset()
-        await player.set_filters(equalizer=eq)
-        async with self.config.custom("EQUALIZER", ctx.guild.id).all() as eq_data:
-            eq_data["eq_bands"] = player.equalizer.get()
-            eq_data["name"] = player.equalizer.name
-        await ctx.invoke(self.command_effects)
-
-    @command_effects.command(name="piano", usage="[off]")
-    async def command_effects_piano(self, ctx: commands.Context, *, state: OffConverter = True):
-        """This effect is suitable for Piano tracks, or tacks with an emphasis on Female Vocals.
-
-        Could also be used as a Bass Cutoff."""
-        if not self._player_check(ctx):
-            ctx.command.reset_cooldown(ctx)
-            return await self.send_embed_msg(ctx, title=_("Nothing playing."))
-
-        player = lavalink.get_player(ctx.guild.id)
-        dj_enabled = await self.config_cache.dj_status.get_context_value(ctx.guild)
-        can_skip = await self._can_instaskip(ctx, ctx.author)
-        if (not ctx.author.voice or ctx.author.voice.channel != player.channel) and not can_skip:
-            ctx.command.reset_cooldown(ctx)
-            return await self.send_embed_msg(
-                ctx,
-                title=_("Unable To Manage Tracks"),
-                description=_("You must be in the voice channel to apply effects."),
-            )
-        if dj_enabled and not can_skip and not await self.is_requester_alone(ctx):
-            ctx.command.reset_cooldown(ctx)
-            return await self.send_embed_msg(
-                ctx,
-                title=_("Unable To Manage Tracks"),
-                description=_("You need the DJ role to apply effectss."),
-            )
-
-        if state:
-            eq = Equalizer.piano()
-        else:
-            eq = player.equalizer
-            eq.reset()
-        await player.set_filters(equalizer=eq)
-        async with self.config.custom("EQUALIZER", ctx.guild.id).all() as eq_data:
-            eq_data["eq_bands"] = player.equalizer.get()
-            eq_data["name"] = player.equalizer.name
-        await ctx.invoke(self.command_effects)
-
-    @command_effects.command(name="metal", usage="[off]")
-    async def command_effects_metal(self, ctx: commands.Context, *, state: OffConverter = True):
-        """Experimental Metal/Rock Equalizer.
-
-        Expect clipping on Bassy songs."""
-        if not self._player_check(ctx):
-            ctx.command.reset_cooldown(ctx)
-            return await self.send_embed_msg(ctx, title=_("Nothing playing."))
-
-        player = lavalink.get_player(ctx.guild.id)
-        dj_enabled = await self.config_cache.dj_status.get_context_value(ctx.guild)
-        can_skip = await self._can_instaskip(ctx, ctx.author)
-        if (not ctx.author.voice or ctx.author.voice.channel != player.channel) and not can_skip:
-            ctx.command.reset_cooldown(ctx)
-            return await self.send_embed_msg(
-                ctx,
-                title=_("Unable To Manage Tracks"),
-                description=_("You must be in the voice channel to apply effects."),
-            )
-        if dj_enabled and not can_skip and not await self.is_requester_alone(ctx):
-            ctx.command.reset_cooldown(ctx)
-            return await self.send_embed_msg(
-                ctx,
-                title=_("Unable To Manage Tracks"),
-                description=_("You need the DJ role to apply effects."),
-            )
-
-        if state:
-            eq = Equalizer.metal()
-        else:
-            eq = player.equalizer
-            eq.reset()
-        await player.set_filters(equalizer=eq)
-        async with self.config.custom("EQUALIZER", ctx.guild.id).all() as eq_data:
-            eq_data["eq_bands"] = player.equalizer.get()
-            eq_data["name"] = player.equalizer.name
-        await ctx.invoke(self.command_effects)
-
-    @command_effects.command(name="nightcore", usage="[off]")
-    async def command_effects_nightcore(
-        self, ctx: commands.Context, *, state: OffConverter = True
-    ):
-        """Apply the nightcore effect."""
-        if not self._player_check(ctx):
-            ctx.command.reset_cooldown(ctx)
-            return await self.send_embed_msg(ctx, title=_("Nothing playing."))
-
-        player = lavalink.get_player(ctx.guild.id)
-        dj_enabled = await self.config_cache.dj_status.get_context_value(ctx.guild)
-        can_skip = await self._can_instaskip(ctx, ctx.author)
-        if (not ctx.author.voice or ctx.author.voice.channel != player.channel) and not can_skip:
-            ctx.command.reset_cooldown(ctx)
-            return await self.send_embed_msg(
-                ctx,
-                title=_("Unable To Manage Tracks"),
-                description=_("You must be in the voice channel to apply effects."),
-            )
-        if dj_enabled and not can_skip and not await self.is_requester_alone(ctx):
-            ctx.command.reset_cooldown(ctx)
-            return await self.send_embed_msg(
-                ctx,
-                title=_("Unable To Manage Tracks"),
-                description=_("You need the DJ role to apply effects."),
-            )
-
-        if state:
-            eq = filters.Equalizer(
-                levels=[
-                    {"band": 0, "gain": -0.075},
-                    {"band": 1, "gain": 0.125},
-                    {"band": 2, "gain": 0.125},
-                ],
-                name="Nightcore",
-            )
-            ts = filters.Timescale(speed=1.17, pitch=1.2, rate=1)
-            player.low_pass.reset()
-        else:
-            eq = player.equalizer
-            ts = player.timescale
-            ts.reset()
-            eq.reset()
-        await player.set_filters(
-            low_pass=None,  # Timescale breaks if it applied with lowpass
-            equalizer=eq,
-            karaoke=player.karaoke if player.karaoke.changed else None,
-            tremolo=player.tremolo if player.tremolo.changed else None,
-            vibrato=player.vibrato if player.vibrato.changed else None,
-            distortion=player.distortion if player.distortion.changed else None,
-            timescale=ts,
-            channel_mix=player.channel_mix if player.channel_mix.changed else None,
-            volume=player.volume,
-            reset_not_set=True,
-        )
-        async with self.config.custom("EQUALIZER", ctx.guild.id).all() as eq_data:
-            eq_data["eq_bands"] = player.equalizer.get()
-            eq_data["name"] = player.equalizer.name
-        await ctx.invoke(self.command_effects)
-
-    @command_effects.command(name="vaporwave", usage="[off]")
-    async def command_effects_vaporwave(
-        self, ctx: commands.Context, *, state: OffConverter = True
-    ):
-        """Apply the vaporwave effect."""
-        if not self._player_check(ctx):
-            ctx.command.reset_cooldown(ctx)
-            return await self.send_embed_msg(ctx, title=_("Nothing playing."))
-
-        player = lavalink.get_player(ctx.guild.id)
-        dj_enabled = await self.config_cache.dj_status.get_context_value(ctx.guild)
-        can_skip = await self._can_instaskip(ctx, ctx.author)
-        if (not ctx.author.voice or ctx.author.voice.channel != player.channel) and not can_skip:
-            ctx.command.reset_cooldown(ctx)
-            return await self.send_embed_msg(
-                ctx,
-                title=_("Unable To Manage Tracks"),
-                description=_("You must be in the voice channel to apply effects."),
-            )
-        if dj_enabled and not can_skip and not await self.is_requester_alone(ctx):
-            ctx.command.reset_cooldown(ctx)
-            return await self.send_embed_msg(
-                ctx,
-                title=_("Unable To Manage Tracks"),
-                description=_("You need the DJ role to apply effects."),
-            )
-
-        if state:
-            eq = filters.Equalizer(
-                levels=[
-                    {"band": 0, "gain": -0.075},
-                    {"band": 1, "gain": 0.125},
-                    {"band": 2, "gain": 0.125},
-                ],
-                name="Vaporwave",
-            )
-            ts = filters.Timescale(speed=0.70, pitch=0.75, rate=1)
-            tm = filters.Tremolo(frequency=14, depth=0.25)
-            player.low_pass.reset()
-        else:
-            eq = player.equalizer
-            ts = player.timescale
-            tm = player.tremolo
-            ts.reset()
-            eq.reset()
-            tm.reset()
-
-        await player.set_filters(
-            low_pass=None,  # Timescale breaks if it applied with lowpass
-            equalizer=eq,
-            karaoke=player.karaoke if player.karaoke.changed else None,
-            tremolo=tm,
-            vibrato=player.vibrato if player.vibrato.changed else None,
-            distortion=player.distortion if player.distortion.changed else None,
-            timescale=ts,
-            channel_mix=player.channel_mix if player.channel_mix.changed else None,
-            volume=player.volume,
-            reset_not_set=True,
-        )
-        async with self.config.custom("EQUALIZER", ctx.guild.id).all() as eq_data:
-            eq_data["eq_bands"] = player.equalizer.get()
-            eq_data["name"] = player.equalizer.name
-        await ctx.invoke(self.command_effects)
-
-    @command_effects.command(name="synth", usage="[off]")
-    async def command_effects_synth(self, ctx: commands.Context, *, state: OffConverter = True):
-        """Apply the synth effect."""
-        if not self._player_check(ctx):
-            ctx.command.reset_cooldown(ctx)
-            return await self.send_embed_msg(ctx, title=_("Nothing playing."))
-
-        player = lavalink.get_player(ctx.guild.id)
-        dj_enabled = await self.config_cache.dj_status.get_context_value(ctx.guild)
-        can_skip = await self._can_instaskip(ctx, ctx.author)
-        if (not ctx.author.voice or ctx.author.voice.channel != player.channel) and not can_skip:
-            ctx.command.reset_cooldown(ctx)
-            return await self.send_embed_msg(
-                ctx,
-                title=_("Unable To Manage Tracks"),
-                description=_("You must be in the voice channel to apply effects."),
-            )
-        if dj_enabled and not can_skip and not await self.is_requester_alone(ctx):
-            ctx.command.reset_cooldown(ctx)
-            return await self.send_embed_msg(
-                ctx,
-                title=_("Unable To Manage Tracks"),
-                description=_("You need the DJ role to apply effects."),
-            )
-
-        if state:
-            eq = filters.Equalizer(
-                levels=[
-                    {"band": 0, "gain": -0.075},
-                    {"band": 1, "gain": 0.325},
-                    {"band": 2, "gain": 0.325},
-                    {"band": 4, "gain": 0.25},
-                    {"band": 5, "gain": 0.25},
-                    {"band": 7, "gain": -0.35},
-                    {"band": 8, "gain": -0.35},
-                    {"band": 11, "gain": 0.8},
-                    {"band": 12, "gain": 0.45},
-                    {"band": 13, "gain": -0.025},
-                ],
-                name="Synth",
-            )
-            ts = filters.Timescale(speed=1.0, pitch=1.1, rate=1.00)
-            tm = filters.Tremolo(frequency=4, depth=0.25)
-            vb = filters.Vibrato(frequency=11, depth=0.3)
-            dt = filters.Distortion(
-                sin_offset=0,
-                sin_scale=-0.25,
-                cos_offset=0,
-                cos_scale=-0.5,
-                tan_offset=-2.75,
-                tan_scale=-0.7,
-                offset=-0.27,
-                scale=-1.2,
-            )
-            player.low_pass.reset()
-        else:
-            eq = player.equalizer
-            ts = player.timescale
-            tm = player.tremolo
-            vb = player.vibrato
-            dt = player.distortion
-            ts.reset()
-            eq.reset()
-            tm.reset()
-            vb.reset()
-            dt.reset()
-
-        await player.set_filters(
-            low_pass=None,  # Timescale breaks if it applied with lowpass
-            equalizer=eq,
-            karaoke=player.karaoke if player.karaoke.changed else None,
-            tremolo=tm,
-            vibrato=vb,
-            distortion=dt,
-            timescale=ts,
-            channel_mix=player.channel_mix if player.channel_mix.changed else None,
-            volume=player.volume,
-            reset_not_set=True,
-        )
-        async with self.config.custom("EQUALIZER", ctx.guild.id).all() as eq_data:
-            eq_data["eq_bands"] = player.equalizer.get()
-            eq_data["name"] = player.equalizer.name
         await ctx.invoke(self.command_effects)
 
     @command_effects.command(
@@ -856,4 +494,374 @@ class EffectsCommands(MixinMeta, metaclass=CompositeMetaClass):
             volume=player.volume,
             reset_not_set=True,
         )
+        await ctx.invoke(self.command_effects)
+
+    @command_effects.command(name="reset", aliases=["off", "disable", "clear", "remove"])
+    async def command_effects_reset(self, ctx: commands.Context):
+        """Reset all effects."""
+        if not self._player_check(ctx):
+            ctx.command.reset_cooldown(ctx)
+            return await self.send_embed_msg(ctx, title=_("Nothing playing."))
+
+        player = lavalink.get_player(ctx.guild.id)
+        dj_enabled = await self.config_cache.dj_status.get_context_value(ctx.guild)
+        can_skip = await self._can_instaskip(ctx, ctx.author)
+        if (not ctx.author.voice or ctx.author.voice.channel != player.channel) and not can_skip:
+            ctx.command.reset_cooldown(ctx)
+            return await self.send_embed_msg(
+                ctx,
+                title=_("Unable To Manage Tracks"),
+                description=_("You must be in the voice channel to change effects."),
+            )
+        if dj_enabled and not can_skip and not await self.is_requester_alone(ctx):
+            ctx.command.reset_cooldown(ctx)
+            return await self.send_embed_msg(
+                ctx,
+                title=_("Unable To Manage Tracks"),
+                description=_("You need the DJ role to change effects."),
+            )
+
+        player.equalizer.reset()
+        player.karaoke.reset()
+        player.timescale.reset()
+        player.tremolo.reset()
+        player.vibrato.reset()
+        player.rotation.reset()
+        player.distortion.reset()
+        player.low_pass.reset()
+        player.channel_mix.reset()
+
+        await player.set_filters()
+        await ctx.invoke(self.command_effects)
+
+    @command_effects.command(name="bassboost", aliases=["baseboost"], usage="[off]")
+    async def command_effects_bassboost(
+        self, ctx: commands.Context, *, state: OffConverter = True
+    ):
+        """This effect emphasizes Punchy Bass and Crisp Mid-High tones.
+
+        Not suitable for tracks with Deep/Low Bass."""
+        if not self._player_check(ctx):
+            ctx.command.reset_cooldown(ctx)
+            return await self.send_embed_msg(ctx, title=_("Nothing playing."))
+
+        player = lavalink.get_player(ctx.guild.id)
+        dj_enabled = await self.config_cache.dj_status.get_context_value(ctx.guild)
+        can_skip = await self._can_instaskip(ctx, ctx.author)
+        if (not ctx.author.voice or ctx.author.voice.channel != player.channel) and not can_skip:
+            ctx.command.reset_cooldown(ctx)
+            return await self.send_embed_msg(
+                ctx,
+                title=_("Unable To Manage Tracks"),
+                description=_("You must be in the voice channel to apply effects."),
+            )
+        if dj_enabled and not can_skip and not await self.is_requester_alone(ctx):
+            ctx.command.reset_cooldown(ctx)
+            return await self.send_embed_msg(
+                ctx,
+                title=_("Unable To Manage Tracks"),
+                description=_("You need the DJ role to apply effects."),
+            )
+        eq = Equalizer.boost()
+
+        if state is False or (player.equalizer.changed and player.equalizer == eq):
+            eq = player.equalizer
+            eq.reset()
+        await player.set_filters(equalizer=eq)
+        async with self.config.custom("EQUALIZER", ctx.guild.id).all() as eq_data:
+            eq_data["eq_bands"] = player.equalizer.get()
+            eq_data["name"] = player.equalizer.name
+        await ctx.invoke(self.command_effects)
+
+    @command_effects.command(name="piano", usage="[off]")
+    async def command_effects_piano(self, ctx: commands.Context, *, state: OffConverter = True):
+        """This effect is suitable for Piano tracks, or tacks with an emphasis on Female Vocals.
+
+        Could also be used as a Bass Cutoff."""
+        if not self._player_check(ctx):
+            ctx.command.reset_cooldown(ctx)
+            return await self.send_embed_msg(ctx, title=_("Nothing playing."))
+
+        player = lavalink.get_player(ctx.guild.id)
+        dj_enabled = await self.config_cache.dj_status.get_context_value(ctx.guild)
+        can_skip = await self._can_instaskip(ctx, ctx.author)
+        if (not ctx.author.voice or ctx.author.voice.channel != player.channel) and not can_skip:
+            ctx.command.reset_cooldown(ctx)
+            return await self.send_embed_msg(
+                ctx,
+                title=_("Unable To Manage Tracks"),
+                description=_("You must be in the voice channel to apply effects."),
+            )
+        if dj_enabled and not can_skip and not await self.is_requester_alone(ctx):
+            ctx.command.reset_cooldown(ctx)
+            return await self.send_embed_msg(
+                ctx,
+                title=_("Unable To Manage Tracks"),
+                description=_("You need the DJ role to apply effectss."),
+            )
+
+        eq = Equalizer.piano()
+
+        if state is False or (player.equalizer.changed and player.equalizer == eq):
+            eq = player.equalizer
+            eq.reset()
+        await player.set_filters(equalizer=eq)
+        async with self.config.custom("EQUALIZER", ctx.guild.id).all() as eq_data:
+            eq_data["eq_bands"] = player.equalizer.get()
+            eq_data["name"] = player.equalizer.name
+        await ctx.invoke(self.command_effects)
+
+    @command_effects.command(name="metal", usage="[off]")
+    async def command_effects_metal(self, ctx: commands.Context, *, state: OffConverter = True):
+        """Experimental Metal/Rock Equalizer.
+
+        Expect clipping on Bassy songs."""
+        if not self._player_check(ctx):
+            ctx.command.reset_cooldown(ctx)
+            return await self.send_embed_msg(ctx, title=_("Nothing playing."))
+
+        player = lavalink.get_player(ctx.guild.id)
+        dj_enabled = await self.config_cache.dj_status.get_context_value(ctx.guild)
+        can_skip = await self._can_instaskip(ctx, ctx.author)
+        if (not ctx.author.voice or ctx.author.voice.channel != player.channel) and not can_skip:
+            ctx.command.reset_cooldown(ctx)
+            return await self.send_embed_msg(
+                ctx,
+                title=_("Unable To Manage Tracks"),
+                description=_("You must be in the voice channel to apply effects."),
+            )
+        if dj_enabled and not can_skip and not await self.is_requester_alone(ctx):
+            ctx.command.reset_cooldown(ctx)
+            return await self.send_embed_msg(
+                ctx,
+                title=_("Unable To Manage Tracks"),
+                description=_("You need the DJ role to apply effects."),
+            )
+
+        eq = Equalizer.metal()
+
+        if state is False or (player.equalizer.changed and player.equalizer == eq):
+            eq = player.equalizer
+            eq.reset()
+        await player.set_filters(equalizer=eq)
+        async with self.config.custom("EQUALIZER", ctx.guild.id).all() as eq_data:
+            eq_data["eq_bands"] = player.equalizer.get()
+            eq_data["name"] = player.equalizer.name
+        await ctx.invoke(self.command_effects)
+
+    @command_effects.command(name="nightcore", usage="[off]")
+    async def command_effects_nightcore(
+        self, ctx: commands.Context, *, state: OffConverter = True
+    ):
+        """Toggle the nightcore effect."""
+        if not self._player_check(ctx):
+            ctx.command.reset_cooldown(ctx)
+            return await self.send_embed_msg(ctx, title=_("Nothing playing."))
+
+        player = lavalink.get_player(ctx.guild.id)
+        dj_enabled = await self.config_cache.dj_status.get_context_value(ctx.guild)
+        can_skip = await self._can_instaskip(ctx, ctx.author)
+        if (not ctx.author.voice or ctx.author.voice.channel != player.channel) and not can_skip:
+            ctx.command.reset_cooldown(ctx)
+            return await self.send_embed_msg(
+                ctx,
+                title=_("Unable To Manage Tracks"),
+                description=_("You must be in the voice channel to apply effects."),
+            )
+        if dj_enabled and not can_skip and not await self.is_requester_alone(ctx):
+            ctx.command.reset_cooldown(ctx)
+            return await self.send_embed_msg(
+                ctx,
+                title=_("Unable To Manage Tracks"),
+                description=_("You need the DJ role to apply effects."),
+            )
+        eq = filters.Equalizer(
+            levels=[
+                {"band": 0, "gain": -0.075},
+                {"band": 1, "gain": 0.125},
+                {"band": 2, "gain": 0.125},
+            ],
+            name="Nightcore",
+        )
+        ts = filters.Timescale(speed=1.17, pitch=1.2, rate=1)
+        if state and (ts != player.timescale or eq != player.equalizer):
+            player.low_pass.reset()
+        else:
+            eq = player.equalizer
+            ts = player.timescale
+            ts.reset()
+            eq.reset()
+        await player.set_filters(
+            low_pass=None,  # Timescale breaks if it applied with lowpass
+            equalizer=eq,
+            karaoke=player.karaoke if player.karaoke.changed else None,
+            tremolo=player.tremolo if player.tremolo.changed else None,
+            vibrato=player.vibrato if player.vibrato.changed else None,
+            distortion=player.distortion if player.distortion.changed else None,
+            timescale=ts,
+            channel_mix=player.channel_mix if player.channel_mix.changed else None,
+            volume=player.volume,
+            reset_not_set=True,
+        )
+        async with self.config.custom("EQUALIZER", ctx.guild.id).all() as eq_data:
+            eq_data["eq_bands"] = player.equalizer.get()
+            eq_data["name"] = player.equalizer.name
+        await ctx.invoke(self.command_effects)
+
+    @command_effects.command(name="vaporwave", usage="[off]")
+    async def command_effects_vaporwave(
+        self, ctx: commands.Context, *, state: OffConverter = True
+    ):
+        """Toggle the vaporwave effect."""
+        if not self._player_check(ctx):
+            ctx.command.reset_cooldown(ctx)
+            return await self.send_embed_msg(ctx, title=_("Nothing playing."))
+
+        player = lavalink.get_player(ctx.guild.id)
+        dj_enabled = await self.config_cache.dj_status.get_context_value(ctx.guild)
+        can_skip = await self._can_instaskip(ctx, ctx.author)
+        if (not ctx.author.voice or ctx.author.voice.channel != player.channel) and not can_skip:
+            ctx.command.reset_cooldown(ctx)
+            return await self.send_embed_msg(
+                ctx,
+                title=_("Unable To Manage Tracks"),
+                description=_("You must be in the voice channel to apply effects."),
+            )
+        if dj_enabled and not can_skip and not await self.is_requester_alone(ctx):
+            ctx.command.reset_cooldown(ctx)
+            return await self.send_embed_msg(
+                ctx,
+                title=_("Unable To Manage Tracks"),
+                description=_("You need the DJ role to apply effects."),
+            )
+        eq = filters.Equalizer(
+            levels=[
+                {"band": 0, "gain": -0.075},
+                {"band": 1, "gain": 0.125},
+                {"band": 2, "gain": 0.125},
+            ],
+            name="Vaporwave",
+        )
+        ts = filters.Timescale(speed=0.70, pitch=0.75, rate=1)
+        tm = filters.Tremolo(frequency=14, depth=0.25)
+        if state and (
+            all([ts != player.timescale, tm != player.tremolo]) or eq != player.equalizer
+        ):
+            player.low_pass.reset()
+        else:
+            eq = player.equalizer
+            ts = player.timescale
+            tm = player.tremolo
+            ts.reset()
+            eq.reset()
+            tm.reset()
+
+        await player.set_filters(
+            low_pass=None,  # Timescale breaks if it applied with lowpass
+            equalizer=eq,
+            karaoke=player.karaoke if player.karaoke.changed else None,
+            tremolo=tm,
+            vibrato=player.vibrato if player.vibrato.changed else None,
+            distortion=player.distortion if player.distortion.changed else None,
+            timescale=ts,
+            channel_mix=player.channel_mix if player.channel_mix.changed else None,
+            volume=player.volume,
+            reset_not_set=True,
+        )
+        async with self.config.custom("EQUALIZER", ctx.guild.id).all() as eq_data:
+            eq_data["eq_bands"] = player.equalizer.get()
+            eq_data["name"] = player.equalizer.name
+        await ctx.invoke(self.command_effects)
+
+    @command_effects.command(name="synth", usage="[off]")
+    async def command_effects_synth(self, ctx: commands.Context, *, state: OffConverter = True):
+        """Toggle the synth effect."""
+        if not self._player_check(ctx):
+            ctx.command.reset_cooldown(ctx)
+            return await self.send_embed_msg(ctx, title=_("Nothing playing."))
+
+        player = lavalink.get_player(ctx.guild.id)
+        dj_enabled = await self.config_cache.dj_status.get_context_value(ctx.guild)
+        can_skip = await self._can_instaskip(ctx, ctx.author)
+        if (not ctx.author.voice or ctx.author.voice.channel != player.channel) and not can_skip:
+            ctx.command.reset_cooldown(ctx)
+            return await self.send_embed_msg(
+                ctx,
+                title=_("Unable To Manage Tracks"),
+                description=_("You must be in the voice channel to apply effects."),
+            )
+        if dj_enabled and not can_skip and not await self.is_requester_alone(ctx):
+            ctx.command.reset_cooldown(ctx)
+            return await self.send_embed_msg(
+                ctx,
+                title=_("Unable To Manage Tracks"),
+                description=_("You need the DJ role to apply effects."),
+            )
+        eq = filters.Equalizer(
+            levels=[
+                {"band": 0, "gain": -0.075},
+                {"band": 1, "gain": 0.325},
+                {"band": 2, "gain": 0.325},
+                {"band": 4, "gain": 0.25},
+                {"band": 5, "gain": 0.25},
+                {"band": 7, "gain": -0.35},
+                {"band": 8, "gain": -0.35},
+                {"band": 11, "gain": 0.8},
+                {"band": 12, "gain": 0.45},
+                {"band": 13, "gain": -0.025},
+            ],
+            name="Synth",
+        )
+        ts = filters.Timescale(speed=1.0, pitch=1.1, rate=1.00)
+        tm = filters.Tremolo(frequency=4, depth=0.25)
+        vb = filters.Vibrato(frequency=11, depth=0.3)
+        dt = filters.Distortion(
+            sin_offset=0,
+            sin_scale=-0.25,
+            cos_offset=0,
+            cos_scale=-0.5,
+            tan_offset=-2.75,
+            tan_scale=-0.7,
+            offset=-0.27,
+            scale=-1.2,
+        )
+        if state and (
+            all(
+                [
+                    ts != player.timescale,
+                    tm != player.tremolo,
+                    vb != player.vibrato,
+                    dt != player.distortion,
+                ]
+            )
+            or eq != player.equalizer
+        ):
+            player.low_pass.reset()
+        else:
+            eq = player.equalizer
+            ts = player.timescale
+            tm = player.tremolo
+            vb = player.vibrato
+            dt = player.distortion
+            ts.reset()
+            eq.reset()
+            tm.reset()
+            vb.reset()
+            dt.reset()
+
+        await player.set_filters(
+            low_pass=None,  # Timescale breaks if it applied with lowpass
+            equalizer=eq,
+            karaoke=player.karaoke if player.karaoke.changed else None,
+            tremolo=tm,
+            vibrato=vb,
+            distortion=dt,
+            timescale=ts,
+            channel_mix=player.channel_mix if player.channel_mix.changed else None,
+            volume=player.volume,
+            reset_not_set=True,
+        )
+        async with self.config.custom("EQUALIZER", ctx.guild.id).all() as eq_data:
+            eq_data["eq_bands"] = player.equalizer.get()
+            eq_data["name"] = player.equalizer.name
         await ctx.invoke(self.command_effects)

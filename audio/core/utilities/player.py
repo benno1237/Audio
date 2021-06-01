@@ -60,6 +60,8 @@ class PlayerUtilities(MixinMeta, metaclass=CompositeMetaClass):
                 current, self.local_folder_current_path
             )
             playing_servers = len(lavalink.active_players())
+            if current:
+                current = lavalink.Track(self.decode_track(current.track_identifier))
         except IndexError:
             current = None
             get_single_title = None
@@ -73,9 +75,13 @@ class PlayerUtilities(MixinMeta, metaclass=CompositeMetaClass):
             await self.bot.change_presence(activity=None)
         elif playing_servers == 1 and track:
             await self.bot.change_presence(
-                activity=discord.Activity(
-                    name=f"{track_string}", url=track.uri, type=discord.ActivityType.streaming
+                activity=discord.Streaming(
+                    name=f"{track_string}",
+                    url=track.uri,
+                    type=discord.ActivityType.streaming,
                 )
+                if track._info.get("sourceName") == "youtube"
+                else discord.Game(name=f"{track_string}")
             )
         elif playing_servers > 1:
             await self.bot.change_presence(
