@@ -42,7 +42,9 @@ class QueueCommands(MixinMeta, metaclass=CompositeMetaClass):
                 await self.get_track_description(player.current, self.local_folder_current_path)
                 or ""
             )
-            song += _("\n Requested by: **{track.requester}**").format(track=player.current)
+            song += _("\n Requested by: **{track.requester.mention}**").format(
+                track=player.current
+            )
             song += f"\n\n{arrow}`{pos}`/`{dur}`"
             embed = discord.Embed(title=_("Now Playing"), description=song)
             thumbnail = await self.config_cache.thumbnail.get_context_value(ctx.guild)
