@@ -339,7 +339,7 @@ class EffectsCommands(MixinMeta, metaclass=CompositeMetaClass):
         enabled, settings = user_input
 
         rotation = player.rotation
-        if enabled:
+        if not enabled:
             rotation.reset()
         else:
             (frequency,) = settings
@@ -393,6 +393,107 @@ class EffectsCommands(MixinMeta, metaclass=CompositeMetaClass):
             distortion.tan_offset = toffset
             distortion.tan_scale = tscale
         await player.set_filters(distortion=distortion)
+        await ctx.invoke(self.command_effects)
+
+    @command_effects.command(
+        name="channelmix",
+        usage="off OR <left_to_left> <left_to_right> <right_to_left> <right_to_right>",
+    )
+    async def command_effects_channelmix(
+        self, ctx: commands.Context, *, user_input: ChannelMixConverter
+    ):
+        """
+        Mixes both channels (left and right), with a configurable factor on how much each channel affects the other.
+        """
+        if not self._player_check(ctx):
+            ctx.command.reset_cooldown(ctx)
+            return await self.send_embed_msg(ctx, title=_("Nothing playing."))
+
+        player = lavalink.get_player(ctx.guild.id)
+        dj_enabled = await self.config_cache.dj_status.get_context_value(ctx.guild)
+        can_skip = await self._can_instaskip(ctx, ctx.author)
+        if (not ctx.author.voice or ctx.author.voice.channel != player.channel) and not can_skip:
+            ctx.command.reset_cooldown(ctx)
+            return await self.send_embed_msg(
+                ctx,
+                title=_("Unable To Manage Tracks"),
+                description=_("You must be in the voice channel to change effects."),
+            )
+        if dj_enabled and not can_skip and not await self.is_requester_alone(ctx):
+            ctx.command.reset_cooldown(ctx)
+            return await self.send_embed_msg(
+                ctx,
+                title=_("Unable To Manage Tracks"),
+                description=_("You need the DJ role to change effects."),
+            )
+
+        channel_mix = player.channel_mix
+        enabled, settings = user_input
+
+        if not enabled:
+            channel_mix.reset()
+        else:
+            left_to_left, left_to_right, right_to_left, right_to_right = settings
+            channel_mix.left_to_left = left_to_left
+            channel_mix.left_to_right = left_to_right
+            channel_mix.right_to_left = right_to_left
+            channel_mix.right_to_right = right_to_right
+        await player.set_filters(channel_mix=channel_mix)
+        await ctx.invoke(self.command_effects)
+
+    @command_effects.command(name="lowpass", usage="off OR <smoothing>")
+    async def command_effects_lowpass(
+        self, ctx: commands.Context, *, user_input: LowPassConverter
+    ):
+        """
+        Higher frequencies get suppressed, while lower frequencies pass through this filter
+        """
+        if not self._player_check(ctx):
+            ctx.command.reset_cooldown(ctx)
+            return await self.send_embed_msg(ctx, title=_("Nothing playing."))
+
+        player = lavalink.get_player(ctx.guild.id)
+        dj_enabled = await self.config_cache.dj_status.get_context_value(ctx.guild)
+        can_skip = await self._can_instaskip(ctx, ctx.author)
+        if (not ctx.author.voice or ctx.author.voice.channel != player.channel) and not can_skip:
+            ctx.command.reset_cooldown(ctx)
+            return await self.send_embed_msg(
+                ctx,
+                title=_("Unable To Manage Tracks"),
+                description=_("You must be in the voice channel to change effects."),
+            )
+        if dj_enabled and not can_skip and not await self.is_requester_alone(ctx):
+            ctx.command.reset_cooldown(ctx)
+            return await self.send_embed_msg(
+                ctx,
+                title=_("Unable To Manage Tracks"),
+                description=_("You need the DJ role to change effects."),
+            )
+
+        low_pass = player.low_pass
+        enabled, settings = user_input
+
+        if not enabled:
+            low_pass.reset()
+        else:
+            (smoothing,) = settings
+            low_pass.smoothing = smoothing
+            player.timescale.reset()
+
+        await player.set_filters(
+            low_pass=low_pass if low_pass.changed else None,
+            equalizer=player.equalizer if player.equalizer.changed else None,
+            karaoke=player.karaoke if player.karaoke.changed else None,
+            tremolo=player.tremolo if player.tremolo.changed else None,
+            vibrato=player.vibrato if player.vibrato.changed else None,
+            distortion=player.distortion if player.distortion.changed else None,
+            timescale=None  # Timescale breaks if it applied with lowpass
+            if low_pass.changed
+            else player.timescale,
+            channel_mix=player.channel_mix if player.channel_mix.changed else None,
+            volume=player.volume,
+            reset_not_set=True,
+        )
         await ctx.invoke(self.command_effects)
 
     @command_effects.command(name="reset", aliases=["off", "disable", "clear", "remove"])
@@ -763,105 +864,4 @@ class EffectsCommands(MixinMeta, metaclass=CompositeMetaClass):
         async with self.config.custom("EQUALIZER", ctx.guild.id).all() as eq_data:
             eq_data["eq_bands"] = player.equalizer.get()
             eq_data["name"] = player.equalizer.name
-        await ctx.invoke(self.command_effects)
-
-    @command_effects.command(
-        name="channelmix",
-        usage="off OR <left_to_left> <left_to_right> <right_to_left> <right_to_right>",
-    )
-    async def command_effects_channelmix(
-        self, ctx: commands.Context, *, user_input: ChannelMixConverter
-    ):
-        """
-        Mixes both channels (left and right), with a configurable factor on how much each channel affects the other.
-        """
-        if not self._player_check(ctx):
-            ctx.command.reset_cooldown(ctx)
-            return await self.send_embed_msg(ctx, title=_("Nothing playing."))
-
-        player = lavalink.get_player(ctx.guild.id)
-        dj_enabled = await self.config_cache.dj_status.get_context_value(ctx.guild)
-        can_skip = await self._can_instaskip(ctx, ctx.author)
-        if (not ctx.author.voice or ctx.author.voice.channel != player.channel) and not can_skip:
-            ctx.command.reset_cooldown(ctx)
-            return await self.send_embed_msg(
-                ctx,
-                title=_("Unable To Manage Tracks"),
-                description=_("You must be in the voice channel to change effects."),
-            )
-        if dj_enabled and not can_skip and not await self.is_requester_alone(ctx):
-            ctx.command.reset_cooldown(ctx)
-            return await self.send_embed_msg(
-                ctx,
-                title=_("Unable To Manage Tracks"),
-                description=_("You need the DJ role to change effects."),
-            )
-
-        channel_mix = player.channel_mix
-        enabled, settings = user_input
-
-        if not enabled:
-            channel_mix.reset()
-        else:
-            left_to_left, left_to_right, right_to_left, right_to_right = settings
-            channel_mix.left_to_left = left_to_left
-            channel_mix.left_to_right = left_to_right
-            channel_mix.right_to_left = right_to_left
-            channel_mix.right_to_right = right_to_right
-        await player.set_filters(channel_mix=channel_mix)
-        await ctx.invoke(self.command_effects)
-
-    @command_effects.command(name="lowpass", usage="off OR <smoothing>")
-    async def command_effects_lowpass(
-        self, ctx: commands.Context, *, user_input: LowPassConverter
-    ):
-        """
-        Higher frequencies get suppressed, while lower frequencies pass through this filter
-        """
-        if not self._player_check(ctx):
-            ctx.command.reset_cooldown(ctx)
-            return await self.send_embed_msg(ctx, title=_("Nothing playing."))
-
-        player = lavalink.get_player(ctx.guild.id)
-        dj_enabled = await self.config_cache.dj_status.get_context_value(ctx.guild)
-        can_skip = await self._can_instaskip(ctx, ctx.author)
-        if (not ctx.author.voice or ctx.author.voice.channel != player.channel) and not can_skip:
-            ctx.command.reset_cooldown(ctx)
-            return await self.send_embed_msg(
-                ctx,
-                title=_("Unable To Manage Tracks"),
-                description=_("You must be in the voice channel to change effects."),
-            )
-        if dj_enabled and not can_skip and not await self.is_requester_alone(ctx):
-            ctx.command.reset_cooldown(ctx)
-            return await self.send_embed_msg(
-                ctx,
-                title=_("Unable To Manage Tracks"),
-                description=_("You need the DJ role to change effects."),
-            )
-
-        low_pass = player.low_pass
-        enabled, settings = user_input
-
-        if not enabled:
-            low_pass.reset()
-        else:
-            (smoothing,) = settings
-            low_pass.smoothing = smoothing
-            player.timescale.reset()
-
-        await player.set_filters(
-            low_pass=low_pass if low_pass.changed else None,
-            equalizer=player.equalizer if player.equalizer.changed else None,
-            karaoke=player.karaoke if player.karaoke.changed else None,
-            tremolo=player.tremolo if player.tremolo.changed else None,
-            vibrato=player.vibrato if player.vibrato.changed else None,
-            distortion=player.distortion if player.distortion.changed else None,
-            timescale=None  # Timescale breaks if it applied with lowpass
-            if low_pass.changed
-            else player.timescale,
-            channel_mix=player.channel_mix if player.channel_mix.changed else None,
-            volume=player.volume,
-            reset_not_set=True,
-        )
         await ctx.invoke(self.command_effects)
