@@ -7,8 +7,7 @@ from typing import MutableMapping
 import discord
 from redbot.core import commands
 from redbot.core.i18n import Translator
-from redbot.core.utils._dpy_menus_utils import dpymenu
-from redbot.core.utils.menus import close_menu, menu, next_page, prev_page
+from redbot.core.utils.menus import DEFAULT_CONTROLS, close_menu, menu, next_page, prev_page
 
 from ...audio_dataclasses import LocalPath, Query
 from ..abc import MixinMeta
@@ -112,7 +111,7 @@ class LocalTrackCommands(MixinMeta, metaclass=CompositeMetaClass):
 
         dj_enabled = await self.config_cache.dj_status.get_context_value(ctx.guild)
         if dj_enabled and not await self._can_instaskip(ctx, ctx.author):
-            return await dpymenu(ctx, folder_page_list)
+            return await menu(ctx, folder_page_list, DEFAULT_CONTROLS)
         else:
             await menu(ctx, folder_page_list, local_folder_controls)
 

@@ -438,6 +438,16 @@ class MixinMeta(ABC):
         raise NotImplementedError()
 
     @abstractmethod
+    async def _build_queue_page(
+        self,
+        ctx: commands.Context,
+        queue: list,
+        player: lavalink.player_manager.Player,
+        page_num: int,
+    ) -> discord.Embed:
+        raise NotImplementedError()
+
+    @abstractmethod
     async def command_pause(self, ctx: commands.Context):
         raise NotImplementedError()
 
@@ -445,6 +455,12 @@ class MixinMeta(ABC):
     async def _build_queue_search_list(
         self, queue_list: List[lavalink.Track], search_words: str
     ) -> List[Tuple[int, str]]:
+        raise NotImplementedError()
+
+    @abstractmethod
+    async def _build_queue_search_page(
+        self, ctx: commands.Context, page_num: int, search_list: List[Tuple[int, str]]
+    ) -> discord.Embed:
         raise NotImplementedError()
 
     @abstractmethod
