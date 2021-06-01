@@ -461,10 +461,9 @@ class EffectsCommands(MixinMeta, metaclass=CompositeMetaClass):
                 title=_("Unable To Manage Tracks"),
                 description=_("You need the DJ role to apply effects."),
             )
+        eq = Equalizer.boost()
 
-        if state:
-            eq = Equalizer.boost()
-        else:
+        if state is False or (player.equalizer.changed and player.equalizer == eq):
             eq = player.equalizer
             eq.reset()
         await player.set_filters(equalizer=eq)
@@ -500,9 +499,9 @@ class EffectsCommands(MixinMeta, metaclass=CompositeMetaClass):
                 description=_("You need the DJ role to apply effectss."),
             )
 
-        if state:
-            eq = Equalizer.piano()
-        else:
+        eq = Equalizer.piano()
+
+        if state is False or (player.equalizer.changed and player.equalizer == eq):
             eq = player.equalizer
             eq.reset()
         await player.set_filters(equalizer=eq)
@@ -538,9 +537,9 @@ class EffectsCommands(MixinMeta, metaclass=CompositeMetaClass):
                 description=_("You need the DJ role to apply effects."),
             )
 
-        if state:
-            eq = Equalizer.metal()
-        else:
+        eq = Equalizer.metal()
+
+        if state is False or (player.equalizer.changed and player.equalizer == eq):
             eq = player.equalizer
             eq.reset()
         await player.set_filters(equalizer=eq)
@@ -553,7 +552,7 @@ class EffectsCommands(MixinMeta, metaclass=CompositeMetaClass):
     async def command_effects_nightcore(
         self, ctx: commands.Context, *, state: OffConverter = True
     ):
-        """Apply the nightcore effect."""
+        """Toggle the nightcore effect."""
         if not self._player_check(ctx):
             ctx.command.reset_cooldown(ctx)
             return await self.send_embed_msg(ctx, title=_("Nothing playing."))
@@ -575,17 +574,16 @@ class EffectsCommands(MixinMeta, metaclass=CompositeMetaClass):
                 title=_("Unable To Manage Tracks"),
                 description=_("You need the DJ role to apply effects."),
             )
-
-        if state:
-            eq = filters.Equalizer(
-                levels=[
-                    {"band": 0, "gain": -0.075},
-                    {"band": 1, "gain": 0.125},
-                    {"band": 2, "gain": 0.125},
-                ],
-                name="Nightcore",
-            )
-            ts = filters.Timescale(speed=1.17, pitch=1.2, rate=1)
+        eq = filters.Equalizer(
+            levels=[
+                {"band": 0, "gain": -0.075},
+                {"band": 1, "gain": 0.125},
+                {"band": 2, "gain": 0.125},
+            ],
+            name="Nightcore",
+        )
+        ts = filters.Timescale(speed=1.17, pitch=1.2, rate=1)
+        if state and (ts != player.timescale or eq != player.equalizer):
             player.low_pass.reset()
         else:
             eq = player.equalizer
@@ -613,7 +611,7 @@ class EffectsCommands(MixinMeta, metaclass=CompositeMetaClass):
     async def command_effects_vaporwave(
         self, ctx: commands.Context, *, state: OffConverter = True
     ):
-        """Apply the vaporwave effect."""
+        """Toggle the vaporwave effect."""
         if not self._player_check(ctx):
             ctx.command.reset_cooldown(ctx)
             return await self.send_embed_msg(ctx, title=_("Nothing playing."))
@@ -635,18 +633,19 @@ class EffectsCommands(MixinMeta, metaclass=CompositeMetaClass):
                 title=_("Unable To Manage Tracks"),
                 description=_("You need the DJ role to apply effects."),
             )
-
-        if state:
-            eq = filters.Equalizer(
-                levels=[
-                    {"band": 0, "gain": -0.075},
-                    {"band": 1, "gain": 0.125},
-                    {"band": 2, "gain": 0.125},
-                ],
-                name="Vaporwave",
-            )
-            ts = filters.Timescale(speed=0.70, pitch=0.75, rate=1)
-            tm = filters.Tremolo(frequency=14, depth=0.25)
+        eq = filters.Equalizer(
+            levels=[
+                {"band": 0, "gain": -0.075},
+                {"band": 1, "gain": 0.125},
+                {"band": 2, "gain": 0.125},
+            ],
+            name="Vaporwave",
+        )
+        ts = filters.Timescale(speed=0.70, pitch=0.75, rate=1)
+        tm = filters.Tremolo(frequency=14, depth=0.25)
+        if state and (
+            all([ts != player.timescale, tm != player.tremolo]) or eq != player.equalizer
+        ):
             player.low_pass.reset()
         else:
             eq = player.equalizer
@@ -675,7 +674,7 @@ class EffectsCommands(MixinMeta, metaclass=CompositeMetaClass):
 
     @command_effects.command(name="synth", usage="[off]")
     async def command_effects_synth(self, ctx: commands.Context, *, state: OffConverter = True):
-        """Apply the synth effect."""
+        """Toggle the synth effect."""
         if not self._player_check(ctx):
             ctx.command.reset_cooldown(ctx)
             return await self.send_embed_msg(ctx, title=_("Nothing playing."))
@@ -697,36 +696,45 @@ class EffectsCommands(MixinMeta, metaclass=CompositeMetaClass):
                 title=_("Unable To Manage Tracks"),
                 description=_("You need the DJ role to apply effects."),
             )
-
-        if state:
-            eq = filters.Equalizer(
-                levels=[
-                    {"band": 0, "gain": -0.075},
-                    {"band": 1, "gain": 0.325},
-                    {"band": 2, "gain": 0.325},
-                    {"band": 4, "gain": 0.25},
-                    {"band": 5, "gain": 0.25},
-                    {"band": 7, "gain": -0.35},
-                    {"band": 8, "gain": -0.35},
-                    {"band": 11, "gain": 0.8},
-                    {"band": 12, "gain": 0.45},
-                    {"band": 13, "gain": -0.025},
-                ],
-                name="Synth",
+        eq = filters.Equalizer(
+            levels=[
+                {"band": 0, "gain": -0.075},
+                {"band": 1, "gain": 0.325},
+                {"band": 2, "gain": 0.325},
+                {"band": 4, "gain": 0.25},
+                {"band": 5, "gain": 0.25},
+                {"band": 7, "gain": -0.35},
+                {"band": 8, "gain": -0.35},
+                {"band": 11, "gain": 0.8},
+                {"band": 12, "gain": 0.45},
+                {"band": 13, "gain": -0.025},
+            ],
+            name="Synth",
+        )
+        ts = filters.Timescale(speed=1.0, pitch=1.1, rate=1.00)
+        tm = filters.Tremolo(frequency=4, depth=0.25)
+        vb = filters.Vibrato(frequency=11, depth=0.3)
+        dt = filters.Distortion(
+            sin_offset=0,
+            sin_scale=-0.25,
+            cos_offset=0,
+            cos_scale=-0.5,
+            tan_offset=-2.75,
+            tan_scale=-0.7,
+            offset=-0.27,
+            scale=-1.2,
+        )
+        if state and (
+            all(
+                [
+                    ts != player.timescale,
+                    tm != player.tremolo,
+                    vb != player.vibrato,
+                    dt != player.distortion,
+                ]
             )
-            ts = filters.Timescale(speed=1.0, pitch=1.1, rate=1.00)
-            tm = filters.Tremolo(frequency=4, depth=0.25)
-            vb = filters.Vibrato(frequency=11, depth=0.3)
-            dt = filters.Distortion(
-                sin_offset=0,
-                sin_scale=-0.25,
-                cos_offset=0,
-                cos_scale=-0.5,
-                tan_offset=-2.75,
-                tan_scale=-0.7,
-                offset=-0.27,
-                scale=-1.2,
-            )
+            or eq != player.equalizer
+        ):
             player.low_pass.reset()
         else:
             eq = player.equalizer
