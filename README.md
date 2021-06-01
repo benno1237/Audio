@@ -4,7 +4,7 @@
 
 [![pre-commit.ci status](https://results.pre-commit.ci/badge/github/Drapersniper/Audio/master.svg)](https://results.pre-commit.ci/latest/github/Drapersniper/Audio/master)
 [![CI status](https://github.com/Drapersniper/Audio/actions/workflows/main.yml/badge.svg)](https://github.com/Drapersniper/Audio/actions/workflows/main.yml)
-[![Activity](https://img.shields.io/github/commit-activity/m/Drapersniper/Audio?logo=GitHub&style=plastict&labelColor=292f35&logoColor=878f96&color=32c754)](https://github.com/Drapersniper/Audio/pulse)
+[![Activity](https://img.shields.io/github/commit-activity/m/Drapersniper/Audio?logo=GitHub&style=plastict&labelColor=292f35&color=32c754)](https://github.com/Drapersniper/Audio/pulse)
 [![LastCommit](https://img.shields.io/github/last-commit/Drapersniper/Audio?logo=Github&labelColor=292f35&logoColor=878f96&color=32c754)](https://github.com/Drapersniper/Audio/commits/master)
 [![Contributors](https://img.shields.io/github/contributors/Drapersniper/Audio.svg?labelColor=292f35&logo=GitHub&logoColor=878f96&color=32c754)](https://github.com/Drapersniper/Audio/graphs/contributors)
 [![License](https://img.shields.io/badge/License-GPLv3-blue.svg?labelColor=292f35&color=32c754)](https://github.com/Cog-Creators/Red-DiscordBot/blob/V3/develop/LICENSE)
