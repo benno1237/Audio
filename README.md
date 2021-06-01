@@ -16,6 +16,7 @@
 [![Personal Patreon](https://img.shields.io/badge/Support-Me!-black.svg)](https://www.patreon.com/drapersniper)
 
 <h2 align="left">About Red</h2>
+
 [![Discord](https://img.shields.io/discord/133049272517001216?color=7289da&label=Red%20Discord&logo=Discord&style=plastic)](https://discord.gg/red)
 [![Support Red on Patreon!](https://img.shields.io/badge/Support-Red!-red.svg)](https://www.patreon.com/Red_Devs)
 
