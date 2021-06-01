@@ -669,12 +669,6 @@ class PlayerControllerCommands(MixinMeta, metaclass=CompositeMetaClass):
         """Set the volume in percentages greater or equal to 0%."""
         dj_enabled = await self.config_cache.dj_status.get_context_value(ctx.guild)
         can_skip = await self._can_instaskip(ctx, ctx.author)
-        if not vol:
-            vol = await self.config_cache.volume.get_context_value(ctx.guild)
-            embed = discord.Embed(title=_("Current Volume:"), description=f"{vol}%")
-            if not self._player_check(ctx):
-                embed.set_footer(text=_("Nothing playing."))
-            return await self.send_embed_msg(ctx, embed=embed)
         if self._player_check(ctx):
             player = lavalink.get_player(ctx.guild.id)
             if (
@@ -695,33 +689,43 @@ class PlayerControllerCommands(MixinMeta, metaclass=CompositeMetaClass):
         if not self._player_check(ctx):
             return await self.send_embed_msg(ctx, title=_("Nothing playing."))
 
+        player = lavalink.get_player(ctx.guild.id)
         max_volume, max_source = await self.config_cache.volume.get_max_and_source(
-            ctx.guild, ctx.guild.me.voice.channel if ctx.guild.me.voice else None
+            ctx.guild, player.channel
         )
 
-        volume = (
-            min(
-                max(vol, 0),
-                max_volume,
+        if vol:
+            volume = (
+                min(
+                    max(vol, 0),
+                    max_volume,
+                )
+                / 100
             )
-            / 100
-        )
+        else:
+            volume = None
 
-        if self._player_check(ctx):
-            player = lavalink.get_player(ctx.guild.id)
+        if volume:
             vol = Volume(value=volume)
             if player.volume != vol:
                 await player.set_volume(vol)
             player.store("notify_channel", ctx.channel.id)
-            embed = discord.Embed(
-                title=_("Volume:"),
-                description="Currently set to **{volume}%**\n\n"
+            description = (
+                "Currently set to **{volume}%**\n\n"
                 "Maximum allowed volume here is **{max_volume}%** "
-                "due to {restrictor} restrictions.".format(
-                    volume=int(volume * 100), max_volume=max_volume, restrictor=max_source
-                ),
-            )
-            await self.send_embed_msg(ctx, embed=embed)
+                "due to {restrictor} restrictions."
+            ).format(volume=int(volume * 100), max_volume=max_volume, restrictor=max_source)
+        else:
+            description = (
+                "Maximum allowed volume here is **{max_volume}%** "
+                "due to {restrictor} restrictions."
+            ).format(max_volume=max_volume, restrictor=max_source)
+
+        embed = discord.Embed(
+            title=_("Volume"),
+            description=description,
+        )
+        await self.send_embed_msg(ctx, embed=embed)
 
     @commands.command(name="repeat")
     @commands.guild_only()

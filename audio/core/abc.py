@@ -414,7 +414,7 @@ class MixinMeta(ABC):
         raise NotImplementedError()
 
     @abstractmethod
-    async def command_play(self, ctx: commands.Context, *, query: str):
+    async def command_play(self, ctx: commands.Context, *, queries: List[Query]):
         raise NotImplementedError()
 
     @abstractmethod
