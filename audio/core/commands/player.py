@@ -270,7 +270,7 @@ class PlayerCommands(MixinMeta, metaclass=CompositeMetaClass):
             desc = _("No tracks found for `{query}`.").format(query=query.to_string_user())
             embed = discord.Embed(title=title, description=desc)
             if (
-                await self.config_cache.external_lavalink_server.get_context_value(ctx.guild)
+                await self.config_cache.use_managed_lavalink.get_context_value(ctx.guild)
                 and query.is_local
             ):
                 embed.description = _(
@@ -833,9 +833,7 @@ class PlayerCommands(MixinMeta, metaclass=CompositeMetaClass):
                 if not tracks:
                     embed = discord.Embed(title=_("Nothing found."))
                     if (
-                        await self.config_cache.external_lavalink_server.get_context_value(
-                            ctx.guild
-                        )
+                        await self.config_cache.use_managed_lavalink.get_context_value(ctx.guild)
                         and query.is_local
                     ):
                         embed.description = _(
@@ -970,7 +968,7 @@ class PlayerCommands(MixinMeta, metaclass=CompositeMetaClass):
             if not tracks:
                 embed = discord.Embed(title=_("Nothing found."))
                 if (
-                    await self.config_cache.external_lavalink_server.get_context_value(ctx.guild)
+                    await self.config_cache.use_managed_lavalink.get_context_value(ctx.guild)
                     and query.is_local
                 ):
                     embed.description = _(

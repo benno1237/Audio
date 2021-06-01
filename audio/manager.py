@@ -29,10 +29,10 @@ from .utils import task_callback
 
 _ = Translator("Audio", pathlib.Path(__file__))
 log = logging.getLogger("red.Audio.manager")
-JAR_VERSION: Final[str] = "3.3.2.3"
-JAR_BUILD: Final[int] = 1232
+JAR_VERSION: Final[str] = "3.3.2.5"
+JAR_BUILD: Final[int] = 1238
 LAVALINK_DOWNLOAD_URL: Final[str] = (
-    "https://github.com/Cog-Creators/Lavalink-Jars/releases/download/"
+    "https://github.com/Drapersniper/Lavalink-Jars/releases/download/"
     f"{JAR_VERSION}_{JAR_BUILD}/"
     "Lavalink.jar"
 )
@@ -91,14 +91,14 @@ LAVALINK_LAVAPLAYER_LINE: Final[Pattern] = re.compile(rb"Lavaplayer\s+(?P<lavapl
 LAVALINK_BUILD_TIME_LINE: Final[Pattern] = re.compile(rb"Build time:\s+(?P<build_time>\d+[.\d+]*)")
 LAVALINK_JAR_ENDPOINT: Final[
     str
-] = "https://api.github.com/repos/Cog-Creators/Lavalink-Jars/releases"
+] = "https://api.github.com/repos/Drapersniper/Lavalink-Jars/releases"
 
 
 async def get_latest_lavalink_release(stable=True, date=False):
-    async with aiohttp.ClientSession() as session:
+    async with aiohttp.ClientSession(json_serialize=json.dumps) as session:
         async with session.get(LAVALINK_JAR_ENDPOINT) as resp:
             if resp.status != 200:
-                return
+                return "", "0_0", "0", None
             data = await resp.json(loads=json.loads)
             if stable:
                 data = list(
@@ -116,6 +116,7 @@ async def get_latest_lavalink_release(stable=True, date=False):
                     ),
                     None,
                 ),
+                None,
             )
             if not date:
                 return output
@@ -197,7 +198,7 @@ class ServerManager:
         else:
             if await self.config_cache.managed_lavalink_server_auto_update.get_global():
                 with contextlib.suppress(Exception):
-                    name, tag, url = await get_latest_lavalink_release()
+                    name, tag, url, _nothing = await get_latest_lavalink_release()
                     if name and "_" in name:
                         tag = name
                         version, build = name.split("_")
@@ -245,11 +246,11 @@ class ServerManager:
         (java_available, java_version) = await self._has_java()
 
         if not java_available:
-            raise RuntimeError("You must install Java 11 for Lavalink to run.")
+            raise RuntimeError("You must install Java 11 or 13 for Lavalink to run.")
 
         return [
             self._java_exc,
-            "-Djdk.tls.client.protocols=TLSv1.2",
+            "-Djdk.tls.client.protocols=TLSv1.2" if (11, 0) <= java_version < (12, 0) else "",
             "-jar",
             str(LAVALINK_JAR_FILE),
         ]
@@ -264,9 +265,9 @@ class ServerManager:
             self.java_available = False
             self.java_version = None
         else:
-            self._java_version = version = await self._get_java_version()
-            self._java_available = (11, 0) <= version < (12, 0)
             self._java_exc = java_exec
+            self._java_version = version = await self._get_java_version()
+            self._java_available = (11, 0) <= version < (12, 0) or (13, 0) <= version < (14, 0)
         return self._java_available, self._java_version
 
     async def _get_java_version(self) -> Tuple[int, int]:
@@ -304,6 +305,9 @@ class ServerManager:
         try:
             with open(BUNDLED_APP_YML, "r") as f:
                 data = yaml.safe_load(f)
+            data["lavalink"]["server"][
+                "jdanas"
+            ] = await self.config_cache.managed_lavalink_yaml.get_jda_nsa()
             data["lavalink"]["server"][
                 "bufferDurationMs"
             ] = await self.config_cache.managed_lavalink_yaml.get_lavalink_buffer()

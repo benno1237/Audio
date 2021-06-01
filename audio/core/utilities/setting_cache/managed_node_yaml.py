@@ -161,6 +161,25 @@ class ManagedNodeYamlManager(CacheBase):
                 "lavalink"
             ]["managed_yaml"]["lavalink"]["server"]["bufferDurationMs"]
 
+    async def get_jda_nsa(self) -> bool:
+        ret: bool
+        if self.enable_cache and None in self._cached_global:
+            ret = self._cached_global["jdanas"]
+        else:
+            ret = await self._config.lavalink.managed_yaml.lavalink.server.jdanas()
+            self._cached_global["jdanas"] = ret
+        return ret
+
+    async def set_jda_nsa(self, set_to: bool) -> None:
+        if set_to is not None:
+            await self._config.lavalink.managed_yaml.lavalink.server.jdanas.set(set_to)
+            self._cached_global["jdanas"] = set_to
+        else:
+            await self._config.lavalink.managed_yaml.lavalink.server.jdanas.clear()
+            self._cached_global["jdanas"] = self._config.defaults["GLOBAL"]["lavalink"][
+                "managed_yaml"
+            ]["lavalink"]["server"]["jdanas"]
+
     async def get_source_http(self) -> bool:
         ret: bool
         if self.enable_cache and None in self._cached_global:

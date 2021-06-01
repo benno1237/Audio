@@ -132,7 +132,7 @@ class QueueCommands(MixinMeta, metaclass=CompositeMetaClass):
             return await self.send_embed_msg(ctx, title=_("There's nothing in the queue."))
 
         await QueueMenu(source=QueueSource(player.queue, self.config_cache), cog=self).start(
-            ctx=ctx, wait=False, page=page
+            ctx=ctx, wait=False, page=page - 1
         )
 
     @command_queue.command(name="clear", aliases=["wipe", "reset"])

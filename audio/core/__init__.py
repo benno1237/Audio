@@ -98,6 +98,7 @@ class Audio(
             }
         }
         lavalink_yaml = dict(lavalink={"server": {"sources": {}}}, server={})
+        lavalink_yaml["lavalink"]["server"]["jdanas"] = True
         lavalink_yaml["lavalink"]["server"]["sources"]["http"] = True
         lavalink_yaml["lavalink"]["server"]["sources"]["local"] = True
         lavalink_yaml["lavalink"]["server"]["sources"]["bandcamp"] = True

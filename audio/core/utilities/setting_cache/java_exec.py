@@ -21,25 +21,26 @@ class JavaExecPathManager(CacheBase):
         super().__init__(*args, **kwargs)
         self._cached_global: Dict[None, str] = {}
 
-    async def get_global(self) -> Path:
+    async def get_global(self) -> str:
         ret: str
         if self.enable_cache and None in self._cached_global:
             ret = self._cached_global[None]
         else:
             ret = await self._config.java_exc_path()
             self._cached_global[None] = ret
-        return Path(ret).absolute()
+        return ret
 
     async def set_global(self, set_to: Optional[Path]) -> None:
         gid = None
         if set_to is not None:
+            set_to = str(set_to.absolute())
             await self._config.java_exc_path.set(set_to)
-            self._cached_global[gid] = str(set_to.absolute())
+            self._cached_global[gid] = set_to
         else:
             await self._config.java_exc_path.clear()
             self._cached_global[gid] = self._config.defaults["GLOBAL"]["java_exc_path"]
 
-    async def get_context_value(self, guild: discord.Guild = None) -> Path:
+    async def get_context_value(self, guild: discord.Guild = None) -> str:
         return await self.get_global()
 
     def reset_globals(self) -> None:

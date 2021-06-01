@@ -11,7 +11,8 @@ class LavalinkJarMetaManager(CacheBase):
         "bot",
         "enable_cache",
         "config_cache",
-        "_cached_build" "_cache_url",
+        "_cached_build",
+        "_cache_url",
         "_cache_stable",
     )
 
