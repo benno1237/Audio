@@ -4,8 +4,8 @@ on:
   push:
 
 jobs:
-  run_precommit:
-    name: Run pre-commit
+  precommit:
+    name: Tests
     runs-on: ubuntu-latest
     steps:
       # Checkout repository

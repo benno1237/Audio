@@ -3,7 +3,7 @@
 <h2 align="center">Alpha Audio Cog</h2>
 
 [![pre-commit.ci status](https://results.pre-commit.ci/badge/github/Drapersniper/Audio/master.svg)](https://results.pre-commit.ci/latest/github/Drapersniper/Audio/master)
-[![CI status](https://github.com/Drapersniper/Audio/actions/workflows/main.yaml/badge.svg?branch=master)](https://github.com/psf/black/actions)
+[![CI status](https://github.com/Drapersniper/Audio/actions/workflows/main.yml/badge.svg)](https://github.com/Drapersniper/Audio/actions/workflows/main.yml)
 [![Contributors](https://img.shields.io/github/commit-activity/m/Drapersniper/Audio?logo=GitHub&style=plastic)](https://github.com/Drapersniper/Audio/pulse)
 [![License](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://github.com/Cog-Creators/Red-DiscordBot/blob/V3/develop/LICENSE)
 [![Black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
