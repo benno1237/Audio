@@ -1,5 +1,5 @@
 ci:
-    skip: [add-hash-to-file, flake8]
+    skip: [flake8]
 
 default_language_version:
   python: python3.8
