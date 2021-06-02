@@ -1,5 +1,16 @@
 ci:
-    skip: [add-hash-to-file]
+    skip:
+        - flake8
+        - check-ast
+        - check-json
+        - check-json
+        - check-yaml
+        - check-case-conflict
+        - check-merge-conflict
+        - python-check-blanket-noqa
+        - rst-directive-colons
+        - rst-inline-touching-normal
+        - add-hash-to-file
 
 default_language_version:
   python: python3.8
