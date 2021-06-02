@@ -65,7 +65,6 @@ class PlayerUtilities(MixinMeta, metaclass=CompositeMetaClass):
             if current:
                 current = lavalink.Track(self.decode_track(current.track_identifier))
         except IndexError:
-            print("Indexerror")
             current = None
             get_single_title = None
             playing_servers = 0

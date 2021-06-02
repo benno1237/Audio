@@ -32,7 +32,18 @@ class DJRoleManager(CacheBase):
         return {y for r in ret if (y := guild.get_role(r)) in guild.roles}
 
     async def get_allowed_members(self, guild: discord.Guild) -> Set[discord.Member]:
-        return {member for role in await self.get_guild(guild) for member in role.members}
+        members = {member for m in self.bot.owner_ids if (member := guild.get_member(m))}
+        if await self.config_cache.dj_status.get_context_value(guild):
+            members |= {member for role in await self.get_guild(guild) for member in role.members}
+        return members
+
+    async def get_allowed_member_ids(self, guild: discord.Guild) -> Set[int]:
+        member_ids = {*self.bot.owner_ids}
+        if await self.config_cache.dj_status.get_context_value(guild):
+            member_ids |= {
+                member.id for role in await self.get_guild(guild) for member in role.members
+            }
+        return member_ids
 
     async def member_is_dj(self, guild: discord.Guild, member: discord.Member) -> bool:
         return member in await self.get_allowed_members(guild)
