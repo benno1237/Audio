@@ -186,7 +186,7 @@ class ServerManager:
         self._java_exc = java_path
         if arch_name in self._blacklisted_archs:
             raise asyncio.CancelledError(
-                "You are attempting to run Lavalink audio on an unsupported machine architecture."
+                "You are attempting to run a Lavalink node on an unsupported machine architecture."
             )
 
         if (jar_url := await self.config_cache.managed_lavalink_meta.get_global_url()) is not None:
@@ -367,7 +367,9 @@ class ServerManager:
                 if b"Port 2333 was already in use" in line:
                     log.warning("Unable to start managed node; Port 2333 is already in use.")
                     raise ShouldAutoRecover
-                raise RuntimeError("Managed Lavalink failed to start: %s", line.decode().strip())
+                raise RuntimeError(
+                    "Managed Lavalink node failed to start: %s", line.decode().strip()
+                )
             if self._proc.returncode is not None:
                 # Avoid Console spam only print once every 2 seconds
                 ready = False
@@ -379,6 +381,12 @@ class ServerManager:
             raise RuntimeError("Managed node failed to start: Node exited with error code 1.")
         if not ready:
             log.critical("Managed node exited early")
+        if self.ready.is_set():
+            log.info(
+                "Managed node is ready to accept connections on: http://%s:%s",
+                self._host,
+                self._port,
+            )
 
     async def _monitor(self) -> None:
         while self._proc.returncode is None:
@@ -391,7 +399,7 @@ class ServerManager:
             await self.start(self._java_exc)
         else:
             log.critical(
-                "Your Java is borked. Please find the hs_err_pid%d.log file"
+                "Your Java install is broken. Please find the hs_err_pid%d.log file"
                 " in the Audio data folder and report this issue.",
                 self._proc.pid,
             )
@@ -421,8 +429,8 @@ class ServerManager:
                     # A 404 means our LAVALINK_DOWNLOAD_URL is invalid, so likely the jar version
                     # hasn't been published yet
                     raise LavalinkDownloadFailed(
-                        f"Lavalink jar version {JAR_VERSION}_{JAR_BUILD} hasn't been published "
-                        "yet",
+                        f"Lavalink server version {self._jar_version}_{self._jar_build} "
+                        "hasn't been published yet",
                         response=response,
                         should_retry=False,
                     )
