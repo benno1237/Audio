@@ -40,6 +40,7 @@ class LavalinkTasks(MixinMeta, metaclass=CompositeMetaClass):
             host = await self.config_cache.node_config.get_host(node_identifier="primary")
             password = await self.config_cache.node_config.get_password(node_identifier="primary")
             port = await self.config_cache.node_config.get_port(node_identifier="primary")
+            name = await self.config_cache.node_config.get_identifier(node_identifier="primary")
             if managed is True:
                 if self.player_manager is not None:
                     await self.player_manager.shutdown()
@@ -108,6 +109,7 @@ class LavalinkTasks(MixinMeta, metaclass=CompositeMetaClass):
                     ws_port=port,
                     timeout=timeout,
                     resume_key=f"Red-Core-Audio-{self.bot.user.id}-{data_manager.instance_name}",
+                    node_name=name,
                 )
             except asyncio.TimeoutError:
                 log.error("Connecting to node timed out, retrying...")
