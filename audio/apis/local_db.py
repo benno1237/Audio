@@ -18,10 +18,12 @@ from redbot.core.utils import AsyncIter
 from redbot.core.utils.dbtools import APSWConnectionWrapper
 
 from ..audio_logging import debug_exc_log
+from ..sql_statements import LAVALINK_DELETE_OLD_ENTRIES  # noqa: F401
+from ..sql_statements import SPOTIFY_DELETE_OLD_ENTRIES  # noqa: F401
+from ..sql_statements import YOUTUBE_DELETE_OLD_ENTRIES  # noqa: F401
 from ..sql_statements import (
     LAVALINK_CREATE_INDEX,
     LAVALINK_CREATE_TABLE,
-    LAVALINK_DELETE_OLD_ENTRIES,
     LAVALINK_FETCH_ALL_ENTRIES_GLOBAL,
     LAVALINK_QUERY,
     LAVALINK_QUERY_ALL,
@@ -30,7 +32,6 @@ from ..sql_statements import (
     LAVALINK_UPSERT,
     SPOTIFY_CREATE_INDEX,
     SPOTIFY_CREATE_TABLE,
-    SPOTIFY_DELETE_OLD_ENTRIES,
     SPOTIFY_QUERY,
     SPOTIFY_QUERY_ALL,
     SPOTIFY_QUERY_LAST_FETCHED_RANDOM,
@@ -38,7 +39,6 @@ from ..sql_statements import (
     SPOTIFY_UPSERT,
     YOUTUBE_CREATE_INDEX,
     YOUTUBE_CREATE_TABLE,
-    YOUTUBE_DELETE_OLD_ENTRIES,
     YOUTUBE_QUERY,
     YOUTUBE_QUERY_ALL,
     YOUTUBE_QUERY_LAST_FETCHED_RANDOM,
