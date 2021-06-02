@@ -1,3 +1,4 @@
+import asyncio
 import logging
 import time
 from pathlib import Path
@@ -47,6 +48,7 @@ class PlayerUtilities(MixinMeta, metaclass=CompositeMetaClass):
         return self._error_counter[guild] >= 5
 
     async def get_active_player_count(self) -> Tuple[Optional[Track], Optional[str], int]:
+        await asyncio.sleep(1)
         try:
             current = next(
                 (
@@ -63,6 +65,7 @@ class PlayerUtilities(MixinMeta, metaclass=CompositeMetaClass):
             if current:
                 current = lavalink.Track(self.decode_track(current.track_identifier))
         except IndexError:
+            print("Indexerror")
             current = None
             get_single_title = None
             playing_servers = 0
@@ -80,7 +83,8 @@ class PlayerUtilities(MixinMeta, metaclass=CompositeMetaClass):
                     url=track.uri,
                     type=discord.ActivityType.streaming,
                 )
-                if track._info.get("sourceName") == "youtube"
+                if track._info.get("sourceName")
+                not in ["local"]  # Discord will auto handle the rest.
                 else discord.Game(name=f"{track_string}")
             )
         elif playing_servers > 1:

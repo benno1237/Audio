@@ -21,7 +21,13 @@ from .core import Audio  # noqa: E402
 __red_end_user_data_statement__ = get_end_user_data_statement(__file__)
 
 
-def setup(bot: Red):
+async def setup(bot: Red):
+    async with bot._config.packages() as curr_pkgs:
+        if "audio" not in curr_pkgs[:1]:
+            while "audio" in curr_pkgs:
+                curr_pkgs.remove("audio")
+            curr_pkgs.insert(0, "audio")
+
     cog = Audio(bot)
     bot.add_cog(cog)
     cog.start_up_task()
