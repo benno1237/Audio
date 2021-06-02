@@ -1153,3 +1153,6 @@ cscope.po.out
 .ensime
 .ensime_cache/
 .ensime_lucene/
+
+### Unignores
+!*core/buttons

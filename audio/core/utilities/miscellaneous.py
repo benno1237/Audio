@@ -11,6 +11,7 @@ from typing import Any, Final, Mapping, MutableMapping, Optional, Pattern, Union
 import discord
 import lavalink
 from discord.embeds import EmptyEmbed
+from discord.utils import MISSING
 
 try:
     from redbot import json
@@ -70,7 +71,7 @@ class MiscellaneousUtilities(MixinMeta, metaclass=CompositeMetaClass):
 
     async def send_embed_msg(
         self, ctx: commands.Context, author: Mapping[str, str] = None, no_embed=False, **kwargs
-    ) -> discord.Message:
+    ) -> None:
         colour = kwargs.get("colour") or kwargs.get("color") or await self.bot.get_embed_color(ctx)
         delete_after = kwargs.get("delete_after")
         _type = kwargs.get("type", "rich") or "rich"
@@ -78,6 +79,7 @@ class MiscellaneousUtilities(MixinMeta, metaclass=CompositeMetaClass):
         timestamp = kwargs.get("timestamp")
         footer = kwargs.get("footer")
         thumbnail = kwargs.get("thumbnail")
+        view = kwargs.get("view")
         if not no_embed:
             title = kwargs.get("title", EmptyEmbed) or EmptyEmbed
             description = kwargs.get("description", EmptyEmbed) or EmptyEmbed
@@ -105,7 +107,7 @@ class MiscellaneousUtilities(MixinMeta, metaclass=CompositeMetaClass):
                     embed.set_author(name=name, icon_url=url)
                 elif name:
                     embed.set_author(name=name)
-            return await ctx.send(embed=embed, delete_after=delete_after)
+            return await ctx.send(embed=embed, delete_after=delete_after, view=view)
         else:
             title = kwargs.get("title", "")
             description = kwargs.get("description", "")
@@ -117,7 +119,69 @@ class MiscellaneousUtilities(MixinMeta, metaclass=CompositeMetaClass):
             if footer:
                 footer = f"{footer}"
             content = f"{title}{description}\n\n{footer}"
-            return await ctx.send(content=content, delete_after=delete_after)
+            return await ctx.send(content=content, delete_after=delete_after, view=view)
+
+    async def send_interaction_msg(
+        self,
+        interaction: discord.Interaction,
+        author: Mapping[str, str] = None,
+        no_embed=False,
+        ephemeral: bool = True,
+        **kwargs,
+    ) -> None:
+        colour = (
+            kwargs.get("colour")
+            or kwargs.get("color")
+            or await self.bot.get_embed_color(interaction)
+        )
+        _type = kwargs.get("type", "rich") or "rich"
+        url = kwargs.get("url", EmptyEmbed) or EmptyEmbed
+        timestamp = kwargs.get("timestamp")
+        footer = kwargs.get("footer")
+        thumbnail = kwargs.get("thumbnail")
+        embed = MISSING
+        content = MISSING
+        if not no_embed:
+            title = kwargs.get("title", EmptyEmbed) or EmptyEmbed
+            description = kwargs.get("description", EmptyEmbed) or EmptyEmbed
+            contents = dict(title=title, type=_type, url=url, description=description)
+            if hasattr(kwargs.get("embed"), "to_dict"):
+                embed = kwargs.get("embed")
+                if embed is not None:
+                    embed = embed.to_dict()
+            else:
+                embed = {}
+            colour = embed.get("color") if embed.get("color") else colour
+            contents.update(embed)
+            if timestamp and isinstance(timestamp, datetime.datetime):
+                contents["timestamp"] = timestamp
+            embed = discord.Embed.from_dict(contents)
+            embed.color = colour
+            if footer:
+                embed.set_footer(text=footer)
+            if thumbnail:
+                embed.set_thumbnail(url=thumbnail)
+            if author:
+                name = author.get("name")
+                url = author.get("url")
+                if name and url:
+                    embed.set_author(name=name, icon_url=url)
+                elif name:
+                    embed.set_author(name=name)
+        else:
+            title = kwargs.get("title", "")
+            description = kwargs.get("description", "")
+            footer = kwargs.get("footer", "")
+            if title:
+                title = f"{title}\n\n"
+            if description:
+                description = f"{description}\n\n"
+            if footer:
+                footer = f"{footer}"
+            content = f"{title}{description}\n\n{footer}"
+        return await interaction.response.send_message(
+            content=content, embed=embed, embeds=MISSING, ephemeral=ephemeral
+        )  # FIXME: Add multi embed support
 
     def _has_notify_perms(self, channel: discord.TextChannel) -> bool:
         perms = channel.permissions_for(channel.guild.me)

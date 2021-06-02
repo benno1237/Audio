@@ -1,9 +1,8 @@
-import asyncio
 import contextlib
 import logging
 import time
 from pathlib import Path
-from typing import Optional, Union
+from typing import Union
 
 import discord
 import lavalink
@@ -12,10 +11,9 @@ from redbot.core import commands
 from redbot.core.i18n import Translator
 from redbot.core.utils import AsyncIter
 from redbot.core.utils.chat_formatting import humanize_number
-from redbot.core.utils.menus import start_adding_reactions
-from redbot.core.utils.predicates import ReactionPredicate
 
 from ..abc import MixinMeta
+from ..buttons.player import PlayerView
 from ..cog_utils import CompositeMetaClass
 
 log = logging.getLogger("red.cogs.Audio.cog.Commands.player_controller")
@@ -80,14 +78,7 @@ class PlayerControllerCommands(MixinMeta, metaclass=CompositeMetaClass):
         """Now playing."""
         if not self._player_check(ctx):
             return await self.send_embed_msg(ctx, title=_("Nothing playing."))
-        emoji = {
-            "prev": "\N{BLACK LEFT-POINTING DOUBLE TRIANGLE WITH VERTICAL BAR}\N{VARIATION SELECTOR-16}",
-            "stop": "\N{BLACK SQUARE FOR STOP}\N{VARIATION SELECTOR-16}",
-            "pause": "\N{BLACK RIGHT-POINTING TRIANGLE WITH DOUBLE VERTICAL BAR}\N{VARIATION SELECTOR-16}",
-            "next": "\N{BLACK RIGHT-POINTING DOUBLE TRIANGLE WITH VERTICAL BAR}\N{VARIATION SELECTOR-16}",
-            "close": "\N{CROSS MARK}",
-        }
-        expected = tuple(emoji.values())
+
         player = lavalink.get_player(ctx.guild.id)
         player.store("notify_channel", ctx.channel.id)
         if player.current:
@@ -107,7 +98,6 @@ class PlayerControllerCommands(MixinMeta, metaclass=CompositeMetaClass):
             song += "\n\n{arrow}`{pos}`/`{dur}`".format(arrow=arrow, pos=pos, dur=dur)
         else:
             song = _("Nothing.")
-
         if player.fetch("np_message") is not None:
             with contextlib.suppress(discord.HTTPException):
                 await player.fetch("np_message").delete()
@@ -137,54 +127,9 @@ class PlayerControllerCommands(MixinMeta, metaclass=CompositeMetaClass):
             + ("\N{WHITE HEAVY CHECK MARK}" if repeat else "\N{CROSS MARK}")
         )
 
-        message = await self.send_embed_msg(ctx, embed=embed, footer=text)
-
+        view = PlayerView(self, ctx, self.config_cache, timeout=None)
+        message = await self.send_embed_msg(ctx, embed=embed, footer=text, view=view)
         player.store("np_message", message)
-
-        dj_enabled = await self.config_cache.dj_status.get_context_value(ctx.guild)
-        vote_enabled = await self.config_cache.votes.get_context_value(ctx.guild)
-        if (
-            (dj_enabled or vote_enabled)
-            and not await self._can_instaskip(ctx, ctx.author)
-            and not await self.is_requester_alone(ctx)
-        ):
-            return
-
-        if not player.queue and not autoplay:
-            expected = (emoji["stop"], emoji["pause"], emoji["close"])
-        task: Optional[asyncio.Task]
-        if player.current:
-            task = start_adding_reactions(message, expected[:5])
-        else:
-            task = None
-
-        try:
-            (r, u) = await self.bot.wait_for(
-                "reaction_add",
-                check=ReactionPredicate.with_emojis(expected, message, ctx.author),
-                timeout=30.0,
-            )
-        except asyncio.TimeoutError:
-            return await self._clear_react(message, emoji)
-        else:
-            if task is not None:
-                task.cancel()
-        reacts = {v: k for k, v in emoji.items()}
-        react = reacts[r.emoji]
-        if react == "prev":
-            await self._clear_react(message, emoji)
-            await ctx.invoke(self.command_prev)
-        elif react == "stop":
-            await self._clear_react(message, emoji)
-            await ctx.invoke(self.command_stop)
-        elif react == "pause":
-            await self._clear_react(message, emoji)
-            await ctx.invoke(self.command_pause)
-        elif react == "next":
-            await self._clear_react(message, emoji)
-            await ctx.invoke(self.command_skip)
-        elif react == "close":
-            await message.delete()
 
     @commands.command(name="pause")
     @commands.guild_only()
@@ -715,11 +660,14 @@ class PlayerControllerCommands(MixinMeta, metaclass=CompositeMetaClass):
                 "Maximum allowed volume here is **{max_volume}%** "
                 "due to {restrictor} restrictions."
             ).format(volume=int(volume * 100), max_volume=max_volume, restrictor=max_source)
+
         else:
+            volume = player.volume.value
             description = (
+                "Currently set to **{volume}%**\n\n"
                 "Maximum allowed volume here is **{max_volume}%** "
                 "due to {restrictor} restrictions."
-            ).format(max_volume=max_volume, restrictor=max_source)
+            ).format(volume=int(volume * 100), max_volume=max_volume, restrictor=max_source)
 
         embed = discord.Embed(
             title=_("Volume"),

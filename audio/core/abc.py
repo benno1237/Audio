@@ -225,6 +225,17 @@ class MixinMeta(ABC):
         raise NotImplementedError()
 
     @abstractmethod
+    async def send_interaction_msg(
+        self,
+        interaction: discord.Interaction,
+        author: Mapping[str, str] = None,
+        no_embed=False,
+        ephemeral: bool = True,
+        **kwargs,
+    ) -> None:
+        raise NotImplementedError()
+
+    @abstractmethod
     def _has_notify_perms(self, channel: discord.TextChannel) -> bool:
         raise NotImplementedError()
 

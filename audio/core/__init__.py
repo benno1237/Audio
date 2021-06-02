@@ -19,7 +19,7 @@ from redbot.core.data_manager import cog_data_path
 from redbot.core.i18n import Translator, cog_i18n
 
 from ..utils import PlaylistScope
-from . import commands, events, tasks, utilities
+from . import buttons, commands, events, tasks, utilities
 from .cog_utils import CompositeMetaClass
 
 _ = Translator("Audio", Path(__file__))
@@ -31,6 +31,7 @@ class Audio(
     events.Events,
     tasks.Tasks,
     utilities.Utilities,
+    buttons.Buttons,
     Cog,
     metaclass=CompositeMetaClass,
 ):
