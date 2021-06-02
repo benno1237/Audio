@@ -15,9 +15,8 @@ from redbot.core import bank, commands
 from redbot.core.data_manager import cog_data_path
 from redbot.core.i18n import Translator
 from redbot.core.utils import AsyncIter
-from redbot.core.utils._dpy_menus_utils import dpymenu
 from redbot.core.utils.chat_formatting import box, humanize_list, humanize_number, pagify
-from redbot.core.utils.menus import start_adding_reactions
+from redbot.core.utils.menus import DEFAULT_CONTROLS, menu, start_adding_reactions
 from redbot.core.utils.predicates import MessagePredicate, ReactionPredicate
 
 from ...audio_dataclasses import LocalPath
@@ -431,7 +430,7 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
             discord.Embed(title=_("Global Allowlist"), description=page, colour=embed_colour)
             for page in pages
         )
-        await dpymenu(ctx, pages)
+        await menu(ctx, pages, DEFAULT_CONTROLS)
 
     @command_audioset_global_whitelist.command(name="clear", aliases=["reset"])
     async def command_audioset_global_whitelist_clear(self, ctx: commands.Context):
@@ -507,7 +506,7 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
             discord.Embed(title=_("Global Denylist"), description=page, colour=embed_colour)
             for page in pages
         )
-        await dpymenu(ctx, pages)
+        await menu(ctx, pages, DEFAULT_CONTROLS)
 
     @command_audioset_global_blacklist.command(name="clear", aliases=["reset"])
     async def command_audioset_global_blacklist_clear(self, ctx: commands.Context):
@@ -940,7 +939,7 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
             discord.Embed(title=_("Allowlist"), description=page, colour=embed_colour)
             for page in pages
         )
-        await dpymenu(ctx, pages)
+        await menu(ctx, pages, DEFAULT_CONTROLS)
 
     @command_audioset_guild_whitelist.command(name="clear", aliases=["reset"])
     async def command_audioset_guild_whitelist_clear(self, ctx: commands.Context):
@@ -1019,7 +1018,7 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
             discord.Embed(title=_("Denylist"), description=page, colour=embed_colour)
             for page in pages
         )
-        await dpymenu(ctx, pages)
+        await menu(ctx, pages, DEFAULT_CONTROLS)
 
     @command_audioset_guild_blacklist.command(name="clear", aliases=["reset"])
     async def command_audioset_guild_blacklist_clear(self, ctx: commands.Context):
@@ -3100,7 +3099,7 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
             pages += 1
             servers_embed.append(em)
 
-        await dpymenu(ctx, servers_embed)
+        await menu(ctx, servers_embed, DEFAULT_CONTROLS)
 
     @command_audioset_lavalink.group(name="disconnect", aliases=["dc", "kill"])
     async def command_audioset_lavalink_disconnect(self, ctx: commands.Context):

@@ -10,6 +10,7 @@ from typing import cast
 
 import discord
 import lavalink
+from redbot.core.utils.menus import DEFAULT_CONTROLS, menu
 
 try:
     from redbot import json
@@ -21,7 +22,6 @@ from redbot.core.commands import UserInputOptional
 from redbot.core.data_manager import cog_data_path
 from redbot.core.i18n import Translator
 from redbot.core.utils import AsyncIter
-from redbot.core.utils._dpy_menus_utils import dpymenu
 from redbot.core.utils.chat_formatting import bold, pagify
 from redbot.core.utils.predicates import MessagePredicate
 
@@ -949,7 +949,7 @@ class PlaylistCommands(MixinMeta, metaclass=CompositeMetaClass):
                     )
                 )
                 page_list.append(embed)
-        await dpymenu(ctx, page_list)
+        await menu(ctx, page_list, DEFAULT_CONTROLS)
 
     @commands.cooldown(1, 15, commands.BucketType.guild)
     @command_playlist.command(name="list", usage="[args]", cooldown_after_parsing=True)
@@ -1105,7 +1105,7 @@ class PlaylistCommands(MixinMeta, metaclass=CompositeMetaClass):
             async for page_num in AsyncIter(range(1, len_playlist_list_pages + 1)):
                 embed = await self._build_playlist_list_page(ctx, page_num, abc_names, name)
                 playlist_embeds.append(embed)
-        await dpymenu(ctx, playlist_embeds)
+        await menu(ctx, playlist_embeds, DEFAULT_CONTROLS)
 
     @command_playlist.command(name="queue", usage="<name> [args]", cooldown_after_parsing=True)
     @commands.cooldown(1, 300, commands.BucketType.member)
@@ -1812,7 +1812,7 @@ class PlaylistCommands(MixinMeta, metaclass=CompositeMetaClass):
                                 added_embeds.append(embed)
                                 added_text = ""
                     embeds = removed_embeds + added_embeds
-                    await dpymenu(ctx, embeds)
+                    await menu(ctx, embeds, DEFAULT_CONTROLS)
                 else:
                     return await self.send_embed_msg(
                         ctx,

@@ -182,13 +182,16 @@ class LavalinkEvents(MixinMeta, metaclass=CompositeMetaClass):
                 ):
                     thumb = current_thumbnail
 
+                description = "{description}\n{extra}".format(
+                    description=description,
+                    extra=_("Track length: **{length}**\nRequested by: {user.mention}").format(
+                        length=dur, user=current_requester
+                    ),
+                )
                 notify_message = await self.send_embed_msg(
                     notify_channel,
                     title=_("Now Playing"),
                     description=description,
-                    footer=_("Track length: {length} | Requested by: {user}").format(
-                        length=dur, user=current_requester
-                    ),
                     thumbnail=thumb,
                 )
                 player.store("notify_message", notify_message)
