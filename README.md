@@ -1,5 +1,3 @@
-![Logo](https://imgur.com/pY1WUFX.png)
-
 <h2 align="center">Alpha Audio Cog</h2>
 
 [![pre-commit.ci status](https://results.pre-commit.ci/badge/github/Drapersniper/Audio/master.svg)](https://results.pre-commit.ci/latest/github/Drapersniper/Audio/master)
@@ -13,11 +11,6 @@
 [![discord.py](https://img.shields.io/badge/discord-py-blue.svg?labelColor=292f35&logo=python&logoColor=878f96&color=32c754)](https://github.com/Rapptz/discord.py/)
 
 [![Personal Patreon](https://img.shields.io/badge/Support-Me!-black.svg?labelColor=292f35)](https://www.patreon.com/drapersniper)
-
-<h2 align="left">About Red</h2>
-
-[![Discord](https://img.shields.io/discord/133049272517001216?color=7289da&label=Red%20Discord&logo=Discord&style=plastic&labelColor=292f35&logoColor=878f96)](https://discord.gg/red)
-[![Support Red on Patreon!](https://img.shields.io/badge/Support-Red!-red.svg?labelColor=292f35)](https://www.patreon.com/Red_Devs)
 
 # Requirements:
 1. If you use an external instance you are required to use the following JAR:
