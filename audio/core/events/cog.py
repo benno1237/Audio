@@ -2,13 +2,11 @@ import asyncio
 import datetime
 import logging
 import time
-from pathlib import Path
 from typing import Optional
 
 import discord
 import lavalink
 from redbot.core import commands
-from redbot.core.i18n import Translator
 
 from ...apis.playlist_interface import Playlist, delete_playlist, get_playlist
 from ...audio_logging import debug_exc_log
@@ -17,7 +15,7 @@ from ..abc import MixinMeta
 from ..cog_utils import CompositeMetaClass
 
 log = logging.getLogger("red.cogs.Audio.cog.Events.audio")
-_ = Translator("Audio", Path(__file__))
+_ = lambda s: s
 
 
 class AudioEvents(MixinMeta, metaclass=CompositeMetaClass):

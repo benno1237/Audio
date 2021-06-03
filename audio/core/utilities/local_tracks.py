@@ -7,7 +7,6 @@ import discord
 import lavalink
 from fuzzywuzzy import process
 from redbot.core import commands
-from redbot.core.i18n import Translator
 from redbot.core.utils import AsyncIter
 
 from ...audio_dataclasses import LocalPath, Query
@@ -16,7 +15,7 @@ from ..abc import MixinMeta
 from ..cog_utils import CompositeMetaClass
 
 log = logging.getLogger("red.cogs.Audio.cog.Utilities.local_tracks")
-_ = Translator("Audio", Path(__file__))
+_ = lambda s: s
 
 
 class LocalTrackUtilities(MixinMeta, metaclass=CompositeMetaClass):

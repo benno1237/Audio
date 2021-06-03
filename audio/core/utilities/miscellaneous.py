@@ -5,7 +5,6 @@ import functools
 import logging
 import re
 import struct
-from pathlib import Path
 from typing import Any, Final, Mapping, MutableMapping, Optional, Pattern, Union, cast
 
 import discord
@@ -18,7 +17,6 @@ except ImportError:
     import json
 from redbot.core import bank, commands
 from redbot.core.commands import Context
-from redbot.core.i18n import Translator
 from redbot.core.utils import AsyncIter
 from redbot.core.utils.chat_formatting import humanize_number
 
@@ -28,7 +26,7 @@ from ..abc import MixinMeta
 from ..cog_utils import CompositeMetaClass, DataReader
 
 log = logging.getLogger("red.cogs.Audio.cog.Utilities.miscellaneous")
-_ = Translator("Audio", Path(__file__))
+_ = lambda s: s
 _RE_TIME_CONVERTER: Final[Pattern] = re.compile(r"(?:(\d+):)?([0-5]?[0-9]):([0-5][0-9])")
 _prefer_lyrics_cache = {}
 

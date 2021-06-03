@@ -1,11 +1,9 @@
 import logging
-from pathlib import Path
 
 import lavalink
 from lavalink import filters
 from lavalink.filters import Equalizer
 from redbot.core import commands
-from redbot.core.i18n import Translator
 from redbot.core.utils.chat_formatting import box
 from tabulate import tabulate
 
@@ -24,7 +22,7 @@ from ..abc import MixinMeta
 from ..cog_utils import CompositeMetaClass
 
 log = logging.getLogger("red.cogs.Audio.cog.Commands.Effects")
-_ = Translator("Audio", Path(__file__))
+_ = lambda s: s
 
 
 class EffectsCommands(MixinMeta, metaclass=CompositeMetaClass):

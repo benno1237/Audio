@@ -4,7 +4,6 @@ import base64
 import contextlib
 import logging
 import time
-from pathlib import Path
 from typing import TYPE_CHECKING, List, Mapping, MutableMapping, Optional, Tuple, Union
 
 import aiohttp
@@ -17,7 +16,6 @@ except ImportError:
 from redbot.core import Config
 from redbot.core.bot import Red
 from redbot.core.commands import Cog, Context
-from redbot.core.i18n import Translator
 from redbot.core.utils import AsyncIter
 
 from ..errors import SpotifyFetchError
@@ -26,7 +24,7 @@ if TYPE_CHECKING:
     from .. import Audio
     from ..core.utilities import SettingCacheManager
 
-_ = Translator("Audio", Path(__file__))
+_ = lambda s: s
 
 log = logging.getLogger("red.cogs.Audio.api.Spotify")
 

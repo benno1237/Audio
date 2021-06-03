@@ -6,14 +6,12 @@ import datetime
 import logging
 import random
 import time
-from pathlib import Path
 from types import SimpleNamespace
 from typing import TYPE_CHECKING, Callable, List, MutableMapping, Optional, Tuple, Union
 
 from redbot.core import Config
 from redbot.core.bot import Red
 from redbot.core.commands import Cog
-from redbot.core.i18n import Translator
 from redbot.core.utils import AsyncIter
 from redbot.core.utils.dbtools import APSWConnectionWrapper
 
@@ -62,7 +60,7 @@ if TYPE_CHECKING:
     from ..core.utilities import SettingCacheManager
 
 log = logging.getLogger("red.cogs.Audio.api.LocalDB")
-_ = Translator("Audio", Path(__file__))
+_ = lambda s: s
 _SCHEMA_VERSION = 3
 
 

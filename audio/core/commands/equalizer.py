@@ -2,12 +2,10 @@ import asyncio
 import contextlib
 import logging
 import re
-from pathlib import Path
 
 import discord
 import lavalink
 from redbot.core import commands
-from redbot.core.i18n import Translator
 from redbot.core.utils.chat_formatting import box, humanize_number, pagify
 from redbot.core.utils.menus import DEFAULT_CONTROLS, menu, start_adding_reactions
 from redbot.core.utils.predicates import MessagePredicate, ReactionPredicate
@@ -16,7 +14,7 @@ from ..abc import MixinMeta
 from ..cog_utils import CompositeMetaClass
 
 log = logging.getLogger("red.cogs.Audio.cog.Commands.equalizer")
-_ = Translator("Audio", Path(__file__))
+_ = lambda s: s
 
 
 class EqualizerCommands(MixinMeta, metaclass=CompositeMetaClass):

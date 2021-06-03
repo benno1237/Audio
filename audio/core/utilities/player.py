@@ -1,7 +1,6 @@
 import asyncio
 import logging
 import time
-from pathlib import Path
 from typing import List, Optional, Tuple, Union
 
 import aiohttp
@@ -11,7 +10,6 @@ from discord.embeds import EmptyEmbed
 from lavalink import Track
 from lavalink.filters import Volume
 from redbot.core import commands
-from redbot.core.i18n import Translator
 from redbot.core.utils import AsyncIter
 from redbot.core.utils.chat_formatting import bold, escape
 
@@ -23,7 +21,7 @@ from ..abc import MixinMeta
 from ..cog_utils import CompositeMetaClass
 
 log = logging.getLogger("red.cogs.Audio.cog.Utilities.player")
-_ = Translator("Audio", Path(__file__))
+_ = lambda s: s
 
 
 class PlayerUtilities(MixinMeta, metaclass=CompositeMetaClass):

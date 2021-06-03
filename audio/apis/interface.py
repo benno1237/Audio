@@ -7,7 +7,6 @@ import logging
 import random
 import time
 from collections import namedtuple
-from pathlib import Path
 from typing import TYPE_CHECKING, Callable, List, MutableMapping, Optional, Tuple, Union, cast
 
 import aiohttp
@@ -23,7 +22,6 @@ except ImportError:
 from redbot.core import Config, commands
 from redbot.core.bot import Red
 from redbot.core.commands import Cog, Context
-from redbot.core.i18n import Translator
 from redbot.core.utils import AsyncIter
 from redbot.core.utils.dbtools import APSWConnectionWrapper
 
@@ -44,7 +42,7 @@ if TYPE_CHECKING:
     from .. import Audio
     from ..core.utilities import SettingCacheManager
 
-_ = Translator("Audio", Path(__file__))
+_ = lambda s: s
 log = logging.getLogger("red.cogs.Audio.api.AudioAPIInterface")
 _TOP_100_US = "https://www.youtube.com/playlist?list=PL4fGSI1pDJn5rWitrRWFKdm-ulaFiIyoK"
 # TODO: Get random from global Cache

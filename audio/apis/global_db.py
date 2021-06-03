@@ -4,7 +4,6 @@ import asyncio
 import contextlib
 import logging
 from copy import copy
-from pathlib import Path
 from typing import TYPE_CHECKING, Mapping, Optional, Union
 
 import aiohttp
@@ -18,7 +17,6 @@ except ImportError:
 from redbot.core import Config
 from redbot.core.bot import Red
 from redbot.core.commands import Cog
-from redbot.core.i18n import Translator
 
 from ..audio_dataclasses import Query
 from ..audio_logging import IS_DEBUG, debug_exc_log
@@ -28,7 +26,7 @@ if TYPE_CHECKING:
     from ..core.utilities import SettingCacheManager
 
 _API_URL = "https://api.redbot.app/"
-_ = Translator("Audio", Path(__file__))
+_ = lambda s: s
 log = logging.getLogger("red.cogs.Audio.api.GlobalDB")
 
 

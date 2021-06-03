@@ -3,7 +3,6 @@ from __future__ import annotations
 import concurrent
 import logging
 import time
-from pathlib import Path
 from types import SimpleNamespace
 from typing import TYPE_CHECKING, List, Union
 
@@ -17,7 +16,6 @@ except ImportError:
 from redbot.core import Config
 from redbot.core.bot import Red
 from redbot.core.commands import Cog
-from redbot.core.i18n import Translator
 from redbot.core.utils import AsyncIter
 from redbot.core.utils.dbtools import APSWConnectionWrapper
 
@@ -40,7 +38,7 @@ from ..sql_statements import (
 from .api_utils import QueueFetchResult
 
 log = logging.getLogger("red.cogs.Audio.api.PersistQueueWrapper")
-_ = Translator("Audio", Path(__file__))
+_ = lambda s: s
 
 if TYPE_CHECKING:
     from .. import Audio

@@ -1,13 +1,11 @@
 import argparse
 import functools
 import re
-from pathlib import Path
 from typing import Final, List, MutableMapping, Optional, Pattern, Tuple, Union
 
 import discord
 from redbot.core import commands
 from redbot.core.bot import Red
-from redbot.core.i18n import Translator
 from redbot.core.utils import AsyncIter
 
 from .apis.api_utils import standardize_scope
@@ -16,7 +14,7 @@ from .audio_dataclasses import Query
 from .errors import NoMatchesFound, TooManyMatches
 from .utils import PlaylistScope
 
-_ = Translator("Audio", Path(__file__))
+_ = lambda s: s
 
 __all__ = [
     "ComplexScopeParser",

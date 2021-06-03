@@ -5,7 +5,6 @@ import logging
 import math
 import random
 import time
-from pathlib import Path
 from typing import List, MutableMapping, Optional, Tuple, Union
 
 import aiohttp
@@ -19,7 +18,6 @@ except ImportError:
     import json
 
 from redbot.core import commands
-from redbot.core.i18n import Translator
 from redbot.core.utils import AsyncIter
 from redbot.core.utils.chat_formatting import box
 from redbot.core.utils.menus import start_adding_reactions
@@ -34,7 +32,7 @@ from ..abc import MixinMeta
 from ..cog_utils import CompositeMetaClass
 
 log = logging.getLogger("red.cogs.Audio.cog.Utilities.playlists")
-_ = Translator("Audio", Path(__file__))
+_ = lambda s: s
 CURRATED_DATA = (
     "https://gist.githubusercontent.com/Drapersniper/cbe10d7053c844f8c69637bb4fd9c5c3/raw/json"
 )

@@ -1,18 +1,16 @@
 import heapq
 import logging
 import random
-from pathlib import Path
 
 import lavalink
 from redbot.core import commands
-from redbot.core.i18n import Translator
 from redbot.core.utils import AsyncIter
 
 from ..abc import MixinMeta
 from ..cog_utils import CompositeMetaClass
 
 log = logging.getLogger("red.cogs.Audio.cog.Commands.miscellaneous")
-_ = Translator("Audio", Path(__file__))
+_ = lambda s: s
 
 
 class MiscellaneousCommands(MixinMeta, metaclass=CompositeMetaClass):

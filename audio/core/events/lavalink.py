@@ -2,14 +2,13 @@ import asyncio
 import contextlib
 import datetime
 import logging
-from pathlib import Path
 from typing import Dict
 
 import discord
 import lavalink
 from discord.backoff import ExponentialBackoff
 from discord.gateway import DiscordWebSocket
-from redbot.core.i18n import Translator, set_contextual_locales_from_guild
+from redbot.core.i18n import set_contextual_locales_from_guild
 
 from ...errors import DatabaseError, TrackEnqueueError
 from ..abc import MixinMeta
@@ -18,7 +17,7 @@ from ..cog_utils import CompositeMetaClass
 log = logging.getLogger("red.cogs.Audio.cog.Events.lavalink")
 ws_audio_log = logging.getLogger("red.Audio.WS.Audio")
 
-_ = Translator("Audio", Path(__file__))
+_ = lambda s: s
 
 
 class LavalinkEvents(MixinMeta, metaclass=CompositeMetaClass):

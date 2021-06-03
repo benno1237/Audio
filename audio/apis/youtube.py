@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import logging
-from pathlib import Path
 from typing import TYPE_CHECKING, Mapping, Optional, Union
 
 import aiohttp
@@ -14,7 +13,6 @@ except ImportError:
 from redbot.core import Config
 from redbot.core.bot import Red
 from redbot.core.commands import Cog
-from redbot.core.i18n import Translator
 
 from ..errors import YouTubeApiError
 
@@ -23,7 +21,7 @@ if TYPE_CHECKING:
     from ..core.utilities import SettingCacheManager
 
 log = logging.getLogger("red.cogs.Audio.api.YouTube")
-_ = Translator("Audio", Path(__file__))
+_ = lambda s: s
 SEARCH_ENDPOINT = "https://www.googleapis.com/youtube/v3/search"
 
 

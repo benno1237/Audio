@@ -13,7 +13,6 @@ import discord
 import lavalink
 from redbot.core import bank, commands
 from redbot.core.data_manager import cog_data_path
-from redbot.core.i18n import Translator
 from redbot.core.utils import AsyncIter
 from redbot.core.utils.chat_formatting import box, humanize_list, humanize_number, pagify
 from redbot.core.utils.menus import DEFAULT_CONTROLS, menu, start_adding_reactions
@@ -37,7 +36,7 @@ from ..cog_utils import (
 
 log = logging.getLogger("red.cogs.Audio.cog.Commands.audioset")
 
-_ = Translator("Audio", Path(__file__))
+_ = lambda s: s
 
 
 class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):

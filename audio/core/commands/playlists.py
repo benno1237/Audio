@@ -5,7 +5,6 @@ import os
 import tarfile
 import time
 from io import BytesIO
-from pathlib import Path
 from typing import cast
 
 import discord
@@ -20,7 +19,6 @@ except ImportError:
 from redbot.core import commands
 from redbot.core.commands import UserInputOptional
 from redbot.core.data_manager import cog_data_path
-from redbot.core.i18n import Translator
 from redbot.core.utils import AsyncIter
 from redbot.core.utils.chat_formatting import bold, pagify
 from redbot.core.utils.predicates import MessagePredicate
@@ -36,7 +34,7 @@ from ..abc import MixinMeta
 from ..cog_utils import CompositeMetaClass, LazyMultilineConverter, PlaylistConverter
 
 log = logging.getLogger("red.cogs.Audio.cog.Commands.playlist")
-_ = Translator("Audio", Path(__file__))
+_ = lambda s: s
 
 
 class PlaylistCommands(MixinMeta, metaclass=CompositeMetaClass):

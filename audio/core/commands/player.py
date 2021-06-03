@@ -2,7 +2,6 @@ import contextlib
 import logging
 import math
 import time
-from pathlib import Path
 from typing import List, MutableMapping
 
 import discord
@@ -10,7 +9,6 @@ import lavalink
 from discord.embeds import EmptyEmbed
 from redbot.core import commands
 from redbot.core.commands import UserInputOptional
-from redbot.core.i18n import Translator
 from redbot.core.utils import AsyncIter
 from redbot.core.utils.menus import DEFAULT_CONTROLS, close_menu, menu, next_page, prev_page
 
@@ -22,7 +20,7 @@ from ..abc import MixinMeta
 from ..cog_utils import ENABLED_TITLE, CompositeMetaClass
 
 log = logging.getLogger("red.cogs.Audio.cog.Commands.player")
-_ = Translator("Audio", Path(__file__))
+_ = lambda s: s
 
 
 class PlayerCommands(MixinMeta, metaclass=CompositeMetaClass):

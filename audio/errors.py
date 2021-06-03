@@ -1,10 +1,7 @@
-from pathlib import Path
-
 import aiohttp
 from redbot.core.commands import UserFeedbackCheckFailure
-from redbot.core.i18n import Translator
 
-_ = Translator("Audio", Path(__file__))
+_ = lambda s: s
 
 
 class AudioError(Exception):
