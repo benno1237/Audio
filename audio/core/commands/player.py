@@ -857,7 +857,6 @@ class PlayerCommands(MixinMeta, metaclass=CompositeMetaClass):
                         description=_("You need the DJ role to queue tracks."),
                     )
                 track_len = 0
-                empty_queue = not player.queue
                 max_queue_length = await self.config_cache.max_queue_size.get_context_value(
                     player.guild
                 )
@@ -909,7 +908,7 @@ class PlayerCommands(MixinMeta, metaclass=CompositeMetaClass):
                         )
                     if not player.current:
                         await player.play()
-                player.maybe_shuffle(0 if empty_queue else 1)
+                player.maybe_shuffle()
                 if len(tracks) > track_len:
                     maxlength_msg = _(" {bad_tracks} tracks cannot be queued.").format(
                         bad_tracks=(len(tracks) - track_len)

@@ -454,7 +454,6 @@ class PlayerUtilities(MixinMeta, metaclass=CompositeMetaClass):
             if len(player.queue) >= max_queue_length:
                 return await self.send_embed_msg(ctx, title=_("Queue size limit reached."))
             track_len = 0
-            empty_queue = not player.queue
             async for track in AsyncIter(tracks):
                 if len(player.queue) >= max_queue_length:
                     continue
@@ -499,7 +498,7 @@ class PlayerUtilities(MixinMeta, metaclass=CompositeMetaClass):
                     )
                     player.add(ctx.author, track)
                     self.bot.dispatch("red_audio_track_enqueue", player.guild, track, ctx.author)
-            player.maybe_shuffle(0 if empty_queue else 1)
+            player.maybe_shuffle()
 
             if len(tracks) > track_len:
                 maxlength_msg = _(" {bad_tracks} tracks cannot be queued.").format(

@@ -1556,7 +1556,6 @@ class PlaylistCommands(MixinMeta, metaclass=CompositeMetaClass):
             try:
                 player = lavalink.get_player(ctx.guild.id)
                 tracks = playlist.tracks_obj
-                empty_queue = not player.queue
                 max_queue_length = await self.config_cache.max_queue_size.get_context_value(
                     player.guild
                 )
@@ -1594,7 +1593,7 @@ class PlaylistCommands(MixinMeta, metaclass=CompositeMetaClass):
                     player.add(author_obj, track)
                     self.bot.dispatch("red_audio_track_enqueue", player.guild, track, ctx.author)
                     track_len += 1
-                player.maybe_shuffle(0 if empty_queue else 1)
+                player.maybe_shuffle()
                 if len(tracks) > track_len:
                     maxlength_msg = _(" {bad_tracks} tracks cannot be queued.").format(
                         bad_tracks=(len(tracks) - track_len)
