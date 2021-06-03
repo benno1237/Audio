@@ -1,4 +1,4 @@
-<h2 align="center">Alpha Audio Cog</h2>
+<h2 align="center">Audio Cog</h2>
 
 [![pre-commit.ci status](https://results.pre-commit.ci/badge/github/Drapersniper/Audio/master.svg)](https://results.pre-commit.ci/latest/github/Drapersniper/Audio/master)
 [![CI status](https://github.com/Drapersniper/Audio/actions/workflows/main.yml/badge.svg)](https://github.com/Drapersniper/Audio/actions/workflows/main.yml)
@@ -21,7 +21,10 @@
 
 ## NOTES
 
-I'm expecting things to be broken, if you are using this at the very least report issues, otherwise if I get people using this without reporting I'll just simply revoke any entries of this.
+I'll be maintaining in independently of Red, none of this work will be contributed into Red due to disagreement with the lead core dev in that project and his toxicity, however you are more than free to use this cog instead of the bundled Audio cog and make suggestion and feature requests here, just be aware that by doing, so it will likely make a move back to core Audio unsafe, due to potential config migration in here.
 
+# License
+Released under the [GNU GPL v3](https://www.gnu.org/licenses/gpl-3.0.en.html) license.
 
-Note: The source code shared [Red's](https://github.com/Cog-Creators/Red-DiscordBot) [GNU General Public License v3.0](https://github.com/Cog-Creators/Red-DiscordBot/blob/V3/develop/LICENSE).
+An original copy of the licence for the original Audio work can be seen in [LICENSE.old](LICENSE.old)
+This version of Audio  split with [Red's Audio](https://github.com/Cog-Creators/Red-DiscordBot/commit/ca373052c53d88ac87d89632e4328ac09e890190) on this commit.
