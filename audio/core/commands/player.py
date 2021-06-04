@@ -43,6 +43,7 @@ class PlayerCommands(MixinMeta, metaclass=CompositeMetaClass):
         """
         queries: List[Query]
         for query in queries:
+            query = Query.process_input(query, self.local_folder_current_path)
             restrict = await self.config_cache.url_restrict.get_context_value(ctx.guild)
             if restrict and self.match_url(str(query)):
                 valid_url = self.is_url_allowed(str(query))

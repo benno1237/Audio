@@ -28,7 +28,7 @@ class MiscellaneousCommands(MixinMeta, metaclass=CompositeMetaClass):
             "f9O2Rjn1azc",
         )
         url = f"https://www.youtube.com/watch?v={random.choice(ids)}"
-        await ctx.invoke(self.command_play, query=url)
+        await ctx.invoke(self.command_play, queries=[url])
 
     @commands.command(name="percent")
     @commands.guild_only()
