@@ -15,7 +15,6 @@ from redbot.core import Config
 from redbot.core.bot import Red
 from redbot.core.commands import Cog
 from redbot.core.data_manager import cog_data_path
-from redbot.core.i18n import cog_i18n
 
 from ..utils import PlaylistScope
 from . import commands, events, tasks, utilities
@@ -24,7 +23,6 @@ from .cog_utils import CompositeMetaClass
 _ = lambda s: s
 
 
-@cog_i18n(_)
 class Audio(
     commands.Commands,
     events.Events,
