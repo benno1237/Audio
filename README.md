@@ -11,6 +11,8 @@
 [![discord.py](https://img.shields.io/badge/discord-py-blue.svg?labelColor=292f35&logo=python&logoColor=878f96&color=32c754)](https://github.com/Rapptz/discord.py/)
 
 [![Personal Patreon](https://img.shields.io/badge/Support-Me!-black.svg?labelColor=292f35)](https://www.patreon.com/drapersniper)
+[![Discord](https://img.shields.io/discord/850282003425394699?color=7289da&label=Support%20Server&logo=Discord&style=plastic&labelColor=292f35&logoColor=878f96)](https://discord.gg/bdnjFPQQaZ)
+
 
 # Requirements:
 1. If you use an external instance you are required to use the following JAR:
