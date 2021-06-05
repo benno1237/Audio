@@ -12,6 +12,7 @@ from urllib.parse import urlparse
 
 import discord
 import lavalink
+from lavalink import Player
 from redbot.core import bank, commands
 from redbot.core.data_manager import cog_data_path
 from redbot.core.utils import AsyncIter
@@ -3051,6 +3052,7 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
                     nodes=humanize_list(list(nodes), style="or")
                 ),
             )
+        node_obj = lavalink.fetch_node(name=node)
         managed = await self.config_cache.use_managed_lavalink.get_global()
         local_path = await self.config_cache.localpath.get_global()
         host = await self.config_cache.node_config.get_host(node_identifier=node)
@@ -3088,24 +3090,71 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
             lavalink_version=lavalink.__version__,
             managed=ENABLED_TITLE if managed else DISABLED_TITLE,
         )
+        msg += "\n----" + _("Node Info") + "----        \n"
+        _unknown = _("Unknown")
+        if node_obj:
+            if node_obj.player_manager.players:
+                p = list(node_obj.player_manager.players)[0]
+            else:
+                p = Player(node_obj.player_manager, ctx.channel)
+
+            node_info = await p.server_metadata()
+            build_time = node_info.get(
+                "buildTime",
+                self.player_manager.path
+                if self.player_manager and self.player_manager.path
+                else _unknown,
+            )
+            llbuild = node_info.get(
+                "build",
+                self.player_manager.path
+                if self.player_manager and self.player_manager.path
+                else _unknown,
+            )
+            llversion = node_info.get("version", _unknown)
+            llbranch = node_info.get(
+                "branch",
+                self.player_manager.path
+                if self.player_manager and self.player_manager.path
+                else _unknown,
+            )
+            lavaplayer = node_info.get(
+                "lavaplayer",
+                self.player_manager.path
+                if self.player_manager and self.player_manager.path
+                else _unknown,
+            )
+            jvm = node_info.get(
+                "jvm",
+                self.player_manager.path
+                if self.player_manager and self.player_manager.path
+                else _unknown,
+            )
+            jv_exec = node_info.get(
+                "java_exec",
+                self.player_manager.path
+                if self.player_manager and self.player_manager.path
+                else _unknown,
+            )
+
+            msg += _(
+                "Build:                  [{llbuild}]\n"
+                "Version:                [{llversion}]\n"
+                "Branch:                 [{llbranch}]\n"
+                "Release date:           [{build_time}]\n"
+                "Lavaplayer:             [{lavaplayer}]\n"
+                "Java version:           [{jvm}]\n"
+                "Java executable:        [{jv_exec}]\n"
+            ).format(
+                build_time=build_time,
+                llversion=llversion,
+                llbuild=llbuild,
+                llbranch=llbranch,
+                lavaplayer=lavaplayer,
+                jvm=jvm,
+                jv_exec=jv_exec,
+            )
         if managed:
-            if self.player_manager and self.player_manager.ll_build:
-                msg += "\n----" + _("Managed Node Info") + "----        \n"
-                msg += _(
-                    "Build:                  [{llbuild}]\n"
-                    "Branch:                 [{llbranch}]\n"
-                    "Release date:           [{build_time}]\n"
-                    "Lavaplayer:             [{lavaplayer}]\n"
-                    "Java version:           [{jvm}]\n"
-                    "Java executable:        [{jv_exec}]\n"
-                ).format(
-                    build_time=self.player_manager.build_time,
-                    llbuild=self.player_manager.ll_build,
-                    llbranch=self.player_manager.ll_branch,
-                    lavaplayer=self.player_manager.lavaplayer,
-                    jvm=self.player_manager.jvm,
-                    jv_exec=self.player_manager.path,
-                )
             msg += _("Lavalink auto-update:   [{update}]\n").format(
                 update=await self.config_cache.managed_lavalink_server_auto_update.get_global(),
             )
