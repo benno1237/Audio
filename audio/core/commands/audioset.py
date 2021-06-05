@@ -2049,6 +2049,56 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
                     nodes=humanize_list(list(nodes), style="or")
                 ),
             )
+
+        try:
+            url = urlparse(host)
+        except Exception:
+            return await self.send_embed_msg(
+                ctx,
+                title=_("Setting Not Changed"),
+                description=_("`{rest_uri}` is not a valid hostname").format(rest_uri=host),
+            )
+        if not url.scheme or url.scheme not in ["https", "http"]:
+            return await self.send_embed_msg(
+                ctx,
+                title=_("Setting Not Changed"),
+                description=_(
+                    "`{rest_uri}` is not valid, it must start with `https://` or `http://`"
+                ).format(rest_uri=host),
+            )
+
+        await self.config_cache.node_config.set_host(node_identifier=node, set_to=host)
+        hostname = url.hostname or url.netloc
+        if url.port:
+            port = url.port
+            await self.config_cache.node_config.set_port(node_identifier=node, set_to=url.port)
+        else:
+            port = url.port or await self.config_cache.node_config.get_port(node_identifier=node)
+        await self.config_cache.node_config.set_host(
+            node_identifier=node, set_to=f"{url.scheme}://{hostname}"
+        )
+        await self.config_cache.node_config.set_rest_uri(
+            node_identifier=node, set_to=f"{url.scheme}://{hostname}:{port}"
+        )
+
+        rest_uri = await self.config_cache.node_config.get_host(node_identifier=node)
+        port = await self.config_cache.node_config.get_host(node_identifier=node)
+        uri_host = await self.config_cache.node_config.get_host(node_identifier=node)
+
+        footer = None
+        if await self.update_external_status():
+            footer = _("External node set to True.")
+        await self.send_embed_msg(
+            ctx,
+            title=_("Setting Changed"),
+            description=_(
+                "URI set to      `{rest_uri}`\n"
+                "Hostname set to `{uri_host}`\n"
+                "Port set to     `{uri_port}`\n"
+            ).format(rest_uri=rest_uri, uri_port=port, uri_host=uri_host),
+            footer=footer,
+        )
+
         await self.config_cache.node_config.set_host(node_identifier=node, set_to=host)
         footer = None
         if await self.update_external_status():
@@ -2121,13 +2171,29 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
                 ),
             )
         await self.config_cache.node_config.set_port(node_identifier=node, set_to=port)
+        rest_uri = await self.config_cache.node_config.get_rest_uri(node_identifier=node)
+        rest_uri = f"{rest_uri}:{port}"
+        url = urlparse(rest_uri)
+        rest_uri = await self.config_cache.node_config.set_rest_uri(
+            node_identifier=node, set_to=rest_uri
+        )
+        if url.hostname:
+            await self.config_cache.node_config.set_host(
+                node_identifier=node, set_to=f"{url.scheme}://{url.hostname}"
+            )
+        uri_host = await self.config_cache.node_config.get_host(node_identifier=node)
+
         footer = None
         if await self.update_external_status():
             footer = _("External node set to True.")
         await self.send_embed_msg(
             ctx,
             title=_("Setting Changed"),
-            description=_("Websocket port set to {port}.").format(port=port),
+            description=_(
+                "URI set to      `{rest_uri}`\n"
+                "Hostname set to `{uri_host}`\n"
+                "Port set to     `{uri_port}`\n"
+            ).format(rest_uri=rest_uri, uri_port=port, uri_host=uri_host),
             footer=footer,
         )
 
@@ -2161,9 +2227,7 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
             return await self.send_embed_msg(
                 ctx,
                 title=_("Setting Not Changed"),
-                description=_(
-                    "`{rest_uri}` is not valid, it must start with `https://` or `http://`"
-                ).format(rest_uri=rest_uri),
+                description=_("`{rest_uri}` is not a valid hostname").format(rest_uri=rest_uri),
             )
         if not url.scheme or url.scheme not in ["https", "http"]:
             return await self.send_embed_msg(
@@ -2195,7 +2259,7 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
             ctx,
             title=_("Setting Changed"),
             description=_(
-                "Rest URI set to `{rest_uri}`\n"
+                "URI set to      `{rest_uri}`\n"
                 "Hostname set to `{uri_host}`\n"
                 "Port set to     `{uri_port}`\n"
             ).format(rest_uri=rest_uri, uri_port=uri_port, uri_host=uri_host),
