@@ -377,7 +377,7 @@ class MiscellaneousUtilities(MixinMeta, metaclass=CompositeMetaClass):
 
         if from_version < 6 <= to_version:  # Migrate node connection info to new namespace
             async with self.config.all() as global_data:
-                host = global_data.pop("host", "localhost")
+                host = global_data.pop("host", "http://localhost")
                 ws_port = global_data.pop("ws_port", 2333)
                 global_data.pop("rest_port", None)
                 password = global_data.pop("password", "youshallnotpass")

@@ -2066,24 +2066,30 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
                     "`{rest_uri}` is not valid, it must start with `https://` or `http://`"
                 ).format(rest_uri=host),
             )
-
-        await self.config_cache.node_config.set_host(node_identifier=node, set_to=host)
-        hostname = url.hostname or url.netloc
+        hostname = url.hostname
+        if not hostname:
+            return await self.send_embed_msg(
+                ctx,
+                title=_("Setting Not Changed"),
+                description=_("`Unable to retrieve hostname from specified host.").format(
+                    rest_uri=host
+                ),
+            )
+        await self.config_cache.node_config.set_host(node_identifier=node, set_to=hostname)
         if url.port:
-            port = url.port
+            final_port = url.port
             await self.config_cache.node_config.set_port(node_identifier=node, set_to=url.port)
         else:
-            port = url.port or await self.config_cache.node_config.get_port(node_identifier=node)
-        await self.config_cache.node_config.set_host(
-            node_identifier=node, set_to=f"{url.scheme}://{hostname}"
-        )
-        await self.config_cache.node_config.set_rest_uri(
-            node_identifier=node, set_to=f"{url.scheme}://{hostname}:{port}"
-        )
+            final_port = await self.config_cache.node_config.get_port(node_identifier=node)
 
-        rest_uri = await self.config_cache.node_config.get_host(node_identifier=node)
-        port = await self.config_cache.node_config.get_host(node_identifier=node)
-        uri_host = await self.config_cache.node_config.get_host(node_identifier=node)
+        final_host = f"{url.scheme}://{hostname}"
+        if final_port:
+            final_uri = f"{final_host}:{final_port}"
+        else:
+            final_uri = final_host
+
+        await self.config_cache.node_config.set_host(node_identifier=node, set_to=final_host)
+        await self.config_cache.node_config.set_rest_uri(node_identifier=node, set_to=final_uri)
 
         footer = None
         if await self.update_external_status():
@@ -2095,18 +2101,7 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
                 "URI set to      `{rest_uri}`\n"
                 "Hostname set to `{uri_host}`\n"
                 "Port set to     `{uri_port}`\n"
-            ).format(rest_uri=rest_uri, uri_port=port, uri_host=uri_host),
-            footer=footer,
-        )
-
-        await self.config_cache.node_config.set_host(node_identifier=node, set_to=host)
-        footer = None
-        if await self.update_external_status():
-            footer = _("External node set to True.")
-        await self.send_embed_msg(
-            ctx,
-            title=_("Setting Changed"),
-            description=_("Host set to {host}.").format(host=host),
+            ).format(rest_uri=final_uri, uri_port=final_port, uri_host=final_host),
             footer=footer,
         )
         try:
@@ -2172,15 +2167,10 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
             )
         await self.config_cache.node_config.set_port(node_identifier=node, set_to=port)
         rest_uri = await self.config_cache.node_config.get_rest_uri(node_identifier=node)
-        rest_uri = f"{rest_uri}:{port}"
         url = urlparse(rest_uri)
-        rest_uri = await self.config_cache.node_config.set_rest_uri(
-            node_identifier=node, set_to=rest_uri
-        )
-        if url.hostname:
-            await self.config_cache.node_config.set_host(
-                node_identifier=node, set_to=f"{url.scheme}://{url.hostname}"
-            )
+        rest_uri = f"{url.scheme}://{url.hostname}:{port}"
+
+        await self.config_cache.node_config.set_rest_uri(node_identifier=node, set_to=rest_uri)
         uri_host = await self.config_cache.node_config.get_host(node_identifier=node)
 
         footer = None
@@ -2243,7 +2233,7 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         if url.port:
             await self.config_cache.node_config.set_port(node_identifier=node, set_to=url.port)
         else:
-            await self.config_cache.node_config.set_port(node_identifier=node, set_to=-1)
+            await self.config_cache.node_config.set_port(node_identifier=node, set_to=None)
         if url.hostname:
             await self.config_cache.node_config.set_host(
                 node_identifier=node, set_to=f"{url.scheme}://{url.hostname}"

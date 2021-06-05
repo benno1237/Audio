@@ -19,7 +19,7 @@ class NodeConfigManager(CacheBase):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self._cached_global: Dict[
-            Optional[str], Union[Dict[str, Union[str, int, bool]], Set[str]]
+            Optional[str], Union[Dict[str, Union[str, int, bool, None]], Set[str]]
         ] = {}
 
     async def get_host(self, node_identifier: str = "primary") -> str:
@@ -47,7 +47,7 @@ class NodeConfigManager(CacheBase):
                 "lavalink"
             ]["nodes"]["primary"]["host"]
 
-    async def get_port(self, node_identifier: str = "primary") -> int:
+    async def get_port(self, node_identifier: str = "primary") -> Optional[int]:
         ret: int
         self._cached_global.setdefault(
             node_identifier, self._config.defaults["GLOBAL"]["lavalink"]["nodes"]["primary"]
@@ -63,14 +63,8 @@ class NodeConfigManager(CacheBase):
         self._cached_global.setdefault(
             node_identifier, self._config.defaults["GLOBAL"]["lavalink"]["nodes"]["primary"]
         )
-        if set_to is not None:
-            await self._config.lavalink.nodes.set_raw(node_identifier, "port", value=set_to)
-            self._cached_global[node_identifier]["port"] = set_to
-        else:
-            await self._config.lavalink.nodes.clear_raw(node_identifier, "port")
-            self._cached_global[node_identifier]["port"] = self._config.defaults["GLOBAL"][
-                "lavalink"
-            ]["nodes"]["primary"]["port"]
+        await self._config.lavalink.nodes.set_raw(node_identifier, "port", value=set_to)
+        self._cached_global[node_identifier]["port"] = set_to
 
     async def get_rest_uri(self, node_identifier: str = "primary") -> str:
         ret: str

@@ -84,7 +84,7 @@ class Audio(
 
         default_cog_lavalink_settings = {
             "primary": {
-                "host": "localhost",
+                "host": "http://localhost",
                 "port": 2333,
                 "rest_uri": "http://localhost:2333",
                 "password": "youshallnotpass",
