@@ -3097,63 +3097,65 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
                 p = list(node_obj.player_manager.players)[0]
             else:
                 p = Player(node_obj.player_manager, ctx.channel)
+            try:
+                node_info = await p.server_metadata()
+                build_time = node_info.get(
+                    "buildTime",
+                    self.player_manager.path
+                    if self.player_manager and self.player_manager.path
+                    else _unknown,
+                )
+                llbuild = node_info.get(
+                    "build",
+                    self.player_manager.path
+                    if self.player_manager and self.player_manager.path
+                    else _unknown,
+                )
+                llversion = node_info.get("version", _unknown)
+                llbranch = node_info.get(
+                    "branch",
+                    self.player_manager.path
+                    if self.player_manager and self.player_manager.path
+                    else _unknown,
+                )
+                lavaplayer = node_info.get(
+                    "lavaplayer",
+                    self.player_manager.path
+                    if self.player_manager and self.player_manager.path
+                    else _unknown,
+                )
+                jvm = node_info.get(
+                    "jvm",
+                    self.player_manager.path
+                    if self.player_manager and self.player_manager.path
+                    else _unknown,
+                )
+                jv_exec = node_info.get(
+                    "java_exec",
+                    self.player_manager.path
+                    if self.player_manager and self.player_manager.path
+                    else _unknown,
+                )
 
-            node_info = await p.server_metadata()
-            build_time = node_info.get(
-                "buildTime",
-                self.player_manager.path
-                if self.player_manager and self.player_manager.path
-                else _unknown,
-            )
-            llbuild = node_info.get(
-                "build",
-                self.player_manager.path
-                if self.player_manager and self.player_manager.path
-                else _unknown,
-            )
-            llversion = node_info.get("version", _unknown)
-            llbranch = node_info.get(
-                "branch",
-                self.player_manager.path
-                if self.player_manager and self.player_manager.path
-                else _unknown,
-            )
-            lavaplayer = node_info.get(
-                "lavaplayer",
-                self.player_manager.path
-                if self.player_manager and self.player_manager.path
-                else _unknown,
-            )
-            jvm = node_info.get(
-                "jvm",
-                self.player_manager.path
-                if self.player_manager and self.player_manager.path
-                else _unknown,
-            )
-            jv_exec = node_info.get(
-                "java_exec",
-                self.player_manager.path
-                if self.player_manager and self.player_manager.path
-                else _unknown,
-            )
-
-            msg += _(
-                "Build:                  [{llbuild}]\n"
-                "Version:                [{llversion}]\n"
-                "Branch:                 [{llbranch}]\n"
-                "Release date:           [{build_time}]\n"
-                "Lavaplayer:             [{lavaplayer}]\n"
-                "Java version:           [{jvm}]\n"
-                "Java executable:        [{jv_exec}]\n"
-            ).format(
-                build_time=build_time,
-                llversion=llversion,
-                llbuild=llbuild,
-                llbranch=llbranch,
-                lavaplayer=lavaplayer,
-                jvm=jvm,
-                jv_exec=jv_exec,
-            )
+                msg += _(
+                    "Build:                  [{llbuild}]\n"
+                    "Version:                [{llversion}]\n"
+                    "Branch:                 [{llbranch}]\n"
+                    "Release date:           [{build_time}]\n"
+                    "Lavaplayer:             [{lavaplayer}]\n"
+                    "Java version:           [{jvm}]\n"
+                    "Java executable:        [{jv_exec}]\n"
+                ).format(
+                    build_time=build_time,
+                    llversion=llversion,
+                    llbuild=llbuild,
+                    llbranch=llbranch,
+                    lavaplayer=lavaplayer,
+                    jvm=jvm,
+                    jv_exec=jv_exec,
+                )
+            except Exception:
+                pass
         if managed:
             msg += _("Lavalink auto-update:   [{update}]\n").format(
                 update=await self.config_cache.managed_lavalink_server_auto_update.get_global(),
