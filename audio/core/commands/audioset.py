@@ -8,6 +8,7 @@ import tarfile
 from operator import attrgetter
 from pathlib import Path
 from typing import Union
+from urllib.parse import urlparse
 
 import discord
 import lavalink
@@ -2141,9 +2142,7 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
                 ),
             )
 
-    @command_audioset_lavalink_node.command(
-        name="uri", enabled=False
-    )  # TODO: Reenable when LL.py is merged in
+    @command_audioset_lavalink_node.command(name="uri")
     async def command_audioset_lavalink_node_uri(
         self, ctx: commands.Context, rest_uri: str = None, node: str = "primary"
     ):
@@ -2156,15 +2155,50 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
                     nodes=humanize_list(list(nodes), style="or")
                 ),
             )
+        try:
+            url = urlparse(rest_uri)
+        except Exception:
+            return await self.send_embed_msg(
+                ctx,
+                title=_("Setting Not Changed"),
+                description=_(
+                    "`{rest_uri}` is not valid, it must start with `https://` or `http://`"
+                ).format(rest_uri=rest_uri),
+            )
+        if not url.scheme or url.scheme not in ["https", "http"]:
+            return await self.send_embed_msg(
+                ctx,
+                title=_("Setting Not Changed"),
+                description=_(
+                    "`{rest_uri}` is not valid, it must start with `https://` or `http://`"
+                ).format(rest_uri=rest_uri),
+            )
         await self.config_cache.node_config.set_rest_uri(node_identifier=node, set_to=rest_uri)
         rest_uri = await self.config_cache.node_config.get_rest_uri(node_identifier=node)
+        url = urlparse(rest_uri)
+        if url.port:
+            await self.config_cache.node_config.set_port(node_identifier=node, set_to=url.port)
+        else:
+            await self.config_cache.node_config.set_port(node_identifier=node, set_to=-1)
+        if url.hostname:
+            await self.config_cache.node_config.set_host(
+                node_identifier=node, set_to=f"{url.scheme}://{url.hostname}"
+            )
+
+        uri_host = await self.config_cache.node_config.get_host(node_identifier=node)
+        uri_port = await self.config_cache.node_config.get_port(node_identifier=node)
+
         footer = None
         if await self.update_external_status():
             footer = _("External node set to True.")
         await self.send_embed_msg(
             ctx,
             title=_("Setting Changed"),
-            description=_("Rest URI set to `{rest_uri}`.").format(rest_uri=rest_uri),
+            description=_(
+                "Rest URI set to `{rest_uri}`\n"
+                "Hostname set to `{uri_host}`\n"
+                "Port set to     `{uri_port}`\n"
+            ).format(rest_uri=rest_uri, uri_port=uri_port, uri_host=uri_host),
             footer=footer,
         )
 

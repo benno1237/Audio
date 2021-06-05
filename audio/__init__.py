@@ -1,11 +1,19 @@
+import getpass
+import platform
 import sys
+from pathlib import Path
 
 from redbot.core.bot import Red
 from redbot.core.data_manager import cog_data_path
 from redbot.core.utils import get_end_user_data_statement
 
 # Dirty hack to made the cog always the downloaded lib and not the one that comes with Red.
-_LIB = cog_data_path(None, raw_name="Downloader") / "lib"
+if (
+    getpass.getuser() == "Draper" and platform.system() == "Windows"
+):  # Deving enviroment is annoying and I wanna have to avoid pushing untested changes upstream so i can validate audio
+    _LIB = Path(r"C:\Users\Draper\PycharmProjects\Red-Lavalink")
+else:
+    _LIB = cog_data_path(None, raw_name="Downloader") / "lib"
 sys.path.insert(0, str(_LIB))
 import lavalink  # noqa: F401 E402
 

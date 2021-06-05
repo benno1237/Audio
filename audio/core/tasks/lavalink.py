@@ -32,13 +32,15 @@ class LavalinkTasks(MixinMeta, metaclass=CompositeMetaClass):
         max_retries = 5
         retry_count = 0
         lazy_external = False
+        node = "primary"
         while retry_count < max_retries:
             managed = await self.config_cache.use_managed_lavalink.get_global()
             java_exec = str(await self.config_cache.java_exec.get_global())
-            host = await self.config_cache.node_config.get_host(node_identifier="primary")
-            password = await self.config_cache.node_config.get_password(node_identifier="primary")
-            port = await self.config_cache.node_config.get_port(node_identifier="primary")
-            name = await self.config_cache.node_config.get_identifier(node_identifier="primary")
+            host = await self.config_cache.node_config.get_host(node_identifier=node)
+            password = await self.config_cache.node_config.get_password(node_identifier=node)
+            port = await self.config_cache.node_config.get_port(node_identifier=node)
+            name = await self.config_cache.node_config.get_identifier(node_identifier=node)
+            rest_uri = await self.config_cache.node_config.get_rest_uri(node_identifier=node)
             if managed is True:
                 if self.player_manager is not None:
                     await self.player_manager.shutdown()
@@ -108,6 +110,7 @@ class LavalinkTasks(MixinMeta, metaclass=CompositeMetaClass):
                     timeout=timeout,
                     resume_key=f"Red-Core-Audio-{self.bot.user.id}-{data_manager.instance_name}",
                     node_name=name,
+                    rest_uri=rest_uri,
                 )
             except asyncio.TimeoutError:
                 log.error("Connecting to node timed out, retrying...")
