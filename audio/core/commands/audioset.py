@@ -2570,7 +2570,7 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
 
     @command_audioset_lavalink_managed.group(name="downloader", aliases=["dl"])
     async def command_audioset_lavalink_managed_downloader(self, ctx: commands.Context):
-        """Configure the managed Lavalibk downloading options."""
+        """Configure the managed Lavalink downloading options."""
 
     @command_audioset_lavalink_managed_downloader.command(name="build")
     async def command_audioset_lavalink_managed_downloader_build(
