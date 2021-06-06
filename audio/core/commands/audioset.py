@@ -12,7 +12,6 @@ from urllib.parse import urlparse
 
 import discord
 import lavalink
-from lavalink import Player
 from redbot.core import bank, commands
 from redbot.core.data_manager import cog_data_path
 from redbot.core.utils import AsyncIter
@@ -3093,12 +3092,8 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         msg += "\n----" + _("Node Info") + "----        \n"
         _unknown = _("Unknown")
         if node_obj:
-            if node_obj.player_manager.players:
-                p = list(node_obj.player_manager.players)[0]
-            else:
-                p = Player(node_obj.player_manager, ctx.channel)
             try:
-                node_info = await p.server_metadata()
+                node_info = await node_obj.server_metadata()
                 build_time = node_info.get(
                     "buildTime",
                     self.player_manager.path
