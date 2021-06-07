@@ -17,7 +17,7 @@
 
 :wave: Hello there, I'm Draper the previous maintainer of Red's core Audio Cog.
 
-This repository contains a heavily modded version of the core Audio cog, with several new features (Filters, Bundled EQ, Global settings to name a few), fixes and -potentially new bugs :smile:
+This repository contains a heavily modded version of the core Audio cog, with several new features (Filters, Bundled EQ, Global settings to name a few), fixes and potentially new bugs :smile:
 
 ------------
 ## Requirements:
@@ -31,19 +31,16 @@ Installation
 
 Primarily, make sure you have `downloader` loaded.
 
-.. code-block:: ini
 
     [p]load downloader
 
 Next, let's add my repository to your system.
 
-.. code-block:: ini
 
     [p]repo add audio https://github.com/Drapersniper/Audio
 
-To install a cog, use this command, replacing <cog> with the name of the cog you wish to install:
+To install a cog, use this command.
 
-.. code-block:: ini
 
     [p]cog install audio audio
 
