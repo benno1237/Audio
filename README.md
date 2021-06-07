@@ -17,7 +17,7 @@
 
 :wave: Hello there, I'm Draper the previous maintainer of Red's core Audio Cog.
 
-This repository contains a heavily modded version of the core Audio cog, with several new features (Filters, Bundled EQ, Global settings to name a few), fixes and -potentially new bugs :smile:
+This repository contains a heavily modded version of the core Audio cog, with several new features (Filters, Bundled EQ, Global settings to name a few), fixes and potentially new bugs :smile:
 
 ------------
 ## Requirements:
