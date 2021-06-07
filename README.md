@@ -49,7 +49,7 @@ To install a cog, use this command.
 - This cog uses a heavily modded version of Red's Lavalink library:
   - Source code can be found here: https://github.com/Drapersniper/Red-Lavalink.
 - This cog uses a heavily modified version of the JAR which Red users (With the ability to auto update and support for Java 13 among some of the new features.)
- - Releases can be found here: https://github.com/Drapersniper/Lavalink-Jars/releases
+  - Releases can be found here: https://github.com/Drapersniper/Lavalink-Jars/releases
 
 # License
 Released under the [GNU GPL v3](https://www.gnu.org/licenses/gpl-3.0.en.html) license.
