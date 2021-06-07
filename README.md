@@ -31,19 +31,16 @@ Installation
 
 Primarily, make sure you have `downloader` loaded.
 
-.. code-block:: ini
 
     [p]load downloader
 
 Next, let's add my repository to your system.
 
-.. code-block:: ini
 
     [p]repo add audio https://github.com/Drapersniper/Audio
 
 To install a cog, use this command, replacing <cog> with the name of the cog you wish to install:
 
-.. code-block:: ini
 
     [p]cog install audio audio
 
