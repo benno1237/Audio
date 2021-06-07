@@ -13,16 +13,46 @@
 [![Personal Patreon](https://img.shields.io/badge/Support-Me!-black.svg?labelColor=292f35)](https://www.patreon.com/drapersniper)
 [![Discord](https://img.shields.io/discord/850282003425394699?color=7289da&label=Support%20Server&logo=Discord&style=plastic&labelColor=292f35&logoColor=878f96)](https://discord.gg/bdnjFPQQaZ)
 
+# Modified Audio Cog by Draper
 
-# Requirements:
+:wave: Hello there, I'm Draper the previous maintainer of Red's core Audio Cog.
+
+This repository contains a heavily modded version of the core Audio cog, with several new features (Filters, Bundled EQ, Global settings to name a few), fixes and -potentially new bugs :smile:
+
+------------
+## Requirements:
 1. If you use an external instance you are required to use the following JAR:
     - <https://github.com/Drapersniper/Lavalink-Jars/releases/latest>
 2. You need to ensure your application.yaml is up to date and has the same settings as <https://github.com/Drapersniper/Audio/blob/master/audio/data/application.yml>
 
+------------
+Installation
+------------
 
-## NOTES
+Primarily, make sure you have `downloader` loaded.
 
-I'll be maintaining in independently of Red, none of this work will be contributed into Red due to disagreement with the lead core dev in that project and his toxicity, however you are more than free to use this cog instead of the bundled Audio cog and make suggestion and feature requests here, just be aware that by doing, so it will likely make a move back to core Audio unsafe, due to potential config migration in here.
+.. code-block:: ini
+
+    [p]load downloader
+
+Next, let's add my repository to your system.
+
+.. code-block:: ini
+
+    [p]repo add audio https://github.com/Drapersniper/Audio
+
+To install a cog, use this command, replacing <cog> with the name of the cog you wish to install:
+
+.. code-block:: ini
+
+    [p]cog install audio audio
+
+
+## Notes
+- This cog uses a heavily modded version of Red's Lavalink library:
+  - Source code can be found here: https://github.com/Drapersniper/Red-Lavalink.
+- This cog uses a heavily modified version of the JAR which Red users (With the ability to auto update and support for Java 13 among some of the new features.)
+ - Releases can be found here: https://github.com/Drapersniper/Lavalink-Jars/releases
 
 # License
 Released under the [GNU GPL v3](https://www.gnu.org/licenses/gpl-3.0.en.html) license.
