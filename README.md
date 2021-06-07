@@ -39,7 +39,7 @@ Next, let's add my repository to your system.
 
     [p]repo add audio https://github.com/Drapersniper/Audio
 
-To install a cog, use this command, replacing <cog> with the name of the cog you wish to install:
+To install a cog, use this command.
 
 
     [p]cog install audio audio
