@@ -19,7 +19,6 @@ from lavalink.filters import Volume
 import lavalink
 
 # Audio Imports
-# Music  Imports
 from ...apis.interface import AudioAPIInterface
 from ...apis.playlist_wrapper import PlaylistWrapper
 from ...audio_logging import debug_exc_log
@@ -28,7 +27,7 @@ from ...utils import task_callback
 from ..abc import MixinMeta
 from ..cog_utils import _OWNER_NOTIFICATION, _SCHEMA_VERSION, CompositeMetaClass
 
-log = logging.getLogger("red.cogs.Music.cog.Tasks.startup")
+log = logging.getLogger("red.cogs.Audio.cog.Tasks.startup")
 
 
 class StartUpTasks(MixinMeta, metaclass=CompositeMetaClass):
@@ -56,14 +55,14 @@ class StartUpTasks(MixinMeta, metaclass=CompositeMetaClass):
         try:
             await self.maybe_message_all_owners()
             self.db_conn = APSWConnectionWrapper(
-                str(cog_data_path(self.bot.get_cog("Music")) / "Audio.db")
+                str(cog_data_path(self.bot.get_cog("Audio")) / "Audio.db")
             )
             self.api_interface = AudioAPIInterface(
                 self.bot,
                 self.config,
                 self.session,
                 self.db_conn,
-                self.bot.get_cog("Music"),
+                self.bot.get_cog("Audio"),
                 self.config_cache,
             )
             self.playlist_api = PlaylistWrapper(
@@ -84,7 +83,7 @@ class StartUpTasks(MixinMeta, metaclass=CompositeMetaClass):
             )
             self.player_automated_timer_task.add_done_callback(task_callback)
         except Exception as err:
-            log.exception("Music failed to start up, please report this issue.", exc_info=err)
+            log.exception("Audio failed to start up, please report this issue.", exc_info=err)
             raise err
 
         self.cog_ready_event.set()

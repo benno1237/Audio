@@ -18,11 +18,10 @@ import discord
 import lavalink
 
 # Audio Imports
-# Music  Imports
 from ..abc import MixinMeta
 from ..cog_utils import CompositeMetaClass
 
-log = logging.getLogger("red.cogs.Music.cog.Commands.equalizer")
+log = logging.getLogger("red.cogs.Audio.cog.Commands.equalizer")
 
 
 class EqualizerCommands(MixinMeta, metaclass=CompositeMetaClass):

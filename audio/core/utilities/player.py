@@ -21,7 +21,6 @@ from lavalink.filters import Volume
 import lavalink
 
 # Audio Imports
-# Music  Imports
 from ...audio_dataclasses import _PARTIALLY_SUPPORTED_MUSIC_EXT, Query
 from ...audio_logging import debug_exc_log, IS_DEBUG
 from ...errors import QueryUnauthorized, SpotifyFetchError, TrackEnqueueError
@@ -29,7 +28,7 @@ from ...utils import Notifier
 from ..abc import MixinMeta
 from ..cog_utils import CompositeMetaClass
 
-log = logging.getLogger("red.cogs.Music.cog.Utilities.player")
+log = logging.getLogger("red.cogs.Audio.cog.Utilities.player")
 
 
 class PlayerUtilities(MixinMeta, metaclass=CompositeMetaClass):

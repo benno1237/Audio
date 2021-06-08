@@ -26,11 +26,10 @@ import discord
 import lavalink
 
 # Audio Imports
-# Music  Imports
 from ..abc import MixinMeta
 from ..cog_utils import CompositeMetaClass
 
-log = logging.getLogger("red.cogs.Music.cog.Commands.queue")
+log = logging.getLogger("red.cogs.Audio.cog.Commands.queue")
 
 
 class QueueCommands(MixinMeta, metaclass=CompositeMetaClass):

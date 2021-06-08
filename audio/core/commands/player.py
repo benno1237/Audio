@@ -20,7 +20,6 @@ import discord
 import lavalink
 
 # Audio Imports
-# Music  Imports
 from ...audio_dataclasses import _PARTIALLY_SUPPORTED_MUSIC_EXT, Query
 from ...audio_logging import IS_DEBUG
 from ...converters import MultiLineConverter
@@ -28,7 +27,7 @@ from ...errors import DatabaseError, QueryUnauthorized, SpotifyFetchError, Track
 from ..abc import MixinMeta
 from ..cog_utils import CompositeMetaClass, ENABLED_TITLE
 
-log = logging.getLogger("red.cogs.Music.cog.Commands.player")
+log = logging.getLogger("red.cogs.Audio.cog.Commands.player")
 
 
 class PlayerCommands(MixinMeta, metaclass=CompositeMetaClass):

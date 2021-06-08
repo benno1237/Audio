@@ -17,13 +17,12 @@ import discord
 import lavalink
 
 # Audio Imports
-# Music  Imports
 from ...errors import DatabaseError, TrackEnqueueError
 from ..abc import MixinMeta
 from ..cog_utils import CompositeMetaClass
 
-log = logging.getLogger("red.cogs.Music.cog.Events.lavalink")
-ws_audio_log = logging.getLogger("red.Music.WS.Audio")
+log = logging.getLogger("red.cogs.Audio.cog.Events.lavalink")
+ws_audio_log = logging.getLogger("red.Audio.WS.Audio")
 
 
 class LavalinkEvents(MixinMeta, metaclass=CompositeMetaClass):
