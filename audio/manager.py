@@ -234,7 +234,6 @@ class ServerManager:
         await self.process_settings()
 
         args = await self._get_jar_args()
-        args = list(filter(None, args))
         self._proc = await asyncio.subprocess.create_subprocess_exec(  # pylint:disable=no-member
             *args,
             cwd=str(LAVALINK_DOWNLOAD_DIR),
@@ -252,17 +251,18 @@ class ServerManager:
         self._monitor_task = asyncio.create_task(self._monitor())
         self._monitor_task.add_done_callback(task_callback)
 
-    async def _get_jar_args(self) -> List[str]:
+    async def _get_jar_args(self) -> List[bytes]:
         (java_available, java_version) = await self._has_java()
 
         if not java_available:
             raise RuntimeError("You must install Java 11 or 13 for Lavalink to run.")
-        return [
+        args = [
             self._java_exc,
             "-Djdk.tls.client.protocols=TLSv1.2" if (11, 0) <= java_version < (12, 0) else None,
             "-jar",
             str(LAVALINK_JAR_FILE),
         ]
+        return list(filter(None, args))
 
     async def _has_java(self) -> Tuple[bool, Optional[Tuple[int, int]]]:
         if self._java_available is not None:
@@ -480,8 +480,7 @@ class ServerManager:
             # Return cached value if we've checked this before
             return True
         args = await self._get_jar_args()
-        args.append("--version")
-        args = list(filter(None, args))
+        args.append(b"--version")
         _proc = await asyncio.subprocess.create_subprocess_exec(  # pylint:disable=no-member
             *args,
             cwd=str(LAVALINK_DOWNLOAD_DIR),
