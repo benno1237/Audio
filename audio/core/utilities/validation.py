@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 # Standard Library Imports
+from abc import ABC
 from typing import Final, Optional, Pattern, TYPE_CHECKING, Union
 from urllib.parse import urlparse
 import logging
@@ -31,7 +32,7 @@ _MIN_SLASH_SUPPORT = VersionInfo.from_json(
 )
 
 
-class ValidationUtilities(MixinMeta, metaclass=CompositeMetaClass):
+class ValidationUtilities(MixinMeta, ABC, metaclass=CompositeMetaClass):
     def match_url(self, url: str) -> bool:
         try:
             query_url = urlparse(url)

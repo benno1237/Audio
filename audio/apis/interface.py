@@ -1046,7 +1046,7 @@ class AudioAPIInterface:
             )
             if notify_channel_id:
                 await self.config_cache.autoplay.set_currently_in_guild(
-                    player.guild, [notify_channel_id, player.channel.id]
+                    player.guild, (notify_channel_id, player.channel.id)
                 )
             else:
                 await self.config_cache.autoplay.set_currently_in_guild(player.guild)

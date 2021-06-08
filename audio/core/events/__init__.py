@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 # Standard Library Imports
+from abc import ABC
 import logging
 
 # Music Imports
@@ -14,5 +15,5 @@ from .red import RedEvents
 log = logging.getLogger("red.cogs.Music.cog.Events")
 
 
-class Events(AudioEvents, DpyEvents, LavalinkEvents, RedEvents, metaclass=CompositeMetaClass):
+class Events(AudioEvents, DpyEvents, LavalinkEvents, RedEvents, ABC, metaclass=CompositeMetaClass):
     """Class joining all event subclasses"""

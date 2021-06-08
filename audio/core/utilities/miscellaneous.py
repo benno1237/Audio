@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 # Standard Library Imports
+from abc import ABC
 from typing import Any, cast, Final, Mapping, MutableMapping, Optional, Pattern, Union
 import asyncio
 import contextlib
@@ -42,7 +43,7 @@ _RE_TIME_CONVERTER: Final[Pattern] = re.compile(r"(?:(\d+):)?([0-5]?[0-9]):([0-5
 _prefer_lyrics_cache = {}
 
 
-class MiscellaneousUtilities(MixinMeta, metaclass=CompositeMetaClass):
+class MiscellaneousUtilities(MixinMeta, ABC, metaclass=CompositeMetaClass):
     async def _clear_react(
         self, message: discord.Message, emoji: MutableMapping = None
     ) -> Optional[asyncio.Task]:

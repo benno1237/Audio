@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 # Standard Library Imports
+from abc import ABC
 from typing import Dict
 import asyncio
 import contextlib
@@ -25,7 +26,7 @@ log = logging.getLogger("red.cogs.Music.cog.Events.lavalink")
 ws_audio_log = logging.getLogger("red.Music.WS.Audio")
 
 
-class LavalinkEvents(MixinMeta, metaclass=CompositeMetaClass):
+class LavalinkEvents(MixinMeta, ABC, metaclass=CompositeMetaClass):
     async def lavalink_update_handler(
         self, player: lavalink.Player, event_type: lavalink.enums.PlayerState, extra
     ):
@@ -122,7 +123,7 @@ class LavalinkEvents(MixinMeta, metaclass=CompositeMetaClass):
             notify_channel = player.fetch("notify_channel")
             if notify_channel and autoplay:
                 await self.config_cache.autoplay.set_currently_in_guild(
-                    guild, [notify_channel, player.channel.id]
+                    guild, (notify_channel, player.channel.id)
                 )
             else:
                 await self.config_cache.autoplay.set_currently_in_guild(guild)
@@ -159,8 +160,8 @@ class LavalinkEvents(MixinMeta, metaclass=CompositeMetaClass):
                             notify_channel,
                             title="Unable to Get Track",
                             description=(
-                                "I'm unable to get a track from Lavalink at the moment, try again in a few "
-                                "minutes."
+                                "I'm unable to get a track from Lavalink at the moment, "
+                                "try again in a few minutes."
                             ),
                         )
                     return
@@ -173,11 +174,7 @@ class LavalinkEvents(MixinMeta, metaclass=CompositeMetaClass):
                         await player.fetch("notify_message").delete()
                 if not (description and notify_channel):
                     return
-                if current_stream:
-                    dur = "LIVE"
-                else:
-                    dur = self.format_time(current_length)
-
+                dur = "LIVE" if current_stream else self.format_time(current_length)
                 thumb = None
                 if (
                     await self.config_cache.thumbnail.get_context_value(player.guild)
@@ -345,10 +342,7 @@ class LavalinkEvents(MixinMeta, metaclass=CompositeMetaClass):
                 )
                 self._ws_op_codes[guild_id]._init(self._ws_op_codes[guild_id]._maxsize)
                 return
-            if player.channel:
-                has_perm = self.can_join_and_speak(player.channel)
-            else:
-                has_perm = False
+            has_perm = self.can_join_and_speak(player.channel) if player.channel else False
             if code in (1000,) and has_perm and player.current and player.is_playing:
                 player.store("resumes", player.fetch("resumes", 0) + 1)
                 await player.resume(player.current, start=player.position, replace=True)
@@ -359,11 +353,9 @@ class LavalinkEvents(MixinMeta, metaclass=CompositeMetaClass):
                 return
 
             if voice_ws.socket._closing or voice_ws.socket.closed or not voice_ws.open:
-                if player._con_delay:
-                    delay = player._con_delay.delay()
-                else:
+                if not player._con_delay:
                     player._con_delay = ExponentialBackoff(base=1)
-                    delay = player._con_delay.delay()
+                delay = player._con_delay.delay()
                 ws_audio_log.warning(
                     "YOU CAN IGNORE THIS UNLESS IT'S CONSISTENTLY REPEATING FOR THE SAME GUILD - "
                     "Voice websocket closed for guild %d -> "
@@ -452,11 +444,9 @@ class LavalinkEvents(MixinMeta, metaclass=CompositeMetaClass):
                     "Player resumed - Reason: Error code %d & %s, %r", code, reason, player
                 )
             elif code in (4015, 4009, 4006, 4000, 1006):
-                if player._con_delay:
-                    delay = player._con_delay.delay()
-                else:
+                if not player._con_delay:
                     player._con_delay = ExponentialBackoff(base=1)
-                    delay = player._con_delay.delay()
+                delay = player._con_delay.delay()
                 ws_audio_log.debug(
                     "Reconnecting to channel %d in guild: %d | %.2fs", channel_id, guild_id, delay
                 )

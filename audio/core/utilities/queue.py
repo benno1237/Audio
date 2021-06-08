@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 # Standard Library Imports
+from abc import ABC
 from typing import List, Tuple
 import logging
 import math
@@ -24,7 +25,7 @@ from ..cog_utils import CompositeMetaClass
 log = logging.getLogger("red.cogs.Music.cog.Utilities.queue")
 
 
-class QueueUtilities(MixinMeta, metaclass=CompositeMetaClass):
+class QueueUtilities(MixinMeta, ABC, metaclass=CompositeMetaClass):
     async def _build_queue_page(
         self,
         ctx: commands.Context,

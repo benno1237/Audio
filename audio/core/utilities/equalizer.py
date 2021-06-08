@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 # Standard Library Imports
+from abc import ABC
 import asyncio
 import contextlib
 import logging
@@ -22,7 +23,7 @@ from ..cog_utils import CompositeMetaClass
 log = logging.getLogger("red.cogs.Music.cog.Utilities.equalizer")
 
 
-class EqualizerUtilities(MixinMeta, metaclass=CompositeMetaClass):
+class EqualizerUtilities(MixinMeta, ABC, metaclass=CompositeMetaClass):
     async def _eq_check(self, ctx: commands.Context, player: lavalink.Player) -> None:
         config_bands = await self.config.custom("EQUALIZER", ctx.guild.id).eq_bands()
         if not config_bands:
@@ -85,13 +86,13 @@ class EqualizerUtilities(MixinMeta, metaclass=CompositeMetaClass):
 
             if react_emoji == "\N{LEFTWARDS BLACK ARROW}\N{VARIATION SELECTOR-16}":
                 page = selected - 1
-                MAX_PAGE = 14
-                selected = page if page > 0 else MAX_PAGE
+                max_page = 14
+                selected = page if page > 0 else max_page
 
             if react_emoji == "\N{BLACK RIGHTWARDS ARROW}\N{VARIATION SELECTOR-16}":
                 page = selected + 1
-                MIN_PAGE = 0
-                selected = page if page < 15 else MIN_PAGE
+                min_page = 0
+                selected = page if page < 15 else min_page
             if react_emoji == "\N{UP-POINTING SMALL RED TRIANGLE}":
                 _max = float("{:.2f}".format(min(equalizer.get_gain(selected) + 0.1, 1.0)))
                 equalizer.set_gain(selected, _max)

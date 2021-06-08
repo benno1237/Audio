@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 # Standard Library Imports
+from abc import ABC
 from typing import List, MutableMapping
 import contextlib
 import logging
@@ -30,7 +31,8 @@ from ..cog_utils import CompositeMetaClass, ENABLED_TITLE
 log = logging.getLogger("red.cogs.Music.cog.Commands.player")
 
 
-class PlayerCommands(MixinMeta, metaclass=CompositeMetaClass):
+# noinspection PyDictDuplicateKeys
+class PlayerCommands(MixinMeta, ABC, metaclass=CompositeMetaClass):
     @commands.command(name="play")
     @commands.guild_only()
     @commands.bot_has_permissions(embed_links=True)
@@ -379,6 +381,7 @@ class PlayerCommands(MixinMeta, metaclass=CompositeMetaClass):
 
         self.update_player_lock(ctx, False)
 
+    # noinspection PyDictDuplicateKeys
     @commands.command(name="genre")
     @commands.guild_only()
     @commands.bot_has_permissions(embed_links=True)
@@ -387,22 +390,7 @@ class PlayerCommands(MixinMeta, metaclass=CompositeMetaClass):
         """Pick a Spotify playlist from a list of categories to start playing."""
 
         async def _category_search_menu(
-            ctx: commands.Context,
-            pages: list,
-            controls: MutableMapping,
-            message: discord.Message,
-            page: int,
-            timeout: float,
-            emoji: str,
-        ):
-            if message:
-                output = await self._genre_search_button_action(ctx, category_list, emoji, page)
-                with contextlib.suppress(discord.HTTPException):
-                    await message.delete()
-                return output
-
-        async def _playlist_search_menu(
-            ctx: commands.Context,
+            category_context: commands.Context,
             pages: list,
             controls: MutableMapping,
             message: discord.Message,
@@ -412,7 +400,24 @@ class PlayerCommands(MixinMeta, metaclass=CompositeMetaClass):
         ):
             if message:
                 output = await self._genre_search_button_action(
-                    ctx, playlists_list, emoji, page, playlist=True
+                    category_context, category_list, emoji, page
+                )
+                with contextlib.suppress(discord.HTTPException):
+                    await message.delete()
+                return output
+
+        async def _playlist_search_menu(
+            playlist_context: commands.Context,
+            pages: list,
+            controls: MutableMapping,
+            message: discord.Message,
+            page: int,
+            timeout: float,
+            emoji: str,
+        ):
+            if message:
+                output = await self._genre_search_button_action(
+                    playlist_context, playlists_list, emoji, page, playlist=True
                 )
                 with contextlib.suppress(discord.HTTPException):
                     await message.delete()
@@ -699,7 +704,7 @@ class PlayerCommands(MixinMeta, metaclass=CompositeMetaClass):
             )
 
         async def _search_menu(
-            ctx: commands.Context,
+            search_ctx: commands.Context,
             pages: list,
             controls: MutableMapping,
             message: discord.Message,
@@ -708,7 +713,7 @@ class PlayerCommands(MixinMeta, metaclass=CompositeMetaClass):
             emoji: str,
         ):
             if message:
-                await self._search_button_action(ctx, tracks, emoji, page)
+                await self._search_button_action(search_ctx, tracks, emoji, page)
                 with contextlib.suppress(discord.HTTPException):
                     await message.delete()
                 return None

@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 # Standard Library Imports
+from abc import ABC
 from operator import attrgetter
 from pathlib import Path
 from typing import Union
@@ -46,7 +47,7 @@ from ..cog_utils import (
 log = logging.getLogger("red.cogs.Music.cog.Commands.audioset")
 
 
-class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
+class AudioSetCommands(MixinMeta, ABC, metaclass=CompositeMetaClass):
     @commands.group(name="audioset")
     @commands.bot_has_permissions(embed_links=True)
     async def command_audioset(self, ctx: commands.Context):
@@ -2027,6 +2028,7 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         Note: Currently `node` may only be set to "primary".
         """
 
+    # noinspection HttpUrlsUsage
     @command_audioset_lavalink_node.command(name="host")
     async def command_audioset_lavalink_node_host(
         self, ctx: commands.Context, host: str, node: str = "primary"
@@ -2216,6 +2218,7 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
                 description="`{rest_uri}` is not a valid hostname".format(rest_uri=rest_uri),
             )
         if not url.scheme or url.scheme not in ["https", "http"]:
+            # noinspection HttpUrlsUsage
             return await self.send_embed_msg(
                 ctx,
                 title="Setting Not Changed",
@@ -2367,7 +2370,7 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
                     nodes=humanize_list(list(nodes), style="or"), node=node
                 ),
             )
-        state = await self.config_cache.node_config.set_search_only(node_identifier=node)
+        state = await self.config_cache.node_config.get_search_only(node_identifier=node)
         await self.config_cache.node_config.set_search_only(node_identifier=node, set_to=not state)
         footer = None
         if await self.update_external_status():

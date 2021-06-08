@@ -187,7 +187,7 @@ class GlobalCacheWrapper:
     async def update_global(self, llresponse: LoadResult, query: Optional[Query] = None):
         await self.post_call(llresponse=llresponse, query=query)
 
-    async def report_invalid(self, id: str) -> None:
+    async def report_invalid(self, identification: str) -> None:
         if not self.cog.global_api_user.get("can_delete"):
             return
         with contextlib.suppress(Exception):
@@ -195,7 +195,7 @@ class GlobalCacheWrapper:
             async with self.session.delete(
                 api_url,
                 headers={"Authorization": self.api_key, "X-Token": self._handshake_token},
-                params={"id": id},
+                params={"id": identification},
             ) as r:
                 await r.read()
 

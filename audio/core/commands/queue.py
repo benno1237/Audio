@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 # Standard Library Imports
+from abc import ABC
 from typing import MutableMapping, Optional
 import asyncio
 import contextlib
@@ -33,7 +34,7 @@ from ..cog_utils import CompositeMetaClass
 log = logging.getLogger("red.cogs.Music.cog.Commands.queue")
 
 
-class QueueCommands(MixinMeta, metaclass=CompositeMetaClass):
+class QueueCommands(MixinMeta, ABC, metaclass=CompositeMetaClass):
     @commands.group(name="queue", invoke_without_command=True)
     @commands.guild_only()
     @commands.bot_has_permissions(embed_links=True, add_reactions=True)
@@ -41,18 +42,18 @@ class QueueCommands(MixinMeta, metaclass=CompositeMetaClass):
         """List the songs in the queue."""
 
         async def _queue_menu(
-            ctx: commands.Context,
+            queue_ctx: commands.Context,
             pages: list,
             controls: MutableMapping,
-            message: discord.Message,
-            page: int,
+            queue_message: discord.Message,
+            queue_page: int,
             timeout: float,
-            emoji: str,
+            queue_emoji: str,
         ):
-            if message:
-                await ctx.send_help(self.command_queue)
+            if queue_message:
+                await queue_ctx.send_help(self.command_queue)
                 with contextlib.suppress(discord.HTTPException):
-                    await message.delete()
+                    await queue_message.delete()
                 return None
 
         queue_controls = {

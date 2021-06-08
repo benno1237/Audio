@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 # Standard Library Imports
+from abc import ABC
 from typing import Optional
 import asyncio
 import datetime
@@ -25,7 +26,7 @@ from ..cog_utils import CompositeMetaClass
 log = logging.getLogger("red.cogs.Music.cog.Events.audio")
 
 
-class AudioEvents(MixinMeta, metaclass=CompositeMetaClass):
+class AudioEvents(MixinMeta, ABC, metaclass=CompositeMetaClass):
     @commands.Cog.listener()
     async def on_red_audio_track_start(
         self, guild: discord.Guild, track: lavalink.Track, requester: discord.Member

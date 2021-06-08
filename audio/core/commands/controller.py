@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 # Standard Library Imports
+from abc import ABC
 from typing import Optional, Union
 import asyncio
 import contextlib
@@ -27,7 +28,7 @@ from ..cog_utils import CompositeMetaClass
 log = logging.getLogger("red.cogs.Music.cog.Commands.player_controller")
 
 
-class PlayerControllerCommands(MixinMeta, metaclass=CompositeMetaClass):
+class PlayerControllerCommands(MixinMeta, ABC, metaclass=CompositeMetaClass):
     @commands.command(name="disconnect")
     @commands.guild_only()
     @commands.bot_has_permissions(embed_links=True)
@@ -492,7 +493,7 @@ class PlayerControllerCommands(MixinMeta, metaclass=CompositeMetaClass):
             return await self.send_embed_msg(
                 ctx,
                 title="Unable To Skip Tracks",
-                description=("Can't skip to a specific track in vote mode without the DJ role."),
+                description="Can't skip to a specific track in vote mode without the DJ role.",
             )
         if ctx.author.id in self.skip_votes[ctx.guild.id]:
             self.skip_votes[ctx.guild.id].discard(ctx.author.id)

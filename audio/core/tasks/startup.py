@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 # Standard Library Imports
+from abc import ABC
 from collections import namedtuple
 from typing import Optional
 import asyncio
@@ -31,7 +32,7 @@ from ..cog_utils import _OWNER_NOTIFICATION, _SCHEMA_VERSION, CompositeMetaClass
 log = logging.getLogger("red.cogs.Music.cog.Tasks.startup")
 
 
-class StartUpTasks(MixinMeta, metaclass=CompositeMetaClass):
+class StartUpTasks(MixinMeta, ABC, metaclass=CompositeMetaClass):
     def start_up_task(self):
         # There has to be a task since this requires the bot to be ready
         # If it waits for ready in startup, we cause a deadlock during initial load

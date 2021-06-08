@@ -397,7 +397,7 @@ class ScopeParser(commands.Converter):
             raise commands.ArgParserFailure("--scope", "Nothing", custom_help=_SCOPE_HELP)
 
         is_owner = await ctx.bot.is_owner(ctx.author)
-        guild = vals.get("guild", None) or vals.get("server", None)
+        guild = vals.get("guild") or vals.get("server")
         if is_owner and guild:
             server_error = ""
             target_guild = None
@@ -418,7 +418,7 @@ class ScopeParser(commands.Converter):
         elif any(x in argument for x in ["--guild", "--server"]):
             raise commands.ArgParserFailure("--guild", "Nothing", custom_help=_GUILD_HELP)
 
-        author = vals.get("author", None) or vals.get("user", None) or vals.get("member", None)
+        author = vals.get("author") or vals.get("user") or vals.get("member")
         if author:
             user_error = ""
             target_user = None
@@ -535,7 +535,7 @@ class ComplexScopeParser(commands.Converter):
         elif "--from-scope" in argument and not vals["to_scope"]:
             raise commands.ArgParserFailure("--to-scope", "Nothing", custom_help=_SCOPE_HELP)
 
-        to_guild = vals.get("to_guild", None) or vals.get("to_server", None)
+        to_guild = vals.get("to_guild") or vals.get("to_server")
         if is_owner and to_guild:
             target_server_error = ""
             target_guild = None
@@ -559,7 +559,7 @@ class ComplexScopeParser(commands.Converter):
         elif any(x in argument for x in ["--to-guild", "--to-server"]):
             raise commands.ArgParserFailure("--to-server", "Nothing", custom_help=_GUILD_HELP)
 
-        from_guild = vals.get("from_guild", None) or vals.get("from_server", None)
+        from_guild = vals.get("from_guild") or vals.get("from_server")
         if is_owner and from_guild:
             source_server_error = ""
             source_guild = None
@@ -583,9 +583,8 @@ class ComplexScopeParser(commands.Converter):
         elif any(x in argument for x in ["--from-guild", "--from-server"]):
             raise commands.ArgParserFailure("--from-server", "Nothing", custom_help=_GUILD_HELP)
 
-        to_author = (
-            vals.get("to_author", None) or vals.get("to_user", None) or vals.get("to_member", None)
-        )
+        to_author = vals.get("to_author") or vals.get("to_user") or vals.get("to_member")
+
         if to_author:
             target_user_error = ""
             target_user = None
@@ -604,11 +603,8 @@ class ComplexScopeParser(commands.Converter):
         elif any(x in argument for x in ["--to-author", "--to-user", "--to-member"]):
             raise commands.ArgParserFailure("--to-user", "Nothing", custom_help=_USER_HELP)
 
-        from_author = (
-            vals.get("from_author", None)
-            or vals.get("from_user", None)
-            or vals.get("from_member", None)
-        )
+        from_author = vals.get("from_author") or vals.get("from_user") or vals.get("from_member")
+
         if from_author:
             source_user_error = ""
             source_user = None

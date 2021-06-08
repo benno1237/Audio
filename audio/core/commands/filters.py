@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 # Standard Library Imports
+from abc import ABC
 import logging
 
 # Dependency Imports
@@ -32,7 +33,7 @@ from ..cog_utils import CompositeMetaClass
 log = logging.getLogger("red.cogs.Music.cog.Commands.Effects")
 
 
-class EffectsCommands(MixinMeta, metaclass=CompositeMetaClass):
+class EffectsCommands(MixinMeta, ABC, metaclass=CompositeMetaClass):
     @commands.group(name="effects", invoke_without_command=True)
     @commands.guild_only()
     @commands.cooldown(1, 5, commands.BucketType.guild)

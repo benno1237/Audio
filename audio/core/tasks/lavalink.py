@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 # Standard Library Imports
+from abc import ABC
 import asyncio
 import logging
 
@@ -20,7 +21,7 @@ from ..cog_utils import CompositeMetaClass
 log = logging.getLogger("red.cogs.Music.cog.Tasks.lavalink")
 
 
-class LavalinkTasks(MixinMeta, metaclass=CompositeMetaClass):
+class LavalinkTasks(MixinMeta, ABC, metaclass=CompositeMetaClass):
     def lavalink_restart_connect(self) -> None:
         lavalink.unregister_event_listener(self.lavalink_event_handler)
         lavalink.unregister_update_listener(self.lavalink_update_handler)

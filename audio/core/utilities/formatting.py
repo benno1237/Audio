@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 # Standard Library Imports
+from abc import ABC
 from typing import List, Optional
 import logging
 import math
@@ -29,7 +30,7 @@ log = logging.getLogger("red.cogs.Music.cog.Utilities.formatting")
 RE_SQUARE = re.compile(r"[\[\]]")
 
 
-class FormattingUtilities(MixinMeta, metaclass=CompositeMetaClass):
+class FormattingUtilities(MixinMeta, ABC, metaclass=CompositeMetaClass):
     async def _genre_search_button_action(
         self, ctx: commands.Context, options: List, emoji: str, page: int, playlist: bool = False
     ) -> str:

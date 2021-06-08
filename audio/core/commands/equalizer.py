@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 # Standard Library Imports
+from abc import ABC
 import asyncio
 import contextlib
 import logging
@@ -24,7 +25,7 @@ from ..cog_utils import CompositeMetaClass
 log = logging.getLogger("red.cogs.Music.cog.Commands.equalizer")
 
 
-class EqualizerCommands(MixinMeta, metaclass=CompositeMetaClass):
+class EqualizerCommands(MixinMeta, ABC, metaclass=CompositeMetaClass):
     @commands.group(name="eq", invoke_without_command=True)
     @commands.guild_only()
     @commands.cooldown(1, 15, commands.BucketType.guild)

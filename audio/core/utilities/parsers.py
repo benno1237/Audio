@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 # Standard Library Imports
+from abc import ABC
 from typing import Final, Optional
 import logging
 import re
@@ -19,7 +20,7 @@ log = logging.getLogger("red.cogs.Music.cog.Utilities.Parsing")
 STREAM_TITLE: Final[re.Pattern] = re.compile(br"StreamTitle='([^']*)';")
 
 
-class ParsingUtilities(MixinMeta, metaclass=CompositeMetaClass):
+class ParsingUtilities(MixinMeta, ABC, metaclass=CompositeMetaClass):
     async def icyparser(self, url: str) -> Optional[str]:
         try:
             async with self.session.get(url, headers={"Icy-MetaData": "1"}) as resp:

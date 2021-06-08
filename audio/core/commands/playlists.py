@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 # Standard Library Imports
+from abc import ABC
 from io import BytesIO
 from typing import cast
 import asyncio
@@ -46,7 +47,7 @@ from ..cog_utils import CompositeMetaClass, LazyMultilineConverter, PlaylistConv
 log = logging.getLogger("red.cogs.Music.cog.Commands.playlist")
 
 
-class PlaylistCommands(MixinMeta, metaclass=CompositeMetaClass):
+class PlaylistCommands(MixinMeta, ABC, metaclass=CompositeMetaClass):
     @commands.group(name="playlist")
     @commands.guild_only()
     @commands.bot_has_permissions(embed_links=True, add_reactions=True)

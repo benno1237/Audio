@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 # Standard Library Imports
+from abc import ABC
 import logging
 
 # Music Imports
@@ -11,5 +12,5 @@ from ..cog_utils import CompositeMetaClass
 log = logging.getLogger("red.cogs.Music.cog.Commands.miscellaneous")
 
 
-class MiscellaneousCommands(MixinMeta, metaclass=CompositeMetaClass):
+class MiscellaneousCommands(MixinMeta, ABC, metaclass=CompositeMetaClass):
     pass

@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 # Standard Library Imports
+from abc import ABC
 import logging
 
 # Music Imports
@@ -13,5 +14,5 @@ from .startup import StartUpTasks
 log = logging.getLogger("red.cogs.Music.cog.Tasks")
 
 
-class Tasks(LavalinkTasks, PlayerTasks, StartUpTasks, metaclass=CompositeMetaClass):
+class Tasks(LavalinkTasks, PlayerTasks, StartUpTasks, ABC, metaclass=CompositeMetaClass):
     """Class joining all task subclasses"""

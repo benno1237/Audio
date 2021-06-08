@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 # Standard Library Imports
+from abc import ABC
 from typing import Literal, Mapping
 import asyncio
 import logging
@@ -16,7 +17,7 @@ from ..cog_utils import CompositeMetaClass
 log = logging.getLogger("red.cogs.Music.cog.Events.red")
 
 
-class RedEvents(MixinMeta, metaclass=CompositeMetaClass):
+class RedEvents(MixinMeta, ABC, metaclass=CompositeMetaClass):
     @commands.Cog.listener()
     async def on_red_api_tokens_update(
         self, service_name: str, api_tokens: Mapping[str, str]

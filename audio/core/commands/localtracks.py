@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 # Standard Library Imports
+from abc import ABC
 from pathlib import Path
 from typing import MutableMapping
 import contextlib
@@ -21,7 +22,7 @@ from ..cog_utils import CompositeMetaClass
 log = logging.getLogger("red.cogs.Music.cog.Commands.local_track")
 
 
-class LocalTrackCommands(MixinMeta, metaclass=CompositeMetaClass):
+class LocalTrackCommands(MixinMeta, ABC, metaclass=CompositeMetaClass):
     @commands.group(name="local")
     @commands.guild_only()
     @commands.bot_has_permissions(embed_links=True, add_reactions=True)
@@ -88,7 +89,7 @@ class LocalTrackCommands(MixinMeta, metaclass=CompositeMetaClass):
                 folder_page_list.append(embed)
 
         async def _local_folder_menu(
-            ctx: commands.Context,
+            context: commands.Context,
             pages: list,
             controls: MutableMapping,
             message: discord.Message,
@@ -99,9 +100,10 @@ class LocalTrackCommands(MixinMeta, metaclass=CompositeMetaClass):
             if message:
                 with contextlib.suppress(discord.HTTPException):
                     await message.delete()
-                await self._search_button_action(ctx, localtracks_folders, emoji, page)
+                await self._search_button_action(context, localtracks_folders, emoji, page)
                 return None
 
+        # noinspection PyDictDuplicateKeys
         local_folder_controls = {
             "\N{DIGIT ONE}\N{COMBINING ENCLOSING KEYCAP}": _local_folder_menu,
             "\N{DIGIT TWO}\N{COMBINING ENCLOSING KEYCAP}": _local_folder_menu,

@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 # Standard Library Imports
+from abc import ABC
 from typing import List, Optional, Tuple, Union
 import asyncio
 import logging
@@ -31,7 +32,7 @@ from ..cog_utils import CompositeMetaClass
 log = logging.getLogger("red.cogs.Music.cog.Utilities.player")
 
 
-class PlayerUtilities(MixinMeta, metaclass=CompositeMetaClass):
+class PlayerUtilities(MixinMeta, ABC, metaclass=CompositeMetaClass):
     async def maybe_reset_error_counter(self, player: lavalink.Player) -> None:
         guild = self.rgetattr(player, "channel.guild.id", None)
         if not guild:

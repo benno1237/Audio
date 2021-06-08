@@ -1,6 +1,9 @@
 # Future Imports
 from __future__ import annotations
 
+# Standard Library Imports
+from abc import ABC
+
 # Music Imports
 from ..cog_utils import CompositeMetaClass
 from .audioset import AudioSetCommands
@@ -24,6 +27,7 @@ class Commands(
     PlayerCommands,
     PlaylistCommands,
     QueueCommands,
+    ABC,
     metaclass=CompositeMetaClass,
 ):
     """Class joining all command subclasses"""

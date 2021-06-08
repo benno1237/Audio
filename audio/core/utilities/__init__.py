@@ -1,6 +1,9 @@
 # Future Imports
 from __future__ import annotations
 
+# Standard Library Imports
+from abc import ABC
+
 # Music Imports
 from ..cog_utils import CompositeMetaClass
 from .equalizer import EqualizerUtilities
@@ -25,6 +28,7 @@ class Utilities(
     QueueUtilities,
     ValidationUtilities,
     ParsingUtilities,
+    ABC,
     metaclass=CompositeMetaClass,
 ):
     """Class joining all utility subclasses"""

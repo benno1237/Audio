@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 # Standard Library Imports
+from abc import ABC
 from typing import Dict
 import asyncio
 import logging
@@ -21,7 +22,7 @@ from ..cog_utils import CompositeMetaClass
 log = logging.getLogger("red.cogs.Music.cog.Tasks.player")
 
 
-class PlayerTasks(MixinMeta, metaclass=CompositeMetaClass):
+class PlayerTasks(MixinMeta, ABC, metaclass=CompositeMetaClass):
     async def player_automated_timer(self) -> None:
         stop_times: Dict = {}
         pause_times: Dict = {}

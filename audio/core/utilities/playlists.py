@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 # Standard Library Imports
+from abc import ABC
 from typing import List, MutableMapping, Optional, Tuple, Union
 import asyncio
 import contextlib
@@ -48,7 +49,7 @@ CURRATED_DATA = (
 )
 
 
-class PlaylistUtilities(MixinMeta, metaclass=CompositeMetaClass):
+class PlaylistUtilities(MixinMeta, ABC, metaclass=CompositeMetaClass):
     async def can_manage_playlist(
         self,
         scope: str,

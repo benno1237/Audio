@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 # Standard Library Imports
+from abc import ABC
 from pathlib import Path
 from typing import List, Union
 import contextlib
@@ -25,7 +26,7 @@ from ..cog_utils import CompositeMetaClass
 log = logging.getLogger("red.cogs.Music.cog.Utilities.local_tracks")
 
 
-class LocalTrackUtilities(MixinMeta, metaclass=CompositeMetaClass):
+class LocalTrackUtilities(MixinMeta, ABC, metaclass=CompositeMetaClass):
     async def get_localtracks_folders(
         self, ctx: commands.Context, search_subfolders: bool = True
     ) -> List[Union[Path, LocalPath]]:

@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 # Standard Library Imports
+from abc import ABC
 from collections import OrderedDict
 from typing import Final, Pattern
 import asyncio
@@ -30,7 +31,7 @@ log = logging.getLogger("red.cogs.Music.cog.Events.dpy")
 RE_CONVERSION: Final[Pattern] = re.compile('Converting to "(.*)" failed for parameter "(.*)".')
 
 
-class DpyEvents(MixinMeta, metaclass=CompositeMetaClass):
+class DpyEvents(MixinMeta, ABC, metaclass=CompositeMetaClass):
     async def cog_before_invoke(self, ctx: commands.Context) -> None:
         await self.cog_ready_event.wait()
         # check for unsupported arch
@@ -258,6 +259,7 @@ class DpyEvents(MixinMeta, metaclass=CompositeMetaClass):
             if self.api_interface is not None:
                 await self.api_interface.run_tasks(ctx)
         if not handled:
+            # noinspection PyArgumentList
             await self.bot.on_command_error(ctx, error, unhandled_by_cog=True)
 
     def cog_unload(self) -> None:
