@@ -361,12 +361,10 @@ class EqualizerCommands(MixinMeta, metaclass=CompositeMetaClass):
             band_pos = band_names.index(band_name_or_position)
             band_int = False
             player.equalizer.set_gain(int(band_pos), band_value)
-            await player.set_equalizer(equalizer=player.equalizer)
         else:
             band_int = True
             player.equalizer.set_gain(band_number, band_value)
-            await player.set_equalizer(equalizer=player.equalizer)
-
+        await player.set_equalizer(equalizer=player.equalizer)
         await self._eq_msg_clear(player.fetch("eq_message"))
         async with self.config.custom("EQUALIZER", ctx.guild.id).all() as eq_data:
             eq_data["eq_bands"] = player.equalizer.get()

@@ -58,14 +58,11 @@ class QueueUtilities(MixinMeta, metaclass=CompositeMetaClass):
         )
         if query.is_stream:
             queue_list += "**Currently livestreaming:**\n"
-            queue_list += f"{current_track_description}\n"
-            queue_list += "Requested by: **{user}**".format(user=player.current.requester.mention)
-            queue_list += f"\n\n{arrow}`{pos}`/`{dur}`\n\n"
         else:
             queue_list += "Playing: "
-            queue_list += f"{current_track_description}\n"
-            queue_list += "Requested by: **{user}**".format(user=player.current.requester.mention)
-            queue_list += f"\n\n{arrow}`{pos}`/`{dur}`\n\n"
+        queue_list += f"{current_track_description}\n"
+        queue_list += "Requested by: **{user}**".format(user=player.current.requester.mention)
+        queue_list += f"\n\n{arrow}`{pos}`/`{dur}`\n\n"
         songs_for_page = queue[queue_idx_start:queue_idx_end]
         async for i, track in AsyncIter(songs_for_page).enumerate(start=queue_idx_start):
             track_idx = i + 1

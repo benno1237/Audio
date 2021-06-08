@@ -118,7 +118,7 @@ async def global_unique_user_finder(
 
     if guild is not None:
         async for member in AsyncIter(guild.members).filter(
-            lambda m: m.nick == arg and not any(obj.id == m.id for obj in maybe_matches)
+            lambda m: m.nick == arg and all(obj.id != m.id for obj in maybe_matches)
         ):
             maybe_matches.append(member)
 
@@ -143,9 +143,11 @@ async def global_unique_user_finder(
 class MultiLineConverter(commands.Converter):
     async def convert(self, ctx: commands.Context, arg: str) -> List[Query]:
         """Split the input into multiple arguments (Separated by `\n`)"""
-        response = []
-        for line in arg.splitlines():
-            response.append(Query.process_input(line, ctx.cog.local_folder_current_path))
+        response = [
+            Query.process_input(line, ctx.cog.local_folder_current_path)
+            for line in arg.splitlines()
+        ]
+
         if not response:
             raise commands.BadArgument("Could not match process queries.")
         return response
@@ -257,9 +259,7 @@ class OffConverter(commands.Converter):
     async def convert(self, ctx: commands.Context, arg: str = "True") -> bool:
         """Parses the Rotation arguments"""
         arg = arg.strip()
-        if arg.lower() in ["off", "disable", "reset", "clear", "remove"]:
-            return False
-        return True
+        return arg.lower() not in ["off", "disable", "reset", "clear", "remove"]
 
 
 class ChannelMixConverter(commands.Converter):
@@ -393,7 +393,7 @@ class ScopeParser(commands.Converter):
             if scope not in valid_scopes:
                 raise commands.ArgParserFailure("--scope", scope_raw, custom_help=_SCOPE_HELP)
             target_scope = standardize_scope(scope)
-        elif "--scope" in argument and not vals["scope"]:
+        elif "--scope" in argument:
             raise commands.ArgParserFailure("--scope", "Nothing", custom_help=_SCOPE_HELP)
 
         is_owner = await ctx.bot.is_owner(ctx.author)
@@ -520,7 +520,7 @@ class ComplexScopeParser(commands.Converter):
                     "--to-scope", to_scope_raw, custom_help=_SCOPE_HELP
                 )
             target_scope = standardize_scope(to_scope)
-        elif "--to-scope" in argument and not vals["to_scope"]:
+        elif "--to-scope" in argument:
             raise commands.ArgParserFailure("--to-scope", "Nothing", custom_help=_SCOPE_HELP)
 
         if vals["from_scope"]:

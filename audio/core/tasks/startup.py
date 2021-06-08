@@ -128,10 +128,9 @@ class StartUpTasks(MixinMeta, metaclass=CompositeMetaClass):
         all_guilds = await self.config.all_guilds()
         ctx = namedtuple("Context", "guild")
         async for guild_id, guild_data in AsyncIter(all_guilds.items(), steps=100):
-            if guild_data["auto_play"]:
-                if guild_data["currently_auto_playing_in"]:
-                    notify_channel, vc_id = guild_data["currently_auto_playing_in"]
-                    metadata[guild_id] = (notify_channel, vc_id)
+            if guild_data["auto_play"] and guild_data["currently_auto_playing_in"]:
+                notify_channel, vc_id = guild_data["currently_auto_playing_in"]
+                metadata[guild_id] = (notify_channel, vc_id)
 
         for guild_id, track_data in itertools.groupby(tracks_to_restore, key=lambda x: x.guild_id):
             await asyncio.sleep(0)

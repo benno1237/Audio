@@ -40,9 +40,7 @@ class ValidationUtilities(MixinMeta, metaclass=CompositeMetaClass):
             return False
 
     def match_yt_playlist(self, url: str) -> bool:
-        if _RE_YT_LIST_PLAYLIST.match(url):
-            return True
-        return False
+        return bool(_RE_YT_LIST_PLAYLIST.match(url))
 
     def is_url_allowed(self, url: str) -> bool:
         valid_tld = [
@@ -59,10 +57,10 @@ class ValidationUtilities(MixinMeta, metaclass=CompositeMetaClass):
         url_domain = ".".join(query_url.netloc.split(".")[-2:])
         if not query_url.netloc:
             url_domain = ".".join(query_url.path.split("/")[0].split(".")[-2:])
-        return True if url_domain in valid_tld else False
+        return url_domain in valid_tld
 
     def is_vc_full(self, channel: discord.VoiceChannel) -> bool:
-        return not (channel.user_limit == 0 or channel.user_limit > len(channel.members))
+        return channel.user_limit != 0 and channel.user_limit <= len(channel.members)
 
     def can_join_and_speak(self, channel: discord.VoiceChannel) -> bool:
         current_perms = channel.permissions_for(channel.guild.me)

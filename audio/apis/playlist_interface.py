@@ -99,7 +99,7 @@ class Playlist:
         dict
             The playlist in the form of a dict.
         """
-        data = dict(
+        return dict(
             id=self.id,
             author=self.author_id,
             guild=self.guild_id,
@@ -107,8 +107,6 @@ class Playlist:
             playlist_url=self.url,
             tracks=self.tracks,
         )
-
-        return data
 
     @classmethod
     async def from_json(

@@ -224,10 +224,7 @@ class WhitelistBlacklistManager(CacheBase):
         global_whitelist = await self.get_whitelist()
         if printable:
             global_whitelist = {f"{s} * Global" for s in global_whitelist}
-        if guild:
-            context_whitelist = await self.get_whitelist(guild)
-        else:
-            context_whitelist = set()
+        context_whitelist = await self.get_whitelist(guild) if guild else set()
         context_whitelist.update(global_whitelist)
         return context_whitelist
 
@@ -237,10 +234,7 @@ class WhitelistBlacklistManager(CacheBase):
         global_blacklist = await self.get_blacklist()
         if printable:
             global_blacklist = {f"{s} * Global" for s in global_blacklist}
-        if guild:
-            context_whitelist = await self.get_blacklist(guild)
-        else:
-            context_whitelist = set()
+        context_whitelist = await self.get_blacklist(guild) if guild else set()
         context_whitelist.update(global_blacklist)
         return context_whitelist
 

@@ -77,8 +77,6 @@ class EqualizerUtilities(MixinMeta, metaclass=CompositeMetaClass):
                 )
             except discord.errors.NotFound:
                 break
-            MAX_PAGE = 14
-            MIN_PAGE = 0
             if not react_emoji:
                 async with self.config.custom("EQUALIZER", ctx.guild.id).all() as eq_data:
                     eq_data["eq_bands"] = equalizer.get()
@@ -87,10 +85,12 @@ class EqualizerUtilities(MixinMeta, metaclass=CompositeMetaClass):
 
             if react_emoji == "\N{LEFTWARDS BLACK ARROW}\N{VARIATION SELECTOR-16}":
                 page = selected - 1
+                MAX_PAGE = 14
                 selected = page if page > 0 else MAX_PAGE
 
             if react_emoji == "\N{BLACK RIGHTWARDS ARROW}\N{VARIATION SELECTOR-16}":
                 page = selected + 1
+                MIN_PAGE = 0
                 selected = page if page < 15 else MIN_PAGE
             if react_emoji == "\N{UP-POINTING SMALL RED TRIANGLE}":
                 _max = float("{:.2f}".format(min(equalizer.get_gain(selected) + 0.1, 1.0)))
