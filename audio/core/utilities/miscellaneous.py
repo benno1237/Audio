@@ -494,6 +494,12 @@ class MiscellaneousUtilities(MixinMeta, metaclass=CompositeMetaClass):
                             del guild_data[gid][k]
             await self.config.schema_version.set(7)
 
+        if from_version < 8 <= to_version:  # Migrate node connection info to new namespace
+            async with self.config.lavalink.nodes.primary() as global_data:
+                if "http://http" in global_data["rest_uri"]:
+                    global_data["rest_uri"] = global_data["rest_uri"][7:]
+            await self.config.schema_version.set(8)
+
         if database_entries:
             await self.api_interface.local_cache_api.lavalink.insert(database_entries)
 
