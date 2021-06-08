@@ -249,13 +249,7 @@ class PlayerControllerCommands(MixinMeta, metaclass=CompositeMetaClass):
                 title="Unable To Skip Tracks",
                 description="There are other people listening - vote to skip instead.",
             )
-        if (
-            dj_enabled
-            and not vote_enabled
-            and not can_skip
-            and not is_requester
-            and not is_alone
-        ):
+        if dj_enabled and not vote_enabled and not can_skip and not is_requester and not is_alone:
             return await self.send_embed_msg(
                 ctx,
                 title="Unable To Skip Tracks",
@@ -498,9 +492,7 @@ class PlayerControllerCommands(MixinMeta, metaclass=CompositeMetaClass):
             return await self.send_embed_msg(
                 ctx,
                 title="Unable To Skip Tracks",
-                description=(
-                    "Can't skip to a specific track in vote mode without the DJ role."
-                ),
+                description=("Can't skip to a specific track in vote mode without the DJ role."),
             )
         if ctx.author.id in self.skip_votes[ctx.guild.id]:
             self.skip_votes[ctx.guild.id].discard(ctx.author.id)
@@ -603,13 +595,7 @@ class PlayerControllerCommands(MixinMeta, metaclass=CompositeMetaClass):
                 title="Unable To Join Voice Channel",
                 description="There are other people listening.",
             )
-        if (
-            dj_enabled
-            and not vote_enabled
-            and not can_skip
-            and not is_requester
-            and not is_alone
-        ):
+        if dj_enabled and not vote_enabled and not can_skip and not is_requester and not is_alone:
             ctx.command.reset_cooldown(ctx)
             return await self.send_embed_msg(
                 ctx,
@@ -696,12 +682,16 @@ class PlayerControllerCommands(MixinMeta, metaclass=CompositeMetaClass):
         )
 
         volume = (
+            (
                 min(
                     max(vol, 0),
                     max_volume,
                 )
                 / 100
-            ) if vol else None
+            )
+            if vol
+            else None
+        )
         if volume:
             vol = Volume(value=volume)
             if player.volume != vol:

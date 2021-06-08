@@ -82,9 +82,7 @@ class LavalinkTasks(MixinMeta, metaclass=CompositeMetaClass):
                     self.lavalink_connection_aborted = True
                     raise
             except asyncio.CancelledError:
-                log.exception(
-                    "Invalid machine architecture, cannot run a managed Lavalink node."
-                )
+                log.exception("Invalid machine architecture, cannot run a managed Lavalink node.")
                 raise
             except Exception as exc:
                 log.exception(

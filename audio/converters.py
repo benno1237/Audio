@@ -117,7 +117,9 @@ async def global_unique_user_finder(
         maybe_matches.append(user)
 
     if guild is not None:
-        async for member in AsyncIter(guild.members).filter(lambda m: m.nick == arg and all(obj.id != m.id for obj in maybe_matches)):
+        async for member in AsyncIter(guild.members).filter(
+            lambda m: m.nick == arg and all(obj.id != m.id for obj in maybe_matches)
+        ):
             maybe_matches.append(member)
 
     if not maybe_matches:

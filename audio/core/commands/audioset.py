@@ -431,9 +431,7 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
                 pages.append(box(text, lang="ini"))
         embed_colour = await ctx.embed_colour()
         pages = [
-            discord.Embed(
-                title="Global Allowlist", description=page, colour=embed_colour
-            )
+            discord.Embed(title="Global Allowlist", description=page, colour=embed_colour)
             for page in pages
         ]
 
@@ -508,9 +506,7 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
                 pages.append(box(text, lang="ini"))
         embed_colour = await ctx.embed_colour()
         pages = [
-            discord.Embed(
-                title="Global Denylist", description=page, colour=embed_colour
-            )
+            discord.Embed(title="Global Denylist", description=page, colour=embed_colour)
             for page in pages
         ]
 
