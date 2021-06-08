@@ -234,6 +234,7 @@ class ServerManager:
         await self.process_settings()
 
         args = await self._get_jar_args()
+        args = list(filter(None, args))
         self._proc = await asyncio.subprocess.create_subprocess_exec(  # pylint:disable=no-member
             *args,
             cwd=str(LAVALINK_DOWNLOAD_DIR),
@@ -256,10 +257,9 @@ class ServerManager:
 
         if not java_available:
             raise RuntimeError("You must install Java 11 or 13 for Lavalink to run.")
-
         return [
             self._java_exc,
-            "-Djdk.tls.client.protocols=TLSv1.2" if (11, 0) <= java_version < (12, 0) else "",
+            "-Djdk.tls.client.protocols=TLSv1.2" if (11, 0) <= java_version < (12, 0) else None,
             "-jar",
             str(LAVALINK_JAR_FILE),
         ]
@@ -481,6 +481,7 @@ class ServerManager:
             return True
         args = await self._get_jar_args()
         args.append("--version")
+        args = list(filter(None, args))
         _proc = await asyncio.subprocess.create_subprocess_exec(  # pylint:disable=no-member
             *args,
             cwd=str(LAVALINK_DOWNLOAD_DIR),
@@ -491,28 +492,35 @@ class ServerManager:
         if (build := _RE_BUILD_LINE.search(stdout)) is None:
             # Output is unexpected, suspect corrupted jarfile
             return False
+        else:
+            build = int(build["build"])
+            self._lavalink_build = build
+
         if (branch := LAVALINK_BRANCH_LINE.search(stdout)) is None:
             # Output is unexpected, suspect corrupted jarfile
             return False
+        else:
+            self._lavalink_branch = branch["branch"].decode()
         if (java := LAVALINK_JAVA_LINE.search(stdout)) is None:
             # Output is unexpected, suspect corrupted jarfile
             return False
+        else:
+            self._jvm = java["jvm"].decode()
+
         if (lavaplayer := LAVALINK_LAVAPLAYER_LINE.search(stdout)) is None:
             # Output is unexpected, suspect corrupted jarfile
             return False
+        else:
+            self._lavaplayer = lavaplayer["lavaplayer"].decode()
+
         if (buildtime := LAVALINK_BUILD_TIME_LINE.search(stdout)) is None:
             # Output is unexpected, suspect corrupted jarfile
             return False
-
-        build = int(build["build"])
-        date = buildtime["build_time"].decode()
-        date = date.replace(".", "/")
-        self._lavalink_build = build
-        self._lavalink_branch = branch["branch"].decode()
-        self._jvm = java["jvm"].decode()
-        self._lavaplayer = lavaplayer["lavaplayer"].decode()
-        self._buildtime = date
-        self._up_to_date = build >= self._jar_build
+        else:
+            date = buildtime["build_time"].decode()
+            date = date.replace(".", "/")
+            self._buildtime = date
+        self._up_to_date = self._lavalink_build >= self._jar_build
         return self._up_to_date
 
     async def maybe_download_jar(self):
