@@ -56,20 +56,24 @@ class StartUpTasks(MixinMeta, metaclass=CompositeMetaClass):
         if await self.config.migrated_from_core():
             return
         audio_cog_config: Config = Config.get_conf(None, 2711759130, cog_name="Audio")
-        audio_cog_config.init_custom("EQUALIZER", 1)
-        user_data = await audio_cog_config.all_users()
-        member_data = await audio_cog_config.all_members()
-        guild_data = await audio_cog_config.all_guilds()
-        channel_data = await audio_cog_config.all_channels()
-        global_data = await audio_cog_config.all()
-        eq_data = await audio_cog_config._get_base_group("EQUALIZER").all()
-        await self.config._get_base_group(self.config.GLOBAL).set(global_data)
-        await self.config._get_base_group(self.config.USER).set(user_data)
-        await self.config._get_base_group(self.config.MEMBER).set(member_data)
-        await self.config._get_base_group("EQUALIZER").set(eq_data)
-        await self.config._get_base_group(self.config.GUILD).set(guild_data)
-        await self.config._get_base_group(self.config.CHANNEL).set(channel_data)
-        await self.config.migrated_from_core.set(True)
+        try:
+            audio_cog_config.init_custom("EQUALIZER", 1)
+            user_data = await audio_cog_config.all_users()
+            member_data = await audio_cog_config.all_members()
+            guild_data = await audio_cog_config.all_guilds()
+            channel_data = await audio_cog_config.all_channels()
+            global_data = await audio_cog_config.all()
+            eq_data = await audio_cog_config._get_base_group("EQUALIZER").all()
+            await self.config._get_base_group(self.config.GLOBAL).set(global_data)
+            await self.config._get_base_group(self.config.USER).set(user_data)
+            await self.config._get_base_group(self.config.MEMBER).set(member_data)
+            await self.config._get_base_group("EQUALIZER").set(eq_data)
+            await self.config._get_base_group(self.config.GUILD).set(guild_data)
+            await self.config._get_base_group(self.config.CHANNEL).set(channel_data)
+            await self.config.migrated_from_core.set(True)
+        finally:
+            # In case this cog is loaded without the core cog being loaded, then unloaded and core cog loaded. this should keep this value same as Core.
+            audio_cog_config.force_registration = True
 
     async def initialize(self) -> None:
         await self.bot.wait_until_red_ready()
