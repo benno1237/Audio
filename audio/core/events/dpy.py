@@ -67,7 +67,6 @@ class DpyEvents(MixinMeta, metaclass=CompositeMetaClass):
             self.command_playmix,
             self.command_search,
             self.command_seek,
-            self.command_sing,
             self.command_skip,
             self.command_stop,
             self.command_summon,

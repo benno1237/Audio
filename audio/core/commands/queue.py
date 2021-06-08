@@ -5,6 +5,7 @@ from __future__ import annotations
 from typing import MutableMapping, Optional
 import asyncio
 import contextlib
+import heapq
 import logging
 import math
 
@@ -368,3 +369,56 @@ class QueueCommands(MixinMeta, metaclass=CompositeMetaClass):
 
         player.force_shuffle(0)
         return await self.send_embed_msg(ctx, title="Queue has been shuffled.")
+
+    @command_queue.command(name="ratio", aliases=["%", "percentage", "percent"])
+    async def command_queue_percent(self, ctx: commands.Context):
+        """Queue percentage."""
+        if not self._player_check(ctx):
+            return await self.send_embed_msg(ctx, title="Nothing playing.")
+        player = lavalink.get_player(ctx.guild.id)
+        queue_tracks = player.queue
+        requesters = {"total": 0, "users": {}}
+
+        async def _usercount(req_username):
+            if req_username in requesters["users"]:
+                requesters["users"][req_username]["songcount"] += 1
+            else:
+                requesters["users"][req_username] = {"songcount": 1}
+
+            requesters["total"] += 1
+
+        async for track in AsyncIter(queue_tracks):
+            req_username = track.requester.mention if track.requester else ctx.me.mention
+            await _usercount(req_username)
+
+        try:
+            req_username = (
+                player.current.requester.mention
+                if player.current and player.current.requester
+                else ctx.me.mention
+            )
+            await _usercount(req_username)
+        except AttributeError:
+            return await self.send_embed_msg(ctx, title="There's nothing in the queue.")
+
+        async for req_username in AsyncIter(requesters["users"]):
+            percentage = float(requesters["users"][req_username]["songcount"]) / float(
+                requesters["total"]
+            )
+            requesters["users"][req_username]["percent"] = round(percentage * 100, 1)
+
+        top_queue_users = heapq.nlargest(
+            20,
+            [
+                (x, requesters["users"][x][y])
+                for x in requesters["users"]
+                for y in requesters["users"][x]
+                if y == "percent"
+            ],
+            key=lambda x: x[1],
+        )
+        queue_user = [f"{x[0]}: {x[1]:g}%" for x in top_queue_users]
+        queue_user_list = "\n".join(queue_user)
+        await self.send_embed_msg(
+            ctx, title="Queued and playing tracks:", description=queue_user_list
+        )
