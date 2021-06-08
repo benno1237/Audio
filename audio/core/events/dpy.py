@@ -79,7 +79,9 @@ class DpyEvents(MixinMeta, metaclass=CompositeMetaClass):
             if not (
                 ctx.author.id == ctx.guild.owner_id
                 or (dj_enabled and await self._has_dj_role(ctx, ctx.author))
-                or await self.bot.is_mod(ctx.author)
+                or await self.config_cache.bot_config.member_is_mod_or_higher(
+                    ctx.guild, ctx.author
+                )
             ) and any(
                 command in not_deafened_commands
                 for command in [ctx.command, ctx.command.root_parent]
@@ -90,11 +92,9 @@ class DpyEvents(MixinMeta, metaclass=CompositeMetaClass):
                     raise CommandRejected(message=msg, reason="deafened")
 
         current_perms = ctx.channel.permissions_for(ctx.me)
-        surpass_ignore = (
-            isinstance(ctx.channel, discord.abc.PrivateChannel)
-            or await ctx.bot.is_owner(ctx.author)
-            or await ctx.bot.is_admin(ctx.author)
-        )
+        surpass_ignore = isinstance(
+            ctx.channel, discord.abc.PrivateChannel
+        ) or await self.config_cache.bot_config.member_is_admin_or_higher(ctx.guild, ctx.author)
         guild = ctx.guild
         if guild and not current_perms.is_superset(self.permission_cache):
             current_perms_set = set(iter(current_perms))

@@ -11,6 +11,7 @@ from .auto_deafen import AutoDeafenManager
 from .autodc import AutoDCManager
 from .autoplay import AutoPlayManager
 from .blacklist_whitelist import WhitelistBlacklistManager
+from .bot import BotConfigManager
 from .channel_restrict import ChannelRestrictManager
 from .country_code import CountryCodeManager
 from .daily_global_playlist import DailyGlobalPlaylistManager
@@ -110,6 +111,7 @@ class SettingCacheManager:
     vc_restricted: VCRestrictedManager = cache_factory(VCRestrictedManager)
     auto_deafen: AutoDeafenManager = cache_factory(AutoDeafenManager)
     max_queue_size: MaxQueueSizerManager = cache_factory(MaxQueueSizerManager)
+    bot_config: BotConfigManager = cache_factory(BotConfigManager)
 
     def reset_globals(self):
         for name, value in attr.asdict(self, recurse=False).items():

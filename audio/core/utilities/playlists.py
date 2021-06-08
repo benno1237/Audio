@@ -83,7 +83,11 @@ class PlaylistUtilities(MixinMeta, metaclass=CompositeMetaClass):
             if (
                 guild.owner_id == ctx.author.id
                 or (dj_enabled and await self._has_dj_role(ctx, ctx.author))
-                or (await self.bot.is_mod(ctx.author))
+                or (
+                    await self.config_cache.bot_config.member_is_mod_or_higher(
+                        ctx.guild, ctx.author
+                    )
+                )
                 or (not dj_enabled and not is_different_user)
             ):
                 has_perms = True

@@ -3,14 +3,17 @@ from __future__ import annotations
 
 # Standard Library Imports
 from enum import Enum, unique
+from functools import wraps
 from shutil import copyfile
 from typing import MutableMapping
 import asyncio
 import contextlib
+import datetime
 import logging
 import time
 
 # Dependency Imports
+from async_lru import alru_cache
 from redbot.core import commands, data_manager
 import discord
 
@@ -230,3 +233,22 @@ def copy_audio_db():
         return
     source = data_manager.cog_data_path(raw_name="Audio")
     copyfile(source / "Audio.db", target_json.with_name("Audio.db"))
+
+
+def timed_alru_cache(seconds: int, maxsize: int = 128):
+    def wrapper_cache(func):
+        func = alru_cache(maxsize=maxsize)(func)
+        func.lifetime = datetime.timedelta(seconds=seconds)
+        func.expiration = datetime.datetime.utcnow() + func.lifetime
+
+        @wraps(func)
+        def wrapped_func(*args, **kwargs):
+            if datetime.datetime.utcnow() >= func.expiration:
+                func.cache_clear()
+                func.expiration = datetime.datetime.utcnow() + func.lifetime
+
+            return func(*args, **kwargs)
+
+        return wrapped_func
+
+    return wrapper_cache
