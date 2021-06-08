@@ -1,24 +1,30 @@
+# Future Imports
 from __future__ import annotations
 
+# Standard Library Imports
+from types import SimpleNamespace
+from typing import List, TYPE_CHECKING, Union
 import concurrent
 import logging
 import time
-from types import SimpleNamespace
-from typing import TYPE_CHECKING, List, Union
 
+# My Modded Imports
 import lavalink
 
 try:
+    # Dependency Imports
     from redbot import json
 except ImportError:
     import json
 
+# Dependency Imports
 from redbot.core import Config
 from redbot.core.bot import Red
 from redbot.core.commands import Cog
 from redbot.core.utils import AsyncIter
 from redbot.core.utils.dbtools import APSWConnectionWrapper
 
+# Audio Imports
 from ..audio_logging import debug_exc_log
 from ..sql_statements import (
     PERSIST_QUEUE_BULK_PLAYED,
@@ -41,6 +47,7 @@ log = logging.getLogger("red.cogs.Audio.api.PersistQueueWrapper")
 _ = lambda s: s
 
 if TYPE_CHECKING:
+    # Audio Imports
     from .. import Audio
     from ..core.utilities import SettingCacheManager
 

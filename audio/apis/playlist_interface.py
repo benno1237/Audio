@@ -1,12 +1,20 @@
-import logging
-from typing import List, MutableMapping, Optional, Union
+# Future Imports
+from __future__ import annotations
 
-import discord
-import lavalink
-from redbot.core import Config, commands
+# Standard Library Imports
+from typing import List, MutableMapping, Optional, Union
+import logging
+
+# Dependency Imports
+from redbot.core import commands, Config
 from redbot.core.bot import Red
 from redbot.core.utils import AsyncIter
+import discord
 
+# My Modded Imports
+import lavalink
+
+# Audio Imports
 from ..errors import NotAllowed
 from ..utils import PlaylistScope
 from .api_utils import PlaylistFetchResult, prepare_config_scope, standardize_scope

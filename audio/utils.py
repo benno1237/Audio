@@ -1,12 +1,17 @@
+# Future Imports
+from __future__ import annotations
+
+# Standard Library Imports
+from enum import Enum, unique
+from typing import MutableMapping
 import asyncio
 import contextlib
 import logging
 import time
-from enum import Enum, unique
-from typing import MutableMapping
 
-import discord
+# Dependency Imports
 from redbot.core import commands
+import discord
 
 log = logging.getLogger("red.cogs.Audio.task.callback")
 _ = lambda s: s

@@ -1,23 +1,29 @@
+# Future Imports
 from __future__ import annotations
 
-import asyncio
-import datetime
+# Standard Library Imports
 from abc import ABC, abstractmethod
 from collections import Counter, defaultdict
 from pathlib import Path
-from typing import TYPE_CHECKING, Any, List, Mapping, MutableMapping, Optional, Set, Tuple, Union
+from typing import Any, List, Mapping, MutableMapping, Optional, Set, Tuple, TYPE_CHECKING, Union
+import asyncio
+import datetime
 
-import aiohttp
-import discord
-import lavalink
-from lavalink import Track
-from lavalink.filters import Equalizer
-from redbot.core import Config, commands
+# Dependency Imports
+from redbot.core import commands, Config
 from redbot.core.bot import Red
 from redbot.core.commands import Context
 from redbot.core.utils.dbtools import APSWConnectionWrapper
+import aiohttp
+import discord
+
+# My Modded Imports
+from lavalink import Track
+from lavalink.filters import Equalizer
+import lavalink
 
 if TYPE_CHECKING:
+    # Audio Imports
     from ..apis.interface import AudioAPIInterface
     from ..apis.playlist_interface import Playlist
     from ..apis.playlist_wrapper import PlaylistWrapper

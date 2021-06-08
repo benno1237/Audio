@@ -1,19 +1,30 @@
-import datetime
-import logging
+# Future Imports
+from __future__ import annotations
+
+# Standard Library Imports
 from collections import namedtuple
 from dataclasses import dataclass, field
 from typing import List, MutableMapping, Optional, Union
+import datetime
+import logging
 
+# Dependency Imports
 import discord
+
+# My Modded Imports
 import lavalink
 
 try:
+    # Dependency Imports
     from redbot import json
 except ImportError:
     import json
+
+# Dependency Imports
 from redbot.core.bot import Red
 from redbot.core.utils.chat_formatting import humanize_list
 
+# Audio Imports
 from ..errors import InvalidPlaylistScope, MissingAuthor, MissingGuild
 from ..utils import PlaylistScope
 

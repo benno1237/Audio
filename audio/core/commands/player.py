@@ -1,23 +1,31 @@
+# Future Imports
+from __future__ import annotations
+
+# Standard Library Imports
+from typing import List, MutableMapping
 import contextlib
 import logging
 import math
 import time
-from typing import List, MutableMapping
 
-import discord
-import lavalink
+# Dependency Imports
 from discord.embeds import EmptyEmbed
 from redbot.core import commands
 from redbot.core.commands import UserInputOptional
 from redbot.core.utils import AsyncIter
-from redbot.core.utils.menus import DEFAULT_CONTROLS, close_menu, menu, next_page, prev_page
+from redbot.core.utils.menus import close_menu, DEFAULT_CONTROLS, menu, next_page, prev_page
+import discord
 
+# My Modded Imports
+import lavalink
+
+# Audio Imports
 from ...audio_dataclasses import _PARTIALLY_SUPPORTED_MUSIC_EXT, Query
 from ...audio_logging import IS_DEBUG
 from ...converters import MultiLineConverter
 from ...errors import DatabaseError, QueryUnauthorized, SpotifyFetchError, TrackEnqueueError
 from ..abc import MixinMeta
-from ..cog_utils import ENABLED_TITLE, CompositeMetaClass
+from ..cog_utils import CompositeMetaClass, ENABLED_TITLE
 
 log = logging.getLogger("red.cogs.Audio.cog.Commands.player")
 _ = lambda s: s

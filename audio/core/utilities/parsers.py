@@ -1,10 +1,16 @@
+# Future Imports
+from __future__ import annotations
+
+# Standard Library Imports
+from typing import Final, Optional
 import logging
 import re
 import struct
-from typing import Final, Optional
 
+# Dependency Imports
 import aiohttp
 
+# Audio Imports
 from ..abc import MixinMeta
 from ..cog_utils import CompositeMetaClass
 

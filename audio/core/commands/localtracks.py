@@ -1,13 +1,19 @@
+# Future Imports
+from __future__ import annotations
+
+# Standard Library Imports
+from pathlib import Path
+from typing import MutableMapping
 import contextlib
 import logging
 import math
-from pathlib import Path
-from typing import MutableMapping
 
-import discord
+# Dependency Imports
 from redbot.core import commands
-from redbot.core.utils.menus import DEFAULT_CONTROLS, close_menu, menu, next_page, prev_page
+from redbot.core.utils.menus import close_menu, DEFAULT_CONTROLS, menu, next_page, prev_page
+import discord
 
+# Audio Imports
 from ...audio_dataclasses import LocalPath, Query
 from ..abc import MixinMeta
 from ..cog_utils import CompositeMetaClass

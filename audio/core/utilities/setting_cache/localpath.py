@@ -1,10 +1,14 @@
+# Future Imports
 from __future__ import annotations
 
+# Standard Library Imports
 from pathlib import Path
 from typing import Dict, Optional
 
+# Dependency Imports
 import discord
 
+# Audio Imports
 from .abc import CacheBase
 
 

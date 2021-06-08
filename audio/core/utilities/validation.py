@@ -1,19 +1,24 @@
+# Future Imports
 from __future__ import annotations
 
+# Standard Library Imports
+from typing import Final, Optional, Pattern, TYPE_CHECKING, Union
+from urllib.parse import urlparse
 import logging
 import re
-from typing import TYPE_CHECKING, Final, Optional, Pattern, Union
-from urllib.parse import urlparse
 
-import discord
+# Dependency Imports
 from redbot import VersionInfo
 from redbot.core.commands import Context
+import discord
 
+# Audio Imports
 from ...audio_dataclasses import Query
 from ..abc import MixinMeta
 from ..cog_utils import CompositeMetaClass
 
 if TYPE_CHECKING:
+    # Audio Imports
     from . import SettingCacheManager
 log = logging.getLogger("red.cogs.Audio.cog.Utilities.validation")
 
@@ -85,8 +90,10 @@ class ValidationUtilities(MixinMeta, metaclass=CompositeMetaClass):
     @staticmethod
     def is_slash_compatible() -> bool:
         try:
+            # Dependency Imports
             from dislash import slash_commands  # noqa: F401
 
+            # Audio Imports
             from ...__version__ import version_info
 
             return _MIN_SLASH_SUPPORT <= version_info

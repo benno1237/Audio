@@ -1,15 +1,23 @@
+# Future Imports
+from __future__ import annotations
+
+# Standard Library Imports
 import asyncio
 import contextlib
 import logging
 import re
 
-import discord
-import lavalink
+# Dependency Imports
 from redbot.core import commands
 from redbot.core.utils.chat_formatting import box, humanize_number, pagify
 from redbot.core.utils.menus import DEFAULT_CONTROLS, menu, start_adding_reactions
 from redbot.core.utils.predicates import MessagePredicate, ReactionPredicate
+import discord
 
+# My Modded Imports
+import lavalink
+
+# Audio Imports
 from ..abc import MixinMeta
 from ..cog_utils import CompositeMetaClass
 

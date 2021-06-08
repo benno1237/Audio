@@ -1,10 +1,14 @@
+# Future Imports
 from __future__ import annotations
 
+# Standard Library Imports
 from collections import defaultdict
 from typing import Dict, Optional, Set
 
+# Dependency Imports
 import discord
 
+# Audio Imports
 from .abc import CacheBase
 
 

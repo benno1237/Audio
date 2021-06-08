@@ -1,5 +1,10 @@
+# Future Imports
+from __future__ import annotations
+
+# Dependency Imports
 from redbot import VersionInfo
 
+# Audio Imports
 from .hash import version
 
 COMMIT = version

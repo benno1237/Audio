@@ -1,13 +1,19 @@
-import struct
+# Future Imports
+from __future__ import annotations
+
+# Standard Library Imports
 from abc import ABC
 from base64 import b64decode
 from io import BytesIO
 from typing import Final
+import struct
 
+# Dependency Imports
 from redbot.core import commands
 from redbot.core.i18n import Translator
 
-from ..__version__ import __version__ as __version__  # noqa: F401
+# Audio Imports
+from ..__version__ import __version__  # noqa: F401
 from ..converters import get_lazy_converter, get_lazy_multiline_converter, get_playlist_converter
 
 __author__ = ["aikaterna", "Draper"]

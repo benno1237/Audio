@@ -1,5 +1,10 @@
+# Future Imports
+from __future__ import annotations
+
+# Standard Library Imports
 import logging
 
+# Audio Imports
 from ..cog_utils import CompositeMetaClass
 from .lavalink import LavalinkTasks
 from .player import PlayerTasks

@@ -1,26 +1,33 @@
+# Future Imports
 from __future__ import annotations
 
+# Standard Library Imports
+from typing import List, Mapping, MutableMapping, Optional, Tuple, TYPE_CHECKING, Union
 import base64
 import contextlib
 import logging
 import time
-from typing import TYPE_CHECKING, List, Mapping, MutableMapping, Optional, Tuple, Union
 
+# Dependency Imports
 import aiohttp
 
 try:
+    # Dependency Imports
     from redbot import json
 except ImportError:
     import json
 
+# Dependency Imports
 from redbot.core import Config
 from redbot.core.bot import Red
 from redbot.core.commands import Cog, Context
 from redbot.core.utils import AsyncIter
 
+# Audio Imports
 from ..errors import SpotifyFetchError
 
 if TYPE_CHECKING:
+    # Audio Imports
     from .. import Audio
     from ..core.utilities import SettingCacheManager
 

@@ -1,5 +1,9 @@
-import aiohttp
+# Future Imports
+from __future__ import annotations
+
+# Dependency Imports
 from redbot.core.commands import UserFeedbackCheckFailure
+import aiohttp
 
 _ = lambda s: s
 

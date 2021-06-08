@@ -3,18 +3,21 @@
 Script showing a diff combining changes from black and isort.
 """
 
+# Future Imports
 from __future__ import annotations
 
+# Standard Library Imports
+from abc import ABC, abstractmethod
+from concurrent.futures import ProcessPoolExecutor
+from pathlib import Path
+from typing import Dict, Generator, Optional, Tuple
 import asyncio
 import dataclasses
 import difflib
 import os
 import sys
-from abc import ABC, abstractmethod
-from concurrent.futures import ProcessPoolExecutor
-from pathlib import Path
-from typing import Dict, Generator, Optional, Tuple
 
+# Dependency Imports
 import black
 import isort
 import isort.api

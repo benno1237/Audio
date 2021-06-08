@@ -1,9 +1,17 @@
+# Future Imports
+from __future__ import annotations
+
+# Standard Library Imports
 import asyncio
 import logging
 
-import lavalink
+# Dependency Imports
 from redbot.core import data_manager
 
+# My Modded Imports
+import lavalink
+
+# Audio Imports
 from ...errors import LavalinkDownloadFailed, ShouldAutoRecover
 from ...manager import ServerManager
 from ..abc import MixinMeta

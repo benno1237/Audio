@@ -1,9 +1,13 @@
+# Future Imports
 from __future__ import annotations
 
+# Standard Library Imports
 from typing import Dict, Union
 
+# Dependency Imports
 import discord
 
+# Audio Imports
 from .abc import CacheBase
 
 

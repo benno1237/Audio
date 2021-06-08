@@ -1,10 +1,7 @@
-import contextlib
-import glob
-import logging
-import ntpath
-import os
-import posixpath
-import re
+# Future Imports
+from __future__ import annotations
+
+# Standard Library Imports
 from pathlib import Path, PosixPath, WindowsPath
 from typing import (
     AsyncIterator,
@@ -18,9 +15,19 @@ from typing import (
     Union,
 )
 from urllib.parse import urlparse
+import contextlib
+import glob
+import logging
+import ntpath
+import os
+import posixpath
+import re
 
-import lavalink
+# Dependency Imports
 from redbot.core.utils import AsyncIter
+
+# My Modded Imports
+import lavalink
 
 _ = lambda s: s
 

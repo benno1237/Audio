@@ -1,12 +1,16 @@
+# Future Imports
 from __future__ import annotations
 
+# Standard Library Imports
 from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING
 
+# Dependency Imports
 from redbot.core import Config
 from redbot.core.bot import Red
 
 if TYPE_CHECKING:
+    # Audio Imports
     from . import SettingCacheManager
 
 

@@ -1,20 +1,25 @@
+# Future Imports
 from __future__ import annotations
 
+# Standard Library Imports
+from types import SimpleNamespace
+from typing import List, MutableMapping, Optional, TYPE_CHECKING
 import concurrent
 import logging
-from types import SimpleNamespace
-from typing import TYPE_CHECKING, List, MutableMapping, Optional
 
 try:
+    # Dependency Imports
     from redbot import json
 except ImportError:
     import json
 
+# Dependency Imports
 from redbot.core import Config
 from redbot.core.bot import Red
 from redbot.core.utils import AsyncIter
 from redbot.core.utils.dbtools import APSWConnectionWrapper
 
+# Audio Imports
 from ..audio_logging import debug_exc_log
 from ..sql_statements import (
     HANDLE_DISCORD_DATA_DELETION_QUERY,
@@ -41,6 +46,7 @@ log = logging.getLogger("red.cogs.Audio.api.Playlists")
 _ = lambda s: s
 
 if TYPE_CHECKING:
+    # Audio Imports
     from ..core.utilities import SettingCacheManager
 
 

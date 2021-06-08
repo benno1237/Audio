@@ -1,11 +1,19 @@
+# Future Imports
+from __future__ import annotations
+
+# Standard Library Imports
 import heapq
 import logging
 import random
 
-import lavalink
+# Dependency Imports
 from redbot.core import commands
 from redbot.core.utils import AsyncIter
 
+# My Modded Imports
+import lavalink
+
+# Audio Imports
 from ..abc import MixinMeta
 from ..cog_utils import CompositeMetaClass
 

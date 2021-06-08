@@ -1,21 +1,30 @@
+# Future Imports
+from __future__ import annotations
+
+# Standard Library Imports
+from io import BytesIO
+from typing import cast
 import asyncio
 import logging
 import math
 import os
 import tarfile
 import time
-from io import BytesIO
-from typing import cast
 
-import discord
-import lavalink
+# Dependency Imports
 from redbot.core.utils.menus import DEFAULT_CONTROLS, menu
+import discord
+
+# My Modded Imports
+import lavalink
 
 try:
+    # Dependency Imports
     from redbot import json
 except ImportError:
     import json
 
+# Dependency Imports
 from redbot.core import commands
 from redbot.core.commands import UserInputOptional
 from redbot.core.data_manager import cog_data_path
@@ -23,10 +32,11 @@ from redbot.core.utils import AsyncIter
 from redbot.core.utils.chat_formatting import bold, pagify
 from redbot.core.utils.predicates import MessagePredicate
 
+# Audio Imports
 from ...apis.api_utils import FakePlaylist
-from ...apis.playlist_interface import Playlist, create_playlist, delete_playlist, get_all_playlist
+from ...apis.playlist_interface import create_playlist, delete_playlist, get_all_playlist, Playlist
 from ...audio_dataclasses import LocalPath, Query
-from ...audio_logging import IS_DEBUG, debug_exc_log
+from ...audio_logging import debug_exc_log, IS_DEBUG
 from ...converters import ComplexScopeParser, ScopeParser
 from ...errors import MissingGuild, TooManyMatches, TrackEnqueueError
 from ...utils import PlaylistScope

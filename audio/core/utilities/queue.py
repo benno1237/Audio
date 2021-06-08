@@ -1,14 +1,22 @@
+# Future Imports
+from __future__ import annotations
+
+# Standard Library Imports
+from typing import List, Tuple
 import logging
 import math
-from typing import List, Tuple
 
-import discord
-import lavalink
+# Dependency Imports
 from fuzzywuzzy import process
 from redbot.core import commands
 from redbot.core.utils import AsyncIter
 from redbot.core.utils.chat_formatting import humanize_number
+import discord
 
+# My Modded Imports
+import lavalink
+
+# Audio Imports
 from ...audio_dataclasses import LocalPath, Query
 from ..abc import MixinMeta
 from ..cog_utils import CompositeMetaClass

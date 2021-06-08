@@ -1,3 +1,8 @@
+# Future Imports
+from __future__ import annotations
+
+# Standard Library Imports
+from typing import List, MutableMapping, Optional, Tuple, Union
 import asyncio
 import contextlib
 import datetime
@@ -5,25 +10,30 @@ import logging
 import math
 import random
 import time
-from typing import List, MutableMapping, Optional, Tuple, Union
 
+# Dependency Imports
+from discord.embeds import EmptyEmbed
 import aiohttp
 import discord
+
+# My Modded Imports
 import lavalink
-from discord.embeds import EmptyEmbed
 
 try:
+    # Dependency Imports
     from redbot import json
 except ImportError:
     import json
 
+# Dependency Imports
 from redbot.core import commands
 from redbot.core.utils import AsyncIter
 from redbot.core.utils.chat_formatting import box
 from redbot.core.utils.menus import start_adding_reactions
 from redbot.core.utils.predicates import ReactionPredicate
 
-from ...apis.playlist_interface import Playlist, PlaylistCompat23, create_playlist
+# Audio Imports
+from ...apis.playlist_interface import create_playlist, Playlist, PlaylistCompat23
 from ...audio_dataclasses import _PARTIALLY_SUPPORTED_MUSIC_EXT, Query
 from ...audio_logging import debug_exc_log
 from ...errors import TooManyMatches, TrackEnqueueError

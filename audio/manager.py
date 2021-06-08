@@ -1,3 +1,8 @@
+# Future Imports
+from __future__ import annotations
+
+# Standard Library Imports
+from typing import ClassVar, Final, List, Optional, Pattern, Tuple
 import asyncio
 import asyncio.subprocess  # disables for # https://github.com/PyCQA/pylint/issues/1469
 import contextlib
@@ -10,19 +15,23 @@ import re
 import shutil
 import sys
 import tempfile
-from typing import ClassVar, Final, List, Optional, Pattern, Tuple
 
+# Dependency Imports
+from tqdm import tqdm
 import aiohttp
 import yaml
-from tqdm import tqdm
 
 try:
+    # Dependency Imports
     from redbot import json
 except ImportError:
     import json
+
+# Dependency Imports
 from redbot.core import data_manager
 from redbot.core.i18n import Translator
 
+# Audio Imports
 from .core.utilities import SettingCacheManager
 from .errors import LavalinkDownloadFailed, ShouldAutoRecover
 from .utils import task_callback

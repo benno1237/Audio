@@ -1,27 +1,36 @@
+# Future Imports
 from __future__ import annotations
 
+# Standard Library Imports
+from copy import copy
+from typing import Mapping, Optional, TYPE_CHECKING, Union
 import asyncio
 import contextlib
 import logging
-from copy import copy
-from typing import TYPE_CHECKING, Mapping, Optional, Union
 
+# Dependency Imports
 import aiohttp
+
+# My Modded Imports
 from lavalink.rest_api import LoadResult
 
 try:
+    # Dependency Imports
     from redbot import json
 except ImportError:
     import json
 
+# Dependency Imports
 from redbot.core import Config
 from redbot.core.bot import Red
 from redbot.core.commands import Cog
 
+# Audio Imports
 from ..audio_dataclasses import Query
-from ..audio_logging import IS_DEBUG, debug_exc_log
+from ..audio_logging import debug_exc_log, IS_DEBUG
 
 if TYPE_CHECKING:
+    # Audio Imports
     from .. import Audio
     from ..core.utilities import SettingCacheManager
 

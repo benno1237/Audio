@@ -1,18 +1,26 @@
+# Future Imports
+from __future__ import annotations
+
+# Standard Library Imports
+from typing import Optional, Union
 import asyncio
 import contextlib
 import logging
 import time
-from typing import Optional, Union
 
-import discord
-import lavalink
-from lavalink.filters import Volume
+# Dependency Imports
 from redbot.core import commands
 from redbot.core.utils import AsyncIter
 from redbot.core.utils.chat_formatting import humanize_number
 from redbot.core.utils.menus import start_adding_reactions
 from redbot.core.utils.predicates import ReactionPredicate
+import discord
 
+# My Modded Imports
+from lavalink.filters import Volume
+import lavalink
+
+# Audio Imports
 from ..abc import MixinMeta
 from ..cog_utils import CompositeMetaClass
 

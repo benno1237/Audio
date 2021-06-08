@@ -1,8 +1,13 @@
+# Future Imports
+from __future__ import annotations
+
+# Standard Library Imports
+from pathlib import Path
 import getpass
 import platform
 import sys
-from pathlib import Path
 
+# Dependency Imports
 from redbot.core.bot import Red
 from redbot.core.data_manager import cog_data_path
 from redbot.core.utils import get_end_user_data_statement
@@ -15,15 +20,18 @@ if (
 else:
     _LIB = cog_data_path(None, raw_name="Downloader") / "lib"
 sys.path.insert(0, str(_LIB))
+# My Modded Imports
 import lavalink  # noqa: F401 E402
 
 _to_remove = [name for name in sys.modules if name == "lavalink" or name.startswith("lavalink.")]
 for _name in _to_remove:
     sys.modules.pop(_name, None)
+# My Modded Imports
 import lavalink  # noqa: F401 E402 F811
 
 sys.path.pop(0)
 
+# Audio Imports
 from .core import Audio  # noqa: E402
 
 __red_end_user_data_statement__ = get_end_user_data_statement(__file__)

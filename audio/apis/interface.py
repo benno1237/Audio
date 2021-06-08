@@ -1,32 +1,40 @@
+# Future Imports
 from __future__ import annotations
 
+# Standard Library Imports
+from collections import namedtuple
+from typing import Callable, cast, List, MutableMapping, Optional, Tuple, TYPE_CHECKING, Union
 import asyncio
 import contextlib
 import datetime
 import logging
 import random
 import time
-from collections import namedtuple
-from typing import TYPE_CHECKING, Callable, List, MutableMapping, Optional, Tuple, Union, cast
 
+# Dependency Imports
 import aiohttp
 import discord
-import lavalink
+
+# My Modded Imports
 from lavalink.rest_api import LoadResult, LoadType
+import lavalink
 
 try:
+    # Dependency Imports
     from redbot import json
 except ImportError:
     import json
 
-from redbot.core import Config, commands
+# Dependency Imports
+from redbot.core import commands, Config
 from redbot.core.bot import Red
 from redbot.core.commands import Cog, Context
 from redbot.core.utils import AsyncIter
 from redbot.core.utils.dbtools import APSWConnectionWrapper
 
+# Audio Imports
 from ..audio_dataclasses import Query
-from ..audio_logging import IS_DEBUG, debug_exc_log
+from ..audio_logging import debug_exc_log, IS_DEBUG
 from ..errors import DatabaseError, SpotifyFetchError, TrackEnqueueError, YouTubeApiError
 from ..utils import CacheLevel, Notifier
 from .api_utils import LavalinkCacheFetchForGlobalResult
@@ -39,6 +47,7 @@ from .spotify import SpotifyWrapper
 from .youtube import YouTubeWrapper
 
 if TYPE_CHECKING:
+    # Audio Imports
     from .. import Audio
     from ..core.utilities import SettingCacheManager
 

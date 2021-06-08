@@ -1,21 +1,29 @@
+# Future Imports
+from __future__ import annotations
+
+# Standard Library Imports
+from collections import OrderedDict
+from typing import Final, Pattern
 import asyncio
 import contextlib
 import logging
 import re
-from collections import OrderedDict
-from typing import Final, Pattern
 
-import discord
-import lavalink
+# Dependency Imports
 from aiohttp import ClientConnectorError
 from discord.ext.commands import CheckFailure
 from redbot.core import commands
 from redbot.core.utils.chat_formatting import box, humanize_list
+import discord
 
+# My Modded Imports
+import lavalink
+
+# Audio Imports
 from ...audio_logging import debug_exc_log
 from ...errors import CommandRejected, TrackEnqueueError
 from ..abc import MixinMeta
-from ..cog_utils import HUMANIZED_PERM, CompositeMetaClass
+from ..cog_utils import CompositeMetaClass, HUMANIZED_PERM
 
 log = logging.getLogger("red.cogs.Audio.cog.Events.dpy")
 _ = lambda s: s

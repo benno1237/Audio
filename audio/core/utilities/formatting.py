@@ -1,16 +1,24 @@
+# Future Imports
+from __future__ import annotations
+
+# Standard Library Imports
+from typing import List, Optional
 import logging
 import math
 import re
 import time
-from typing import List, Optional
 
-import discord
-import lavalink
+# Dependency Imports
 from discord.embeds import EmptyEmbed
 from redbot.core import commands
 from redbot.core.utils import AsyncIter
 from redbot.core.utils.chat_formatting import box, escape
+import discord
 
+# My Modded Imports
+import lavalink
+
+# Audio Imports
 from ...audio_dataclasses import LocalPath, Query
 from ...audio_logging import IS_DEBUG
 from ..abc import MixinMeta

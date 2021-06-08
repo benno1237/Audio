@@ -1,6 +1,10 @@
+# Future Imports
+from __future__ import annotations
+
+# Standard Library Imports
+from typing import Any, Final, Tuple
 import logging
 import sys
-from typing import Any, Final, Tuple
 
 IS_DEBUG: Final[bool] = "--debug" in sys.argv
 

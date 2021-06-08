@@ -1,3 +1,11 @@
+# Future Imports
+from __future__ import annotations
+
+# Standard Library Imports
+from operator import attrgetter
+from pathlib import Path
+from typing import Union
+from urllib.parse import urlparse
 import asyncio
 import contextlib
 import datetime
@@ -5,20 +13,20 @@ import logging
 import math
 import os
 import tarfile
-from operator import attrgetter
-from pathlib import Path
-from typing import Union
-from urllib.parse import urlparse
 
-import discord
-import lavalink
+# Dependency Imports
 from redbot.core import bank, commands
 from redbot.core.data_manager import cog_data_path
 from redbot.core.utils import AsyncIter
 from redbot.core.utils.chat_formatting import box, humanize_list, humanize_number, pagify
 from redbot.core.utils.menus import DEFAULT_CONTROLS, menu, start_adding_reactions
 from redbot.core.utils.predicates import MessagePredicate, ReactionPredicate
+import discord
 
+# My Modded Imports
+import lavalink
+
+# Audio Imports
 from ...audio_dataclasses import LocalPath
 from ...converters import ScopeParser
 from ...errors import MissingGuild, TooManyMatches
@@ -26,13 +34,13 @@ from ...manager import get_latest_lavalink_release
 from ...utils import CacheLevel, PlaylistScope
 from ..abc import MixinMeta
 from ..cog_utils import (
+    __version__,
+    CompositeMetaClass,
     DISABLED,
     DISABLED_TITLE,
     ENABLED,
     ENABLED_TITLE,
-    CompositeMetaClass,
     PlaylistConverter,
-    __version__,
 )
 
 log = logging.getLogger("red.cogs.Audio.cog.Commands.audioset")

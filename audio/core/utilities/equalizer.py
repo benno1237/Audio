@@ -1,13 +1,21 @@
+# Future Imports
+from __future__ import annotations
+
+# Standard Library Imports
 import asyncio
 import contextlib
 import logging
 
-import discord
-import lavalink
-from lavalink.filters import Equalizer
+# Dependency Imports
 from redbot.core import commands
 from redbot.core.utils.chat_formatting import box
+import discord
 
+# My Modded Imports
+from lavalink.filters import Equalizer
+import lavalink
+
+# Audio Imports
 from ..abc import MixinMeta
 from ..cog_utils import CompositeMetaClass
 

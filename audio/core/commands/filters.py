@@ -1,12 +1,20 @@
+# Future Imports
+from __future__ import annotations
+
+# Standard Library Imports
 import logging
 
-import lavalink
-from lavalink import filters
-from lavalink.filters import Equalizer
+# Dependency Imports
 from redbot.core import commands
 from redbot.core.utils.chat_formatting import box
 from tabulate import tabulate
 
+# My Modded Imports
+from lavalink import filters
+from lavalink.filters import Equalizer
+import lavalink
+
+# Audio Imports
 from ...converters import (
     ChannelMixConverter,
     DistortionConverter,

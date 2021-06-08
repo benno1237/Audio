@@ -1,9 +1,15 @@
+# Future Imports
+from __future__ import annotations
+
+# Standard Library Imports
+from typing import Literal, Mapping
 import asyncio
 import logging
-from typing import Literal, Mapping
 
+# Dependency Imports
 from redbot.core import commands
 
+# Audio Imports
 from ..abc import MixinMeta
 from ..cog_utils import CompositeMetaClass
 

@@ -1,23 +1,31 @@
+# Future Imports
+from __future__ import annotations
+
+# Standard Library Imports
+from typing import MutableMapping, Optional
 import asyncio
 import contextlib
 import logging
 import math
-from typing import MutableMapping, Optional
 
-import discord
-import lavalink
+# Dependency Imports
 from redbot.core import commands
 from redbot.core.utils import AsyncIter
 from redbot.core.utils.menus import (
-    DEFAULT_CONTROLS,
     close_menu,
+    DEFAULT_CONTROLS,
     menu,
     next_page,
     prev_page,
     start_adding_reactions,
 )
 from redbot.core.utils.predicates import ReactionPredicate
+import discord
 
+# My Modded Imports
+import lavalink
+
+# Audio Imports
 from ..abc import MixinMeta
 from ..cog_utils import CompositeMetaClass
 

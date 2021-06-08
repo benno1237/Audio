@@ -1,20 +1,24 @@
+# Future Imports
 from __future__ import annotations
 
+# Standard Library Imports
+from types import SimpleNamespace
+from typing import Callable, List, MutableMapping, Optional, Tuple, TYPE_CHECKING, Union
 import concurrent
 import contextlib
 import datetime
 import logging
 import random
 import time
-from types import SimpleNamespace
-from typing import TYPE_CHECKING, Callable, List, MutableMapping, Optional, Tuple, Union
 
+# Dependency Imports
 from redbot.core import Config
 from redbot.core.bot import Red
 from redbot.core.commands import Cog
 from redbot.core.utils import AsyncIter
 from redbot.core.utils.dbtools import APSWConnectionWrapper
 
+# Audio Imports
 from ..audio_logging import debug_exc_log
 from ..sql_statements import (
     LAVALINK_CREATE_INDEX,
@@ -26,6 +30,11 @@ from ..sql_statements import (
     LAVALINK_QUERY_LAST_FETCHED_RANDOM,
     LAVALINK_UPDATE,
     LAVALINK_UPSERT,
+    PRAGMA_FETCH_user_version,
+    PRAGMA_SET_journal_mode,
+    PRAGMA_SET_read_uncommitted,
+    PRAGMA_SET_temp_store,
+    PRAGMA_SET_user_version,
     SPOTIFY_CREATE_INDEX,
     SPOTIFY_CREATE_TABLE,
     SPOTIFY_DELETE_OLD_ENTRIES,
@@ -42,11 +51,6 @@ from ..sql_statements import (
     YOUTUBE_QUERY_LAST_FETCHED_RANDOM,
     YOUTUBE_UPDATE,
     YOUTUBE_UPSERT,
-    PRAGMA_FETCH_user_version,
-    PRAGMA_SET_journal_mode,
-    PRAGMA_SET_read_uncommitted,
-    PRAGMA_SET_temp_store,
-    PRAGMA_SET_user_version,
 )
 from .api_utils import (
     LavalinkCacheFetchForGlobalResult,
@@ -56,6 +60,7 @@ from .api_utils import (
 )
 
 if TYPE_CHECKING:
+    # Audio Imports
     from .. import Audio
     from ..core.utilities import SettingCacheManager
 

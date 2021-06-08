@@ -1,11 +1,19 @@
+# Future Imports
+from __future__ import annotations
+
+# Standard Library Imports
+from typing import Dict
 import asyncio
 import logging
 import time
-from typing import Dict
 
-import lavalink
+# Dependency Imports
 from redbot.core.utils import AsyncIter
 
+# My Modded Imports
+import lavalink
+
+# Audio Imports
 from ...audio_logging import debug_exc_log
 from ..abc import MixinMeta
 from ..cog_utils import CompositeMetaClass

@@ -1,20 +1,28 @@
+# Future Imports
+from __future__ import annotations
+
+# Standard Library Imports
+from typing import List, Optional, Tuple, Union
 import asyncio
 import logging
 import time
-from typing import List, Optional, Tuple, Union
 
-import aiohttp
-import discord
-import lavalink
+# Dependency Imports
 from discord.embeds import EmptyEmbed
-from lavalink import Track
-from lavalink.filters import Volume
 from redbot.core import commands
 from redbot.core.utils import AsyncIter
 from redbot.core.utils.chat_formatting import bold, escape
+import aiohttp
+import discord
 
+# My Modded Imports
+from lavalink import Track
+from lavalink.filters import Volume
+import lavalink
+
+# Audio Imports
 from ...audio_dataclasses import _PARTIALLY_SUPPORTED_MUSIC_EXT, Query
-from ...audio_logging import IS_DEBUG, debug_exc_log
+from ...audio_logging import debug_exc_log, IS_DEBUG
 from ...errors import QueryUnauthorized, SpotifyFetchError, TrackEnqueueError
 from ...utils import Notifier
 from ..abc import MixinMeta

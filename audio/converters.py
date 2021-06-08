@@ -1,13 +1,19 @@
+# Future Imports
+from __future__ import annotations
+
+# Standard Library Imports
+from typing import Final, List, MutableMapping, Optional, Pattern, Tuple, Union
 import argparse
 import functools
 import re
-from typing import Final, List, MutableMapping, Optional, Pattern, Tuple, Union
 
-import discord
+# Dependency Imports
 from redbot.core import commands
 from redbot.core.bot import Red
 from redbot.core.utils import AsyncIter
+import discord
 
+# Audio Imports
 from .apis.api_utils import standardize_scope
 from .apis.playlist_interface import get_all_playlist_converter
 from .audio_dataclasses import Query

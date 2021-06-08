@@ -1,15 +1,23 @@
+# Future Imports
+from __future__ import annotations
+
+# Standard Library Imports
+from typing import Dict
 import asyncio
 import contextlib
 import datetime
 import logging
-from typing import Dict
 
-import discord
-import lavalink
+# Dependency Imports
 from discord.backoff import ExponentialBackoff
 from discord.gateway import DiscordWebSocket
 from redbot.core.i18n import set_contextual_locales_from_guild
+import discord
 
+# My Modded Imports
+import lavalink
+
+# Audio Imports
 from ...errors import DatabaseError, TrackEnqueueError
 from ..abc import MixinMeta
 from ..cog_utils import CompositeMetaClass

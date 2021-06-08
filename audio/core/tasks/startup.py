@@ -1,16 +1,24 @@
+# Future Imports
+from __future__ import annotations
+
+# Standard Library Imports
+from collections import namedtuple
+from typing import Optional
 import asyncio
 import itertools
 import logging
-from collections import namedtuple
-from typing import Optional
 
-import lavalink
-from lavalink.filters import Volume
+# Dependency Imports
 from redbot.core.data_manager import cog_data_path
 from redbot.core.utils import AsyncIter
 from redbot.core.utils._internal_utils import send_to_owners_with_prefix_replaced
 from redbot.core.utils.dbtools import APSWConnectionWrapper
 
+# My Modded Imports
+from lavalink.filters import Volume
+import lavalink
+
+# Audio Imports
 from ...apis.interface import AudioAPIInterface
 from ...apis.playlist_wrapper import PlaylistWrapper
 from ...audio_logging import debug_exc_log
@@ -31,6 +39,7 @@ class StartUpTasks(MixinMeta, metaclass=CompositeMetaClass):
         lavalink.set_logging_level(self.bot._cli_flags.logging_level)
 
         if self.is_slash_compatible():
+            # Dependency Imports
             from dislash import slash_commands
 
             if not hasattr(self.bot, "slash"):

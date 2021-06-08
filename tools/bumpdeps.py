@@ -66,15 +66,20 @@ the output. So for example, if a dependency has the environment marker
 this dependency will be ignored, and must be added to ``setup.cfg``
 manually.
 """
+# Future Imports
+from __future__ import annotations
+
+# Standard Library Imports
+from pathlib import Path
+from typing import Dict, Iterable, Sequence
 import shlex
 import subprocess as sp
 import sys
 import tempfile
 import textwrap
 import venv
-from pathlib import Path
-from typing import Dict, Iterable, Sequence
 
+# Dependency Imports
 import packaging.requirements
 import setuptools.config
 
