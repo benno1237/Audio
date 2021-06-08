@@ -21,7 +21,8 @@
         "git+https://github.com/Drapersniper/Red-Lavalink.git@edge#egg=Red-Lavalink",
         "PyYAML==5.4.1",
         "dislash.py~=1.0.3",
-        "tabulate"
+        "tabulate",
+        "async_lru"
     ],
     "min_bot_version": "3.3.10",
     "end_user_data_statement": "This cog stores metadata and partial messages for playlists and equalizer configuration."
