@@ -149,11 +149,11 @@ class ServerManager:
     _jar_name: ClassVar[str] = f"{JAR_VERSION}_{JAR_BUILD}"
     _jar_download_url: ClassVar[str] = LAVALINK_DOWNLOAD_URL
 
-    _lavaplayer: ClassVar[Optional[str]] = None
-    _lavalink_build: ClassVar[Optional[int]] = None
-    _jvm: ClassVar[Optional[str]] = None
-    _lavalink_branch: ClassVar[Optional[str]] = None
-    _buildtime: ClassVar[Optional[str]] = None
+    _lavaplayer: ClassVar[str] = "Unknown"
+    _lavalink_build: ClassVar[int] = "Unknown"
+    _jvm: ClassVar[str] = "Unknown"
+    _lavalink_branch: ClassVar[str] = "Unknown"
+    _buildtime: ClassVar[str] = "Unknown"
     _java_exc: ClassVar[str] = "java"
 
     def __init__(self, host: str, password: str, port: int, cache: SettingCacheManager) -> None:
