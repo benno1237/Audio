@@ -113,7 +113,7 @@ class Audio(
         lavalink_yaml["lavalink"]["server"]["password"] = default_cog_lavalink_settings["primary"][
             "password"
         ]
-        lavalink_yaml["server"]["address"] = default_cog_lavalink_settings["primary"]["host"]
+        lavalink_yaml["server"]["address"] = "localhost"
         lavalink_yaml["server"]["port"] = default_cog_lavalink_settings["primary"]["port"]
 
         default_global = dict(
