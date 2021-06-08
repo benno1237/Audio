@@ -2643,7 +2643,7 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
 
     @command_audioset_lavalink_managed.group(name="config", aliases=["conf", "yaml"])
     async def command_audioset_lavalink_managed_config(self, ctx: commands.Context):
-        """Configure the local node runtime options. """
+        """Configure the local node runtime options."""
 
     @command_audioset_lavalink_managed_config.group(name="server")
     async def command_audioset_lavalink_managed_config_server(self, ctx: commands.Context):
