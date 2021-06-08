@@ -3,7 +3,7 @@
         "Draper#6666"
     ],
     "install_msg": "Make sure to read <https://github.com/Drapersniper/Audio/blob/master/README.md> to ensure you have all required dependencies.",
-    "name": "Audio",
+    "name": "Music",
     "short": "Red's Audio early access",
     "description": "This is a heavily modded version of Red's core Audio cog used for testing and development.",
     "tags": [

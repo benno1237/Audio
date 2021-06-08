@@ -61,7 +61,7 @@ from .api_utils import (
 
 if TYPE_CHECKING:
     # Audio Imports
-    from .. import Audio
+    from .. import Music
     from ..core.utilities import SettingCacheManager
 
 log = logging.getLogger("red.cogs.Audio.api.LocalDB")
@@ -75,7 +75,7 @@ class BaseWrapper:
         bot: Red,
         config: Config,
         conn: APSWConnectionWrapper,
-        cog: Union["Audio", Cog],
+        cog: Union[Music, Cog],
         cache: SettingCacheManager,
     ):
         self.bot = bot
@@ -247,7 +247,7 @@ class YouTubeTableWrapper(BaseWrapper):
         bot: Red,
         config: Config,
         conn: APSWConnectionWrapper,
-        cog: Union["Audio", Cog],
+        cog: Union[Music, Cog],
         cache: SettingCacheManager,
     ):
         super().__init__(bot, config, conn, cog, cache)
@@ -288,7 +288,7 @@ class SpotifyTableWrapper(BaseWrapper):
         bot: Red,
         config: Config,
         conn: APSWConnectionWrapper,
-        cog: Union["Audio", Cog],
+        cog: Union[Music, Cog],
         cache: SettingCacheManager,
     ):
         super().__init__(bot, config, conn, cog, cache)
@@ -329,7 +329,7 @@ class LavalinkTableWrapper(BaseWrapper):
         bot: Red,
         config: Config,
         conn: APSWConnectionWrapper,
-        cog: Union["Audio", Cog],
+        cog: Union[Music, Cog],
         cache: SettingCacheManager,
     ):
         super().__init__(bot, config, conn, cog, cache)
@@ -392,7 +392,7 @@ class LocalCacheWrapper:
         bot: Red,
         config: Config,
         conn: APSWConnectionWrapper,
-        cog: Union["Audio", Cog],
+        cog: Union[Music, Cog],
         cache: SettingCacheManager,
     ):
         self.bot = bot

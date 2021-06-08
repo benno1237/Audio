@@ -399,7 +399,7 @@ class MiscellaneousUtilities(MixinMeta, metaclass=CompositeMetaClass):
                 global_data["lavalink"]["nodes"]["primary"] = {
                     "host": host,
                     "port": ws_port,
-                    "rest_uri": f"http://{host}:{ws_port}",
+                    "rest_uri": f"{host if host.startswith('http') else f'http://{host}'}:{ws_port}",
                     "password": password,
                     "identifier": "primary",
                     "region": "",

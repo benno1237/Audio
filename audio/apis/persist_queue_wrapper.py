@@ -48,7 +48,7 @@ log = logging.getLogger("red.cogs.Audio.api.PersistQueueWrapper")
 
 if TYPE_CHECKING:
     # Audio Imports
-    from .. import Audio
+    from .. import Music
     from ..core.utilities import SettingCacheManager
 
 
@@ -58,7 +58,7 @@ class QueueInterface:
         bot: Red,
         config: Config,
         conn: APSWConnectionWrapper,
-        cog: Union["Audio", Cog],
+        cog: Union[Music, Cog],
         cache: SettingCacheManager,
     ):
         self.bot = bot

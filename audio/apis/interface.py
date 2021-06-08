@@ -48,7 +48,7 @@ from .youtube import YouTubeWrapper
 
 if TYPE_CHECKING:
     # Audio Imports
-    from .. import Audio
+    from .. import Music
     from ..core.utilities import SettingCacheManager
 
 
@@ -69,7 +69,7 @@ class AudioAPIInterface:
         config: Config,
         session: aiohttp.ClientSession,
         conn: APSWConnectionWrapper,
-        cog: Union["Audio", Cog],
+        cog: Union[Music, Cog],
         cache: SettingCacheManager,
     ):
         self.bot = bot

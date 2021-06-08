@@ -28,7 +28,7 @@ from ..errors import SpotifyFetchError
 
 if TYPE_CHECKING:
     # Audio Imports
-    from .. import Audio
+    from .. import Music
     from ..core.utilities import SettingCacheManager
 
 
@@ -50,7 +50,7 @@ class SpotifyWrapper:
         bot: Red,
         config: Config,
         session: aiohttp.ClientSession,
-        cog: Union["Audio", Cog],
+        cog: Union["Music", Cog],
         cache: SettingCacheManager,
     ):
         self.bot = bot

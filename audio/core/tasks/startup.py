@@ -55,14 +55,14 @@ class StartUpTasks(MixinMeta, metaclass=CompositeMetaClass):
         try:
             await self.maybe_message_all_owners()
             self.db_conn = APSWConnectionWrapper(
-                str(cog_data_path(self.bot.get_cog("Audio")) / "Audio.db")
+                str(cog_data_path(self.bot.get_cog("Music")) / "Audio.db")
             )
             self.api_interface = AudioAPIInterface(
                 self.bot,
                 self.config,
                 self.session,
                 self.db_conn,
-                self.bot.get_cog("Audio"),
+                self.bot.get_cog("Music"),
                 self.config_cache,
             )
             self.playlist_api = PlaylistWrapper(

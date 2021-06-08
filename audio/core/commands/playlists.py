@@ -787,7 +787,7 @@ class PlaylistCommands(MixinMeta, metaclass=CompositeMetaClass):
             to_write.write(playlist_data)
             to_write.seek(0)
             if to_write.getbuffer().nbytes > ctx.guild.filesize_limit - 10000:
-                datapath = cog_data_path(raw_name="Audio")
+                datapath = cog_data_path(raw_name="Music")
                 temp_file = datapath / f"{file_name}.txt"
                 temp_tar = datapath / f"{file_name}.tar.gz"
                 with temp_file.open("wb") as playlist_file:
