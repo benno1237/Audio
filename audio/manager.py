@@ -392,7 +392,7 @@ class ServerManager:
             log.critical("Managed node exited early")
         if self.ready.is_set():
             log.info(
-                "Managed node is ready to accept connections on: http://%s:%s",
+                "Managed node is ready to accept connections on: %s:%s",
                 self._host,
                 self._port,
             )
