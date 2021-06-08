@@ -11,7 +11,6 @@ import logging
 # Dependency Imports
 from discord.backoff import ExponentialBackoff
 from discord.gateway import DiscordWebSocket
-from redbot.core.i18n import set_contextual_locales_from_guild
 import discord
 
 # My Modded Imports
@@ -92,7 +91,6 @@ class LavalinkEvents(MixinMeta, metaclass=CompositeMetaClass):
                 log.exception("Error in WEBSOCKET_CLOSED handling for guild: %s", player.guild.id)
             return
 
-        await set_contextual_locales_from_guild(self.bot, guild)
         current_requester = self.rgetattr(current_track, "requester", None)
         current_stream = self.rgetattr(current_track, "is_stream", None)
         current_length = self.rgetattr(current_track, "length", None)
