@@ -48,52 +48,51 @@ class LavalinkTasks(MixinMeta, metaclass=CompositeMetaClass):
             port = await self.config_cache.node_config.get_port(node_identifier=node)
             name = await self.config_cache.node_config.get_identifier(node_identifier=node)
             rest_uri = await self.config_cache.node_config.get_rest_uri(node_identifier=node)
-            if managed is True:
+            if managed is not True:
+                break
+            if self.player_manager is not None:
+                await self.player_manager.shutdown()
+            self.player_manager = ServerManager(host, password, port, self.config_cache)
+            try:
+                await self.player_manager.start(java_exec)
+            except ShouldAutoRecover:
                 if self.player_manager is not None:
                     await self.player_manager.shutdown()
-                self.player_manager = ServerManager(host, password, port, self.config_cache)
-                try:
-                    await self.player_manager.start(java_exec)
-                except ShouldAutoRecover:
-                    if self.player_manager is not None:
-                        await self.player_manager.shutdown()
-                    self.player_manager = None
-                    log.warning(
-                        "Managed node cannot be started due to port 2333 "
-                        "already being taken, attempting to connect to existing node."
-                    )
-                    lazy_external = True
-                    break
-                except LavalinkDownloadFailed as exc:
-                    await asyncio.sleep(1)
-                    if exc.should_retry:
-                        log.exception(
-                            "Exception whilst starting managed node, retrying...",
-                            exc_info=exc,
-                        )
-                        retry_count += 1
-                        continue
-                    else:
-                        log.exception(
-                            "Fatal exception whilst starting managed node, aborting...",
-                            exc_info=exc,
-                        )
-                        self.lavalink_connection_aborted = True
-                        raise
-                except asyncio.CancelledError:
+                self.player_manager = None
+                log.warning(
+                    "Managed node cannot be started due to port 2333 "
+                    "already being taken, attempting to connect to existing node."
+                )
+                lazy_external = True
+                break
+            except LavalinkDownloadFailed as exc:
+                await asyncio.sleep(1)
+                if exc.should_retry:
                     log.exception(
-                        "Invalid machine architecture, cannot run a managed Lavalink node."
+                        "Exception whilst starting managed node, retrying...",
+                        exc_info=exc,
                     )
-                    raise
-                except Exception as exc:
+                    retry_count += 1
+                    continue
+                else:
                     log.exception(
-                        "Unhandled exception whilst starting managed node, aborting...",
+                        "Fatal exception whilst starting managed node, aborting...",
                         exc_info=exc,
                     )
                     self.lavalink_connection_aborted = True
                     raise
-                else:
-                    break
+            except asyncio.CancelledError:
+                log.exception(
+                    "Invalid machine architecture, cannot run a managed Lavalink node."
+                )
+                raise
+            except Exception as exc:
+                log.exception(
+                    "Unhandled exception whilst starting managed node, aborting...",
+                    exc_info=exc,
+                )
+                self.lavalink_connection_aborted = True
+                raise
             else:
                 break
         else:
@@ -135,12 +134,7 @@ class LavalinkTasks(MixinMeta, metaclass=CompositeMetaClass):
                 break
         else:
             self.lavalink_connection_aborted = True
-            if not lazy_external:
-                log.critical(
-                    "Connecting to the node failed after multiple attempts. "
-                    "See above tracebacks for details."
-                )
-            else:
+            if lazy_external:
                 log.critical(
                     "Connecting to the existing node failed after multiple attempts. "
                     "This could be due to another program using port 2333, "
@@ -152,6 +146,11 @@ class LavalinkTasks(MixinMeta, metaclass=CompositeMetaClass):
                     host,
                     password,
                     port,
+                )
+            else:
+                log.critical(
+                    "Connecting to the node failed after multiple attempts. "
+                    "See above tracebacks for details."
                 )
             return
         if managed is False:

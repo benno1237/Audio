@@ -430,10 +430,13 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
             else:
                 pages.append(box(text, lang="ini"))
         embed_colour = await ctx.embed_colour()
-        pages = list(
-            discord.Embed(title="Global Allowlist", description=page, colour=embed_colour)
+        pages = [
+            discord.Embed(
+                title="Global Allowlist", description=page, colour=embed_colour
+            )
             for page in pages
-        )
+        ]
+
         await menu(ctx, pages, DEFAULT_CONTROLS)
 
     @command_audioset_global_whitelist.command(name="clear", aliases=["reset"])
@@ -504,10 +507,13 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
             else:
                 pages.append(box(text, lang="ini"))
         embed_colour = await ctx.embed_colour()
-        pages = list(
-            discord.Embed(title="Global Denylist", description=page, colour=embed_colour)
+        pages = [
+            discord.Embed(
+                title="Global Denylist", description=page, colour=embed_colour
+            )
             for page in pages
-        )
+        ]
+
         await menu(ctx, pages, DEFAULT_CONTROLS)
 
     @command_audioset_global_blacklist.command(name="clear", aliases=["reset"])
@@ -933,10 +939,11 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
             else:
                 pages.append(box(text, lang="ini"))
         embed_colour = await ctx.embed_colour()
-        pages = list(
+        pages = [
             discord.Embed(title="Allowlist", description=page, colour=embed_colour)
             for page in pages
-        )
+        ]
+
         await menu(ctx, pages, DEFAULT_CONTROLS)
 
     @command_audioset_guild_whitelist.command(name="clear", aliases=["reset"])
@@ -1010,10 +1017,11 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
             else:
                 pages.append(box(text, lang="ini"))
         embed_colour = await ctx.embed_colour()
-        pages = list(
+        pages = [
             discord.Embed(title="Denylist", description=page, colour=embed_colour)
             for page in pages
-        )
+        ]
+
         await menu(ctx, pages, DEFAULT_CONTROLS)
 
     @command_audioset_guild_blacklist.command(name="clear", aliases=["reset"])
@@ -1415,7 +1423,7 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         """
         roles = await self.config_cache.dj_roles.get_context_value(ctx.guild)
         roles = sorted(roles, key=attrgetter("position"), reverse=True)
-        rolestring = "\n".join([r.name for r in roles])
+        rolestring = "\n".join(r.name for r in roles)
         pages = pagify(rolestring, page_length=500)
         await ctx.send_interactive(pages, timeout=30)
 
@@ -1429,7 +1437,7 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         """
         djs = await self.config_cache.dj_roles.get_allowed_members(ctx.guild)
         djs = sorted(djs, key=attrgetter("top_role.position", "display_name"), reverse=True)
-        memberstring = "\n".join([r.display_name for r in djs])
+        memberstring = "\n".join(r.display_name for r in djs)
         pages = pagify(memberstring, page_length=500)
         await ctx.send_interactive(pages, timeout=30)
 
@@ -3327,9 +3335,10 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
             "----"
             + "User Settings"
             + "----        \nSpotify search:   [{country_code}]\n".format(
-                country_code=country_code if country_code else "Not set",
+                country_code=country_code or "Not set"
             )
         )
+
         await self.send_embed_msg(ctx, description=box(msg, lang="ini"), no_embed=True)
 
     # --------------------------- GENERIC COMMANDS ----------------------------

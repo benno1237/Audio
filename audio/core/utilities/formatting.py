@@ -34,9 +34,7 @@ class FormattingUtilities(MixinMeta, metaclass=CompositeMetaClass):
         self, ctx: commands.Context, options: List, emoji: str, page: int, playlist: bool = False
     ) -> str:
         try:
-            if emoji == "\N{DIGIT ONE}\N{COMBINING ENCLOSING KEYCAP}":
-                search_choice = options[0 + (page * 5)]
-            elif emoji == "\N{DIGIT TWO}\N{COMBINING ENCLOSING KEYCAP}":
+            if emoji == "\N{DIGIT TWO}\N{COMBINING ENCLOSING KEYCAP}":
                 search_choice = options[1 + (page * 5)]
             elif emoji == "\N{DIGIT THREE}\N{COMBINING ENCLOSING KEYCAP}":
                 search_choice = options[2 + (page * 5)]
@@ -331,10 +329,7 @@ class FormattingUtilities(MixinMeta, metaclass=CompositeMetaClass):
             else:
                 if track.is_stream:
                     icy = await self.icyparser(track.uri)
-                    if icy:
-                        title = icy
-                    else:
-                        title = f"{track.title} - {track.author}"
+                    title = icy or f"{track.title} - {track.author}"
                 elif track.author.lower() not in track.title.lower():
                     title = f"{track.title} - {track.author}"
                 else:
@@ -372,10 +367,7 @@ class FormattingUtilities(MixinMeta, metaclass=CompositeMetaClass):
             else:
                 if track.is_stream:
                     icy = await self.icyparser(track.uri)
-                    if icy:
-                        title = icy
-                    else:
-                        title = f"{track.title} - {track.author}"
+                    title = icy or f"{track.title} - {track.author}"
                 elif track.author.lower() not in track.title.lower():
                     title = f"{track.title} - {track.author}"
                 else:
@@ -408,13 +400,12 @@ class FormattingUtilities(MixinMeta, metaclass=CompositeMetaClass):
         loc_time = round((pos / dur if dur != 0 else pos) * sections)
         bar = "\N{BOX DRAWINGS HEAVY HORIZONTAL}"
         seek = "\N{RADIO BUTTON}"
-        if paused:
-            msg = "\N{DOUBLE VERTICAL BAR}\N{VARIATION SELECTOR-16}"
-        else:
-            msg = "\N{BLACK RIGHT-POINTING TRIANGLE}\N{VARIATION SELECTOR-16}"
+        msg = (
+            "\N{DOUBLE VERTICAL BAR}\N{VARIATION SELECTOR-16}"
+            if paused
+            else "\N{BLACK RIGHT-POINTING TRIANGLE}\N{VARIATION SELECTOR-16}"
+        )
+
         for i in range(sections):
-            if i == loc_time:
-                msg += seek
-            else:
-                msg += bar
+            msg += seek if i == loc_time else bar
         return msg

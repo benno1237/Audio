@@ -88,10 +88,7 @@ class VolumeManager(CacheBase):
     ) -> int:
         global_value = await self.get_global()
         guild_value = await self.get_guild(guild)
-        if channel:
-            channel_value = await self.get_channel(channel)
-        else:
-            channel_value = 1000000
+        channel_value = await self.get_channel(channel) if channel else 1000000
         return min(global_value, guild_value, channel_value)
 
     async def get_context_max(
@@ -99,10 +96,7 @@ class VolumeManager(CacheBase):
     ) -> Tuple[int, int, Optional[int]]:
         global_value = await self.get_global()
         guild_value = await self.get_guild(guild)
-        if channel:
-            channel_value = await self.get_channel(channel)
-        else:
-            channel_value = -1
+        channel_value = await self.get_channel(channel) if channel else -1
         return global_value, guild_value, channel_value
 
     async def get_max_and_source(
@@ -110,11 +104,7 @@ class VolumeManager(CacheBase):
     ) -> Tuple[int, str]:
         global_value = await self.get_global()
         guild_value = await self.get_guild(guild)
-        if channel:
-            channel_value = await self.get_channel(channel)
-        else:
-            channel_value = -1
-
+        channel_value = await self.get_channel(channel) if channel else -1
         mininum = min(global_value, guild_value, channel_value)
         restrictor = (
             "server"

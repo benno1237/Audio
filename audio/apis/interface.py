@@ -266,7 +266,9 @@ class AudioAPIInterface:
                     "last_fetched": time_now,
                 }
             )
-            if skip_youtube is False:
+            if skip_youtube:
+                youtube_urls.append(track_info)
+            else:
                 val = None
                 if youtube_cache:
                     try:
@@ -291,20 +293,18 @@ class AudioAPIInterface:
                     self.append_task(ctx, *task)
                 if val:
                     youtube_urls.append(val)
-            else:
-                youtube_urls.append(track_info)
             track_count += 1
             if notifier is not None and ((track_count % 2 == 0) or (track_count == total_tracks)):
                 await notifier.notify_user(current=track_count, total=total_tracks, key="youtube")
-            if notifier is not None and (youtube_api_error and not global_api):
+            if notifier is not None and youtube_api_error:
+                if global_api:
+                    continue
                 error_embed = discord.Embed(
                     colour=await ctx.embed_colour(),
                     title="Failing to get tracks, skipping remaining.",
                 )
                 await notifier.update_embed(error_embed)
                 break
-            elif notifier is not None and (youtube_api_error and global_api):
-                continue
         if CacheLevel.set_spotify().is_subset(current_cache_level):
             task = ("insert", ("spotify", database_entries))
             self.append_task(ctx, *task)
@@ -365,13 +365,12 @@ class AudioAPIInterface:
             if notifier:
                 await notifier.notify_user(current=track_count, total=total_tracks, key="spotify")
             try:
-                if results.get("next") is not None:
-                    results = await self.fetch_from_spotify_api(
-                        query_type, uri, results["next"], params, notifier=notifier
-                    )
-                    continue
-                else:
+                if results.get("next") is None:
                     break
+                results = await self.fetch_from_spotify_api(
+                    query_type, uri, results["next"], params, notifier=notifier
+                )
+                continue
             except KeyError:
                 raise SpotifyFetchError(
                     "This doesn't seem to be a valid Spotify playlist/album URL or code."
@@ -892,7 +891,7 @@ class AudioAPIInterface:
                     results, called_api = results, False
         if valid_global_entry:
             pass
-        elif lazy is True:
+        elif lazy:
             called_api = False
         elif val and not forced and isinstance(val, dict):
             data = val
@@ -987,24 +986,23 @@ class AudioAPIInterface:
             except Exception as exc:
                 debug_exc_log(log, exc, "Failed to fetch playlist for autoplay")
 
-        if not tracks or not getattr(playlist, "tracks", None):
-            if cache_enabled:
-                track = await self.get_random_track_from_db()
-                tracks = [] if not track else [track]
-            if not tracks:
-                ctx = namedtuple("Context", "message guild cog")
-                (results, called_api) = await self.fetch_track(
-                    cast(commands.Context, ctx(player.guild, player.guild, self.cog)),
-                    player,
-                    Query.process_input(_TOP_100_US, self.cog.local_folder_current_path),
-                )
-                tracks = list(results.tracks)
+        if (not tracks or not getattr(playlist, "tracks", None)) and cache_enabled:
+            track = await self.get_random_track_from_db()
+            tracks = [] if not track else [track]
+        if not tracks:
+            ctx = namedtuple("Context", "message guild cog")
+            (results, called_api) = await self.fetch_track(
+                cast(commands.Context, ctx(player.guild, player.guild, self.cog)),
+                player,
+                Query.process_input(_TOP_100_US, self.cog.local_folder_current_path),
+            )
+            tracks = list(results.tracks)
         if tracks:
             multiple = len(tracks) > 1
             valid = not multiple
             tries = len(tracks)
             track = tracks[0]
-            while valid is False and multiple:
+            while not valid and multiple:
                 tries -= 1
                 if tries <= 0:
                     raise DatabaseError("No valid entry found")

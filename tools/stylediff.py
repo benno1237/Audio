@@ -116,13 +116,12 @@ class Results:
                 unchanged += 1
         if changed:
             print("Oh no! \N{COLLISION SYMBOL} \N{BROKEN HEART} \N{COLLISION SYMBOL}")
-        else:
-            print("All done! \N{SPARKLES} \N{SHORTCAKE} \N{SPARKLES}")
-        if changed:
             if changed > 1:
                 print(f"{changed} files would be reformatted, ", end="")
             else:
                 print("1 file would be reformatted, ", end="")
+        else:
+            print("All done! \N{SPARKLES} \N{SHORTCAKE} \N{SPARKLES}")
         print(f"{unchanged} files would be left unchanged.")
 
 
