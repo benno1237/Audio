@@ -10,7 +10,8 @@ from redbot.core import Config
 from redbot.core.bot import Red
 
 if TYPE_CHECKING:
-    # Audio Imports
+
+    # Music Imports
     from . import SettingCacheManager
 
 

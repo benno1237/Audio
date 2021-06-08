@@ -26,7 +26,7 @@ import discord
 # My Modded Imports
 import lavalink
 
-# Audio Imports
+# Music Imports
 from ...audio_dataclasses import LocalPath
 from ...converters import ScopeParser
 from ...errors import MissingGuild, TooManyMatches
@@ -43,7 +43,7 @@ from ..cog_utils import (
     PlaylistConverter,
 )
 
-log = logging.getLogger("red.cogs.Audio.cog.Commands.audioset")
+log = logging.getLogger("red.cogs.Music.cog.Commands.audioset")
 
 
 class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
@@ -1727,7 +1727,7 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
             return await self.send_embed_msg(
                 ctx,
                 title="Playlists Are Not Available",
-                description="The playlist section of Audio is currently unavailable",
+                description="The playlist section of Music is currently unavailable",
                 footer=discord.Embed.Empty
                 if not await self.bot.is_owner(ctx.author)
                 else "Check your logs.",
@@ -1933,13 +1933,13 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         """
 
         if not local_path:
-            await self.config_cache.localpath.set_global(cog_data_path(raw_name="Audio"))
-            self.local_folder_current_path = cog_data_path(raw_name="Audio")
+            await self.config_cache.localpath.set_global(cog_data_path(raw_name="Music"))
+            self.local_folder_current_path = cog_data_path(raw_name="Music")
             return await self.send_embed_msg(
                 ctx,
                 title="Setting Changed",
                 description="The localtracks path location has been reset to {localpath}".format(
-                    localpath=str(cog_data_path(raw_name="Audio").absolute())
+                    localpath=str(cog_data_path(raw_name="Music").absolute())
                 ),
             )
 
@@ -1958,7 +1958,7 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
             "**This folder and files need to be visible to the user where `"
             "Lavalink.jar` is being run from.**\n"
             "Use this command with no path given to reset it to the default, "
-            "the Audio data directory for this bot.\n"
+            "the Music data directory for this bot.\n"
             "Do you want to continue to set the provided path for local tracks?"
         )
         info = await ctx.maybe_send_embed(info_msg)
@@ -1990,7 +1990,7 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
             ).format(localfolder=temp.absolute(), localtracks=temp.localtrack_folder.absolute())
             await self.send_embed_msg(ctx, title="Invalid Environment", description=warn_msg)
         local_path = str(temp.localtrack_folder.absolute())
-        await self.config_cache.localpath.set_global(cog_data_path(raw_name="Audio"))
+        await self.config_cache.localpath.set_global(cog_data_path(raw_name="Music"))
         self.local_folder_current_path = temp.localtrack_folder.absolute()
         return await self.send_embed_msg(
             ctx,
@@ -2102,7 +2102,7 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
             await self.send_embed_msg(
                 ctx,
                 title="Failed To Shutdown Lavalink",
-                description="Please reload Audio (`{prefix}reload audio`).".format(
+                description="Please reload Music (`{prefix}reload audio`).".format(
                     prefix=ctx.prefix
                 ),
             )
@@ -2139,7 +2139,7 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
             await self.send_embed_msg(
                 ctx,
                 title="Failed To Shutdown Lavalink",
-                description="Please reload Audio (`{prefix}reload audio`).".format(
+                description="Please reload Music (`{prefix}reload audio`).".format(
                     prefix=ctx.prefix
                 ),
             )
@@ -2185,7 +2185,7 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
             await self.send_embed_msg(
                 ctx,
                 title="Failed To Shutdown Lavalink",
-                description="Please reload Audio (`{prefix}reload audio`).".format(
+                description="Please reload Music (`{prefix}reload audio`).".format(
                     prefix=ctx.prefix
                 ),
             )
@@ -2254,7 +2254,7 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
             await self.send_embed_msg(
                 ctx,
                 title="Failed To Shutdown Lavalink",
-                description="Please reload Audio (`{prefix}reload audio`).".format(
+                description="Please reload Music (`{prefix}reload audio`).".format(
                     prefix=ctx.prefix
                 ),
             )
@@ -2295,7 +2295,7 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
             await self.send_embed_msg(
                 ctx,
                 title="Failed To Shutdown Lavalink",
-                description="Please reload Audio (`{prefix}reload audio`).".format(
+                description="Please reload Music (`{prefix}reload audio`).".format(
                     prefix=ctx.prefix
                 ),
             )
@@ -2343,7 +2343,7 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
             await self.send_embed_msg(
                 ctx,
                 title="Failed To Shutdown Lavalink",
-                description="Please reload Audio (`{prefix}reload audio`).".format(
+                description="Please reload Music (`{prefix}reload audio`).".format(
                     prefix=ctx.prefix
                 ),
             )
@@ -2383,7 +2383,7 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
             await self.send_embed_msg(
                 ctx,
                 title="Failed To Shutdown Lavalink",
-                description="Please reload Audio (`{prefix}reload audio`).".format(
+                description="Please reload Music (`{prefix}reload audio`).".format(
                     prefix=ctx.prefix
                 ),
             )
@@ -2401,11 +2401,11 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
                 title="Invalid Environment",
                 description=(
                     "You cannot changed the Java executable path of "
-                    "external Lavalink instances from the Audio Cog."
+                    "external Lavalink instances from the Music Cog."
                 ),
             )
 
-        datapath = cog_data_path(raw_name="Audio")
+        datapath = cog_data_path(raw_name="Music")
         logs = datapath / "logs" / "spring.log"
         zip_name = None
         try:
@@ -2455,7 +2455,7 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
                 title="Invalid Environment",
                 description=(
                     "You cannot changed the Java executable path of "
-                    "external Lavalink instances from the Audio Cog."
+                    "external Lavalink instances from the Music Cog."
                 ),
             )
         if java_path is None:
@@ -2463,7 +2463,7 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
             await self.send_embed_msg(
                 ctx,
                 title="Java Executable Reset",
-                description="Audio will now use `java` to run your Lavalink.jar",
+                description="Music will now use `java` to run your Lavalink.jar",
             )
         else:
             exc = Path(java_path)
@@ -2480,7 +2480,7 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
             await self.send_embed_msg(
                 ctx,
                 title="Java Executable Changed",
-                description="Audio will now use `{exc}` to run your Lavalink.jar".format(
+                description="Music will now use `{exc}` to run your Lavalink.jar".format(
                     exc=exc_absolute
                 ),
             )
@@ -2492,7 +2492,7 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
                 ctx,
                 title="Failed To Shutdown Lavalink",
                 description=(
-                    "For it to take effect please reload Audio (`{prefix}reload audio`)."
+                    "For it to take effect please reload Music (`{prefix}reload audio`)."
                 ).format(
                     prefix=ctx.prefix,
                 ),

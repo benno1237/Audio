@@ -19,15 +19,16 @@ from redbot.core import Config
 from redbot.core.bot import Red
 from redbot.core.commands import Cog
 
-# Audio Imports
+# Music Imports
 from ..errors import YouTubeApiError
 
 if TYPE_CHECKING:
-    # Audio Imports
-    from .. import Audio
+
+    # Music Imports
+    from .. import Music
     from ..core.utilities import SettingCacheManager
 
-log = logging.getLogger("red.cogs.Audio.api.YouTube")
+log = logging.getLogger("red.cogs.Music.api.YouTube")
 
 SEARCH_ENDPOINT = "https://www.googleapis.com/youtube/v3/search"
 
@@ -40,7 +41,7 @@ class YouTubeWrapper:
         bot: Red,
         config: Config,
         session: aiohttp.ClientSession,
-        cog: Union["Audio", Cog],
+        cog: Union[Music, Cog],
         cache: SettingCacheManager,
     ):
         self.bot = bot

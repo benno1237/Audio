@@ -30,13 +30,13 @@ from redbot.core.commands import Context
 from redbot.core.utils import AsyncIter
 from redbot.core.utils.chat_formatting import humanize_number
 
-# Audio Imports
+# Music Imports
 from ...apis.playlist_interface import get_all_playlist_for_migration23
 from ...utils import PlaylistScope
 from ..abc import MixinMeta
 from ..cog_utils import CompositeMetaClass, DataReader
 
-log = logging.getLogger("red.cogs.Audio.cog.Utilities.miscellaneous")
+log = logging.getLogger("red.cogs.Music.cog.Utilities.miscellaneous")
 
 _RE_TIME_CONVERTER: Final[Pattern] = re.compile(r"(?:(\d+):)?([0-5]?[0-9]):([0-5][0-9])")
 _prefer_lyrics_cache = {}
@@ -399,7 +399,7 @@ class MiscellaneousUtilities(MixinMeta, metaclass=CompositeMetaClass):
                 global_data["lavalink"]["nodes"]["primary"] = {
                     "host": host,
                     "port": ws_port,
-                    "rest_uri": f"http://{host}:{ws_port}",
+                    "rest_uri": f"{host if host.startswith('http') else f'http://{host}'}:{ws_port}",
                     "password": password,
                     "identifier": "primary",
                     "region": "",
@@ -493,6 +493,12 @@ class MiscellaneousUtilities(MixinMeta, metaclass=CompositeMetaClass):
                         if k not in guild_keys:
                             del guild_data[gid][k]
             await self.config.schema_version.set(7)
+
+        if from_version < 8 <= to_version:  # Migrate node connection info to new namespace
+            async with self.config.lavalink.nodes.primary() as global_data:
+                if "http://http" in global_data["rest_uri"]:
+                    global_data["rest_uri"] = global_data["rest_uri"][7:]
+            await self.config.schema_version.set(8)
 
         if database_entries:
             await self.api_interface.local_cache_api.lavalink.insert(database_entries)

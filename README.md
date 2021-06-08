@@ -55,7 +55,7 @@ To install a cog, use this command.
 Released under the [GNU GPL v3](https://www.gnu.org/licenses/gpl-3.0.en.html) license.
 
 An original copy of the licence for the original Audio work can be seen in [LICENSE.old](LICENSE.old)
-This version of Audio  split with [Red's Audio](https://github.com/Cog-Creators/Red-DiscordBot/commit/ca373052c53d88ac87d89632e4328ac09e890190) on this commit.
+This version of Audio split with [Red's Audio](https://github.com/Cog-Creators/Red-DiscordBot/commit/ca373052c53d88ac87d89632e4328ac09e890190) on this commit.
 
 # Why branching off Red.
 I have been getting DM'ed a lot in the past 24 hours, so I wanted to clarify what happened.

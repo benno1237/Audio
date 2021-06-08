@@ -10,7 +10,7 @@ import aiohttp
 
 
 class AudioError(Exception):
-    """Base exception for errors in the Audio cog."""
+    """Base exception for errors in the Music cog."""
 
 
 class ShouldAutoRecover(AudioError, RuntimeError):
@@ -25,7 +25,7 @@ class LavalinkDownloadFailed(AudioError, RuntimeError):
     response : aiohttp.ClientResponse
         The response from the server to the failed GET request.
     should_retry : bool
-        Whether or not the Audio cog should retry downloading the jar.
+        Whether or not the Music cog should retry downloading the jar.
     """
 
     def __init__(

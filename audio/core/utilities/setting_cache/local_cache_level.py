@@ -7,7 +7,7 @@ from typing import Dict, Optional
 # Dependency Imports
 import discord
 
-# Audio Imports
+# Music Imports
 from ....utils import CacheLevel
 from .abc import CacheBase
 

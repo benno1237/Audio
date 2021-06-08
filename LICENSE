@@ -631,7 +631,7 @@ to attach them to the start of each source file to most effectively
 state the exclusion of warranty; and each file should have at least
 the "copyright" line and a pointer to where the full notice is found.
 
-    Audio Cog
+    Music Cog
     Copyright (C) 2021-Present Drapersniper
     Copyright (C) 2017-2021  Cog Creators
     Copyright (C) 2015-2017  Twentysix
@@ -653,7 +653,7 @@ Also add information on how to contact you by electronic and paper mail.
 
   If the program does terminal interaction, make it output a short
 notice like this when it starts in an interactive mode:
-    Audio Cog Copyright (C) 2021-Present Drapersniper
+    Music Cog Copyright (C) 2021-Present Drapersniper
     Red-DiscordBot  Copyright (C) 2017-2021  Cog Creators
     Red-DiscordBot  Copyright (C) 2015-2017  Twentysix
     This program comes with ABSOLUTELY NO WARRANTY; for details type `show w'.
@@ -676,7 +676,7 @@ the library.  If this is what you want to do, use the GNU Lesser General
 Public License instead of this License.  But first, please read
 <http://www.gnu.org/philosophy/why-not-lgpl.html>.
 
-The Audio cog contains subcomponents in audio.py that have a
+The Music cog contains subcomponents in audio.py that have a
 separate copyright notice and license terms. Your use of the source code for
 these subcomponents is subject to the terms and conditions of the following
 licenses.
@@ -703,5 +703,5 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 
-This project is derived from the bundled Audio cog I worked on for Red (https://github.com/Rapptz/discord-ext-menus) made by Cog-Creators which is distributed under GPL V3 License.
+This project is derived from the bundled Music cog I worked on for Red (https://github.com/Rapptz/discord-ext-menus) made by Cog-Creators which is distributed under GPL V3 License.
 Copy of this license can be found in LICENSE.old file in this repository.

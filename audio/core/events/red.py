@@ -9,11 +9,11 @@ import logging
 # Dependency Imports
 from redbot.core import commands
 
-# Audio Imports
+# Music Imports
 from ..abc import MixinMeta
 from ..cog_utils import CompositeMetaClass
 
-log = logging.getLogger("red.cogs.Audio.cog.Events.red")
+log = logging.getLogger("red.cogs.Music.cog.Events.red")
 
 
 class RedEvents(MixinMeta, metaclass=CompositeMetaClass):

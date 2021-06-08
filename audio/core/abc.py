@@ -23,7 +23,8 @@ from lavalink.filters import Equalizer
 import lavalink
 
 if TYPE_CHECKING:
-    # Audio Imports
+
+    # Music Imports
     from ..apis.interface import AudioAPIInterface
     from ..apis.playlist_interface import Playlist
     from ..apis.playlist_wrapper import PlaylistWrapper

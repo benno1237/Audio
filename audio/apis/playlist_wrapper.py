@@ -19,7 +19,7 @@ from redbot.core.bot import Red
 from redbot.core.utils import AsyncIter
 from redbot.core.utils.dbtools import APSWConnectionWrapper
 
-# Audio Imports
+# Music Imports
 from ..audio_logging import debug_exc_log
 from ..sql_statements import (
     HANDLE_DISCORD_DATA_DELETION_QUERY,
@@ -42,11 +42,12 @@ from ..sql_statements import (
 from ..utils import PlaylistScope
 from .api_utils import PlaylistFetchResult
 
-log = logging.getLogger("red.cogs.Audio.api.Playlists")
+log = logging.getLogger("red.cogs.Music.api.Playlists")
 
 
 if TYPE_CHECKING:
-    # Audio Imports
+
+    # Music Imports
     from ..core.utilities import SettingCacheManager
 
 

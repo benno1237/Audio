@@ -16,13 +16,13 @@ import discord
 # My Modded Imports
 import lavalink
 
-# Audio Imports
+# Music Imports
 from ...errors import DatabaseError, TrackEnqueueError
 from ..abc import MixinMeta
 from ..cog_utils import CompositeMetaClass
 
-log = logging.getLogger("red.cogs.Audio.cog.Events.lavalink")
-ws_audio_log = logging.getLogger("red.Audio.WS.Audio")
+log = logging.getLogger("red.cogs.Music.cog.Events.lavalink")
+ws_audio_log = logging.getLogger("red.Music.WS.Audio")
 
 
 class LavalinkEvents(MixinMeta, metaclass=CompositeMetaClass):
@@ -266,7 +266,7 @@ class LavalinkEvents(MixinMeta, metaclass=CompositeMetaClass):
                             "Closing the audio player "
                             "due to multiple errors being detected. "
                             "If this persists, please inform the bot owner "
-                            "as the Audio cog may be temporally unavailable."
+                            "as the Music cog may be temporally unavailable."
                         ),
                     )
                     await message_channel.send(embed=embed)

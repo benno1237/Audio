@@ -8,7 +8,7 @@ from typing import Dict, Optional
 # Dependency Imports
 import discord
 
-# Audio Imports
+# Music Imports
 from .abc import CacheBase
 
 

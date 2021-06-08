@@ -1,7 +1,7 @@
 # Future Imports
 from __future__ import annotations
 
-# Audio Imports
+# Music Imports
 from . import api_utils  # noqa: F401
 from . import global_db  # noqa: F401
 from . import interface  # noqa: F401

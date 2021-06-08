@@ -1,7 +1,7 @@
 # Future Imports
 from __future__ import annotations
 
-# Audio Imports
+# Music Imports
 from ..cog_utils import CompositeMetaClass
 from .audioset import AudioSetCommands
 from .controller import PlayerControllerCommands

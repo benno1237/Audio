@@ -3,7 +3,7 @@
         "Draper"
     ],
     "install_msg": "Thanks for adding my repository! Feel free to join my server (https://discord.gg/bdnjFPQQaZ) for support and feature requests.",
-    "name": "Audio",
+    "name": "Music",
     "short": "A modified version of the bundled Audio cog in Red-DiscordBot V3, featuring more and better features and extra bugs!",
     "description": "A repo with just the modified Audio cog."
 }

@@ -9,6 +9,7 @@ import itertools
 import logging
 
 # Dependency Imports
+from redbot.core import Config
 from redbot.core.data_manager import cog_data_path
 from redbot.core.utils import AsyncIter
 from redbot.core.utils._internal_utils import send_to_owners_with_prefix_replaced
@@ -18,7 +19,7 @@ from redbot.core.utils.dbtools import APSWConnectionWrapper
 from lavalink.filters import Volume
 import lavalink
 
-# Audio Imports
+# Music Imports
 from ...apis.interface import AudioAPIInterface
 from ...apis.playlist_wrapper import PlaylistWrapper
 from ...audio_logging import debug_exc_log
@@ -27,7 +28,7 @@ from ...utils import task_callback
 from ..abc import MixinMeta
 from ..cog_utils import _OWNER_NOTIFICATION, _SCHEMA_VERSION, CompositeMetaClass
 
-log = logging.getLogger("red.cogs.Audio.cog.Tasks.startup")
+log = logging.getLogger("red.cogs.Music.cog.Tasks.startup")
 
 
 class StartUpTasks(MixinMeta, metaclass=CompositeMetaClass):
@@ -44,25 +45,47 @@ class StartUpTasks(MixinMeta, metaclass=CompositeMetaClass):
             if not hasattr(self.bot, "slash"):
                 slash_commands.SlashClient(self.bot)
             elif not isinstance(self.bot.slash, slash_commands.SlashClient):
-                raise RuntimeError("Audio requires `bot.slash` to be a `SlashClient` object.")
+                raise RuntimeError("Music requires `bot.slash` to be a `SlashClient` object.")
 
         self.cog_init_task = self.bot.loop.create_task(self.initialize())
         self.cog_init_task.add_done_callback(task_callback)
+
+    async def maybe_migrate_from_core(
+        self,
+    ):  # Copy data from core to new datapath to avoid conflicts.
+        if await self.config.migrated_from_core():
+            return
+        audio_cog_config: Config = Config.get_conf(None, 2711759130, cog_name="Audio")
+        audio_cog_config.init_custom("EQUALIZER", 1)
+        user_data = await audio_cog_config.all_users()
+        member_data = await audio_cog_config.all_members()
+        guild_data = await audio_cog_config.all_guilds()
+        channel_data = await audio_cog_config.all_channels()
+        global_data = await audio_cog_config.all()
+        eq_data = await audio_cog_config._get_base_group("EQUALIZER").all()
+        await self.config._get_base_group(self.config.GLOBAL).set(global_data)
+        await self.config._get_base_group(self.config.USER).set(user_data)
+        await self.config._get_base_group(self.config.MEMBER).set(member_data)
+        await self.config._get_base_group("EQUALIZER").set(eq_data)
+        await self.config._get_base_group(self.config.GUILD).set(guild_data)
+        await self.config._get_base_group(self.config.CHANNEL).set(channel_data)
+        await self.config.migrated_from_core.set(True)
 
     async def initialize(self) -> None:
         await self.bot.wait_until_red_ready()
         # Unlike most cases, we want the cache to exit before migration.
         try:
+            await self.maybe_migrate_from_core()
             await self.maybe_message_all_owners()
             self.db_conn = APSWConnectionWrapper(
-                str(cog_data_path(self.bot.get_cog("Audio")) / "Audio.db")
+                str(cog_data_path(self.bot.get_cog("Music")) / "Audio.db")
             )
             self.api_interface = AudioAPIInterface(
                 self.bot,
                 self.config,
                 self.session,
                 self.db_conn,
-                self.bot.get_cog("Audio"),
+                self.bot.get_cog("Music"),
                 self.config_cache,
             )
             self.playlist_api = PlaylistWrapper(
@@ -83,7 +106,7 @@ class StartUpTasks(MixinMeta, metaclass=CompositeMetaClass):
             )
             self.player_automated_timer_task.add_done_callback(task_callback)
         except Exception as err:
-            log.exception("Audio failed to start up, please report this issue.", exc_info=err)
+            log.exception("Music failed to start up, please report this issue.", exc_info=err)
             raise err
 
         self.cog_ready_event.set()
@@ -282,9 +305,9 @@ class StartUpTasks(MixinMeta, metaclass=CompositeMetaClass):
         if current_notification == _OWNER_NOTIFICATION:
             return
         if current_notification < 1 <= _OWNER_NOTIFICATION:
-            msg = """Hello, this message brings you an important update regarding the core Audio cog:
+            msg = """Hello, this message brings you an important update regarding the core Music cog:
 
-Starting from Audio v2.3.0+ you can take advantage of the **Global Audio API**, a new service offered by the Cog-Creators organization that allows your bot to greatly reduce the amount of requests done to YouTube / Spotify. This reduces the likelihood of YouTube rate-limiting your bot for making requests too often.
+Starting from Music v2.3.0+ you can take advantage of the **Global Audio API**, a new service offered by the Cog-Creators organization that allows your bot to greatly reduce the amount of requests done to YouTube / Spotify. This reduces the likelihood of YouTube rate-limiting your bot for making requests too often.
 See `[p]help audioset global globalapi` for more information.
 Access to this service is disabled by default and **requires you to explicitly opt-in** to start using it.
 

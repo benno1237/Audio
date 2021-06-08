@@ -20,11 +20,11 @@ import discord
 from lavalink.filters import Volume
 import lavalink
 
-# Audio Imports
+# Music Imports
 from ..abc import MixinMeta
 from ..cog_utils import CompositeMetaClass
 
-log = logging.getLogger("red.cogs.Audio.cog.Commands.player_controller")
+log = logging.getLogger("red.cogs.Music.cog.Commands.player_controller")
 
 
 class PlayerControllerCommands(MixinMeta, metaclass=CompositeMetaClass):

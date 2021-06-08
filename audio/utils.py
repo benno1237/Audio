@@ -3,6 +3,7 @@ from __future__ import annotations
 
 # Standard Library Imports
 from enum import Enum, unique
+from shutil import copyfile
 from typing import MutableMapping
 import asyncio
 import contextlib
@@ -10,10 +11,10 @@ import logging
 import time
 
 # Dependency Imports
-from redbot.core import commands
+from redbot.core import commands, data_manager
 import discord
 
-log = logging.getLogger("red.cogs.Audio.task.callback")
+log = logging.getLogger("red.cogs.Music.task.callback")
 
 
 class CacheLevel:
@@ -220,3 +221,12 @@ def task_callback(task: asyncio.Task) -> None:
     with contextlib.suppress(asyncio.CancelledError, asyncio.InvalidStateError):
         if exc := task.exception():
             log.exception("%s raised an Exception", task.get_name(), exc_info=exc)
+
+
+def copy_audio_db():
+    target = data_manager.cog_data_path(raw_name="Music")
+    if (target_json := target / "Audio.db").exists():
+        log.debug("%s already exist, skipping move.", target_json)
+        return
+    source = data_manager.cog_data_path(raw_name="Audio")
+    copyfile(source / "Audio.db", target_json.with_name("Audio.db"))

@@ -10,11 +10,11 @@ import struct
 # Dependency Imports
 import aiohttp
 
-# Audio Imports
+# Music Imports
 from ..abc import MixinMeta
 from ..cog_utils import CompositeMetaClass
 
-log = logging.getLogger("red.cogs.Audio.cog.Utilities.Parsing")
+log = logging.getLogger("red.cogs.Music.cog.Utilities.Parsing")
 
 STREAM_TITLE: Final[re.Pattern] = re.compile(br"StreamTitle='([^']*)';")
 

@@ -12,15 +12,16 @@ from redbot import VersionInfo
 from redbot.core.commands import Context
 import discord
 
-# Audio Imports
+# Music Imports
 from ...audio_dataclasses import Query
 from ..abc import MixinMeta
 from ..cog_utils import CompositeMetaClass
 
 if TYPE_CHECKING:
-    # Audio Imports
+
+    # Music Imports
     from . import SettingCacheManager
-log = logging.getLogger("red.cogs.Audio.cog.Utilities.validation")
+log = logging.getLogger("red.cogs.Music.cog.Utilities.validation")
 
 _RE_YT_LIST_PLAYLIST: Final[Pattern] = re.compile(
     r"^(https?://)?(www\.)?(youtube\.com|youtu\.?be)(/playlist\?).*(list=)(.*)(&|$)"
@@ -93,7 +94,7 @@ class ValidationUtilities(MixinMeta, metaclass=CompositeMetaClass):
             # Dependency Imports
             from dislash import slash_commands  # noqa: F401
 
-            # Audio Imports
+            # Music Imports
             from ...__version__ import version_info
 
             return _MIN_SLASH_SUPPORT <= version_info

@@ -29,15 +29,13 @@ except ImportError:
 
 # Dependency Imports
 from redbot.core import data_manager
-from redbot.core.i18n import Translator
 
-# Audio Imports
+# Music Imports
 from .core.utilities import SettingCacheManager
 from .errors import LavalinkDownloadFailed, ShouldAutoRecover
 from .utils import task_callback
 
-_ = Translator("Audio", pathlib.Path(__file__))
-log = logging.getLogger("red.Audio.manager")
+log = logging.getLogger("red.Music.manager")
 JAR_VERSION: Final[str] = "3.3.2.5"
 JAR_BUILD: Final[int] = 1250
 LAVALINK_DOWNLOAD_URL: Final[str] = (
@@ -45,7 +43,7 @@ LAVALINK_DOWNLOAD_URL: Final[str] = (
     f"{JAR_VERSION}_{JAR_BUILD}/"
     "Lavalink.jar"
 )
-LAVALINK_DOWNLOAD_DIR: Final[pathlib.Path] = data_manager.cog_data_path(raw_name="Audio")
+LAVALINK_DOWNLOAD_DIR: Final[pathlib.Path] = data_manager.cog_data_path(raw_name="Music")
 LAVALINK_JAR_FILE: Final[pathlib.Path] = LAVALINK_DOWNLOAD_DIR / "Lavalink.jar"
 BUNDLED_APP_YML: Final[pathlib.Path] = pathlib.Path(__file__).parent / "data" / "application.yml"
 LAVALINK_APP_YML: Final[pathlib.Path] = LAVALINK_DOWNLOAD_DIR / "application.yml"
@@ -107,7 +105,7 @@ async def get_latest_lavalink_release(stable=True, date=False):
     async with aiohttp.ClientSession(json_serialize=json.dumps) as session:
         async with session.get(LAVALINK_JAR_ENDPOINT) as resp:
             if resp.status != 200:
-                return "", "0_0", "0", None
+                return "", "0_0", 0, None
             data = await resp.json(loads=json.loads)
             if stable:
                 data = list(
@@ -409,7 +407,7 @@ class ServerManager:
         else:
             log.critical(
                 "Your Java install is broken. Please find the hs_err_pid%d.log file"
-                " in the Audio data folder and report this issue.",
+                " in the Music data folder and report this issue.",
                 self._proc.pid,
             )
 

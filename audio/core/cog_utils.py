@@ -10,21 +10,19 @@ import struct
 
 # Dependency Imports
 from redbot.core import commands
-from redbot.core.i18n import Translator
 
-# Audio Imports
+# Music Imports
 from ..__version__ import __version__  # noqa: F401
 from ..converters import get_lazy_converter, get_lazy_multiline_converter, get_playlist_converter
 
 __author__ = ["aikaterna", "Draper"]
 
-_SCHEMA_VERSION: Final[int] = 7
+_SCHEMA_VERSION: Final[int] = 8
 _OWNER_NOTIFICATION: Final[int] = 1
 
 LazyGreedyConverter = get_lazy_converter("--")
 LazyMultilineConverter = get_lazy_multiline_converter("--")
 PlaylistConverter = get_playlist_converter()
-T_ = Translator("Audio", __file__)
 
 HUMANIZED_PERM = {
     "create_instant_invite": "Create Instant Invite",
@@ -65,8 +63,6 @@ ENABLED = "enabled"
 DISABLED = "disabled"
 ENABLED_TITLE = "Enabled"
 DISABLED_TITLE = "Disabled"
-
-_ = T_
 
 
 class CompositeMetaClass(type(commands.Cog), type(ABC)):

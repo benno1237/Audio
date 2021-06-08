@@ -14,7 +14,7 @@ from lavalink import filters
 from lavalink.filters import Equalizer
 import lavalink
 
-# Audio Imports
+# Music Imports
 from ...converters import (
     ChannelMixConverter,
     DistortionConverter,
@@ -29,7 +29,7 @@ from ...converters import (
 from ..abc import MixinMeta
 from ..cog_utils import CompositeMetaClass
 
-log = logging.getLogger("red.cogs.Audio.cog.Commands.Effects")
+log = logging.getLogger("red.cogs.Music.cog.Commands.Effects")
 
 
 class EffectsCommands(MixinMeta, metaclass=CompositeMetaClass):

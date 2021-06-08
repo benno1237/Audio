@@ -19,13 +19,13 @@ import discord
 # My Modded Imports
 import lavalink
 
-# Audio Imports
+# Music Imports
 from ...audio_logging import debug_exc_log
 from ...errors import CommandRejected, TrackEnqueueError
 from ..abc import MixinMeta
 from ..cog_utils import CompositeMetaClass, HUMANIZED_PERM
 
-log = logging.getLogger("red.cogs.Audio.cog.Events.dpy")
+log = logging.getLogger("red.cogs.Music.cog.Events.dpy")
 
 RE_CONVERSION: Final[Pattern] = re.compile('Converting to "(.*)" failed for parameter "(.*)".')
 
@@ -49,7 +49,7 @@ class DpyEvents(MixinMeta, metaclass=CompositeMetaClass):
                     )
                 )
             raise RuntimeError(
-                "Not running Audio command due to invalid machine architecture for Lavalink."
+                "Not running Music command due to invalid machine architecture for Lavalink."
             )
         not_deafened_commands = [  # TODO: Add the missing ones to the ABC
             self.command_play,
@@ -244,7 +244,7 @@ class DpyEvents(MixinMeta, metaclass=CompositeMetaClass):
                 error=True,
             )
             log.exception(
-                "This is not handled in the core Audio cog, please report it.", exc_info=error
+                "This is not handled in the core Music cog, please report it.", exc_info=error
             )
         if not isinstance(
             error,

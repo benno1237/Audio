@@ -24,11 +24,11 @@ except ImportError:
 from redbot.core.bot import Red
 from redbot.core.utils.chat_formatting import humanize_list
 
-# Audio Imports
+# Music Imports
 from ..errors import InvalidPlaylistScope, MissingAuthor, MissingGuild
 from ..utils import PlaylistScope
 
-log = logging.getLogger("red.cogs.Audio.api.utils")
+log = logging.getLogger("red.cogs.Music.api.utils")
 
 
 @dataclass

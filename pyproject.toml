@@ -25,7 +25,7 @@
     import_heading_stdlib = "Standard Library Imports"
     import_heading_thirdparty = "Dependency Imports"
     import_heading_firstparty = "My Modded Imports"
-    import_heading_localfolder = "Audio Imports"
+    import_heading_localfolder = "Music Imports"
 
     add_imports  = ["from __future__ import annotations"]
     append_only = true

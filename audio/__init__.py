@@ -12,6 +12,9 @@ from redbot.core.bot import Red
 from redbot.core.data_manager import cog_data_path
 from redbot.core.utils import get_end_user_data_statement
 
+# Music Imports
+from .utils import copy_audio_db
+
 # Dirty hack to made the cog always the downloaded lib and not the one that comes with Red.
 if (
     getpass.getuser() == "Draper" and platform.system() == "Windows"
@@ -31,8 +34,9 @@ import lavalink  # noqa: F401 E402 F811
 
 sys.path.pop(0)
 
-# Audio Imports
-from .core import Audio  # noqa: E402
+
+# Music Imports
+from .core import Music  # noqa: E402
 
 __red_end_user_data_statement__ = get_end_user_data_statement(__file__)
 
@@ -43,7 +47,7 @@ async def setup(bot: Red):
             while "audio" in curr_pkgs:
                 curr_pkgs.remove("audio")
             curr_pkgs.insert(0, "audio")
-
-    cog = Audio(bot)
+    copy_audio_db()
+    cog = Music(bot)
     bot.add_cog(cog)
     cog.start_up_task()

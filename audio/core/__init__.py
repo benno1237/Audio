@@ -19,15 +19,16 @@ try:
     # Dependency Imports
     from redbot import json
 except ImportError:
+    # Standard Library Imports
     import json
 
-# Audio Imports
+# Music Imports
 from ..utils import PlaylistScope
 from . import commands, events, tasks, utilities
 from .cog_utils import CompositeMetaClass
 
 
-class Audio(
+class Music(
     commands.Commands,
     events.Events,
     tasks.Tasks,
@@ -117,6 +118,7 @@ class Audio(
         lavalink_yaml["server"]["port"] = default_cog_lavalink_settings["primary"]["port"]
 
         default_global = dict(
+            migrated_from_core=False,
             schema_version=1,
             bundled_playlist_version=0,
             owner_notification=0,
@@ -129,7 +131,7 @@ class Audio(
             global_db_get_timeout=5,
             status=False,
             restrict=True,
-            localpath=str(cog_data_path(raw_name="Audio")),
+            localpath=str(cog_data_path(raw_name="Music")),
             url_keyword_blacklist=[],
             url_keyword_whitelist=[],
             java_exc_path="java",
