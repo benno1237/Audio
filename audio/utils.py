@@ -225,25 +225,24 @@ def task_callback(task: asyncio.Task) -> None:
 
 
 def copy_datapath():
-    source = data_manager.cog_data_path(raw_name="Audio")
     target = data_manager.cog_data_path(raw_name="Music")
     if (target_json := target / "settings.json").exists():
         log.debug("%s already exist, skipping move.", target_json)
         return
-    target_json = target / "settings.json"
-    print(target_json.with_name("Audio.db"))
+    source = data_manager.cog_data_path(raw_name="Audio")
     copyfile(source / "settings.json", target_json)
     copyfile(source / "Audio.db", target_json.with_name("Audio.db"))
 
-    with target_json.open() as f:
+    with target_json.open(mode="r") as f:
         data = json.load(f)
-        if "2711759130" not in data:
-            return
-        if "GLOBAL" not in data["2711759130"]:
-            return
-        data["2711759130"]["GLOBAL"]["schema_version"] = (
-            3
-            if data["2711759130"]["GLOBAL"]["schema_version"] > 3
-            else data["2711759130"]["GLOBAL"]["schema_version"]
-        )
+    if "2711759130" not in data:
+        return
+    if "GLOBAL" not in data["2711759130"]:
+        return
+    data["2711759130"]["GLOBAL"]["schema_version"] = (
+        3
+        if data["2711759130"]["GLOBAL"]["schema_version"] > 3
+        else data["2711759130"]["GLOBAL"]["schema_version"]
+    )
+    with target_json.open(mode="w") as f:
         json.dump(data, f)

@@ -12,7 +12,10 @@ from redbot.core.bot import Red
 from redbot.core.data_manager import cog_data_path
 from redbot.core.utils import get_end_user_data_statement
 
+# Audio Imports
 # Dirty hack to made the cog always the downloaded lib and not the one that comes with Red.
+from .utils import copy_datapath
+
 if (
     getpass.getuser() == "Draper" and platform.system() == "Windows"
 ):  # Deving enviroment is annoying and I wanna have to avoid pushing untested changes upstream so i can validate audio
@@ -43,6 +46,7 @@ async def setup(bot: Red):
             while "audio" in curr_pkgs:
                 curr_pkgs.remove("audio")
             curr_pkgs.insert(0, "audio")
+    copy_datapath()
     cog = Music(bot)
     bot.add_cog(cog)
     cog.start_up_task()
