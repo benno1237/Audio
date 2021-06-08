@@ -523,5 +523,6 @@ class ServerManager:
                     f"Download of Lavalink build {self.ll_build} from {self.ll_branch} "
                     f"({self._jar_download_url}) failed, Expected build {self._jar_build} "
                     f"But downloaded {self._lavalink_build}",
+                    response=None,
                     should_retry=False,
                 )

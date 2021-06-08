@@ -1,6 +1,9 @@
 # Future Imports
 from __future__ import annotations
 
+# Standard Library Imports
+from typing import Optional
+
 # Dependency Imports
 from redbot.core.commands import UserFeedbackCheckFailure
 import aiohttp
@@ -27,7 +30,9 @@ class LavalinkDownloadFailed(AudioError, RuntimeError):
         Whether or not the Audio cog should retry downloading the jar.
     """
 
-    def __init__(self, *args, response: aiohttp.ClientResponse, should_retry: bool = False):
+    def __init__(
+        self, *args, response: Optional[aiohttp.ClientResponse], should_retry: bool = False
+    ):
         super().__init__(*args)
         self.response = response
         self.should_retry = should_retry
@@ -40,7 +45,10 @@ class LavalinkDownloadFailed(AudioError, RuntimeError):
         return f"{super().__str__()} {self._response_repr()}"
 
     def _response_repr(self) -> str:
-        return f"[{self.response.status} {self.response.reason}]"
+        if self.response:
+            return f"[{self.response.status} {self.response.reason}]"
+        else:
+            return "[No Response]"
 
 
 class QueryUnauthorized(AudioError):
