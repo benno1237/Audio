@@ -33,6 +33,7 @@ from redbot.core.utils import AsyncIter
 from redbot.core.utils.dbtools import APSWConnectionWrapper
 
 # Audio Imports
+# Music  Imports
 from ..audio_dataclasses import Query
 from ..audio_logging import debug_exc_log, IS_DEBUG
 from ..errors import DatabaseError, SpotifyFetchError, TrackEnqueueError, YouTubeApiError
@@ -47,12 +48,13 @@ from .spotify import SpotifyWrapper
 from .youtube import YouTubeWrapper
 
 if TYPE_CHECKING:
+    # Music  Imports
     # Audio Imports
-    from .. import Audio
+    from .. import Music
     from ..core.utilities import SettingCacheManager
 
 
-log = logging.getLogger("red.cogs.Audio.api.AudioAPIInterface")
+log = logging.getLogger("red.cogs.Music.api.AudioAPIInterface")
 _TOP_100_US = "https://www.youtube.com/playlist?list=PL4fGSI1pDJn5rWitrRWFKdm-ulaFiIyoK"
 # TODO: Get random from global Cache
 
@@ -69,7 +71,7 @@ class AudioAPIInterface:
         config: Config,
         session: aiohttp.ClientSession,
         conn: APSWConnectionWrapper,
-        cog: Union["Audio", Cog],
+        cog: Union[Music, Cog],
         cache: SettingCacheManager,
     ):
         self.bot = bot

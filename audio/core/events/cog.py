@@ -16,13 +16,14 @@ import discord
 import lavalink
 
 # Audio Imports
+# Music  Imports
 from ...apis.playlist_interface import delete_playlist, get_playlist, Playlist
 from ...audio_logging import debug_exc_log
 from ...utils import PlaylistScope
 from ..abc import MixinMeta
 from ..cog_utils import CompositeMetaClass
 
-log = logging.getLogger("red.cogs.Audio.cog.Events.audio")
+log = logging.getLogger("red.cogs.Music.cog.Events.audio")
 
 
 class AudioEvents(MixinMeta, metaclass=CompositeMetaClass):

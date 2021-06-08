@@ -33,6 +33,7 @@ from redbot.core.utils.menus import start_adding_reactions
 from redbot.core.utils.predicates import ReactionPredicate
 
 # Audio Imports
+# Music  Imports
 from ...apis.playlist_interface import create_playlist, Playlist, PlaylistCompat23
 from ...audio_dataclasses import _PARTIALLY_SUPPORTED_MUSIC_EXT, Query
 from ...audio_logging import debug_exc_log
@@ -41,7 +42,7 @@ from ...utils import Notifier, PlaylistScope
 from ..abc import MixinMeta
 from ..cog_utils import CompositeMetaClass
 
-log = logging.getLogger("red.cogs.Audio.cog.Utilities.playlists")
+log = logging.getLogger("red.cogs.Music.cog.Utilities.playlists")
 
 CURRATED_DATA = (
     "https://gist.githubusercontent.com/Drapersniper/cbe10d7053c844f8c69637bb4fd9c5c3/raw/json"

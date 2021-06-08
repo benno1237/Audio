@@ -16,10 +16,11 @@ from lavalink.filters import Equalizer
 import lavalink
 
 # Audio Imports
+# Music  Imports
 from ..abc import MixinMeta
 from ..cog_utils import CompositeMetaClass
 
-log = logging.getLogger("red.cogs.Audio.cog.Utilities.equalizer")
+log = logging.getLogger("red.cogs.Music.cog.Utilities.equalizer")
 
 
 class EqualizerUtilities(MixinMeta, metaclass=CompositeMetaClass):

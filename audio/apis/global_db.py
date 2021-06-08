@@ -26,17 +26,19 @@ from redbot.core.bot import Red
 from redbot.core.commands import Cog
 
 # Audio Imports
+# Music  Imports
 from ..audio_dataclasses import Query
 from ..audio_logging import debug_exc_log, IS_DEBUG
 
 if TYPE_CHECKING:
+    # Music  Imports
     # Audio Imports
-    from .. import Audio
+    from .. import Music
     from ..core.utilities import SettingCacheManager
 
 _API_URL = "https://api.redbot.app/"
 
-log = logging.getLogger("red.cogs.Audio.api.GlobalDB")
+log = logging.getLogger("red.cogs.Music.api.GlobalDB")
 
 
 class GlobalCacheWrapper:
@@ -45,7 +47,7 @@ class GlobalCacheWrapper:
         bot: Red,
         config: Config,
         session: aiohttp.ClientSession,
-        cog: Union["Audio", Cog],
+        cog: Union[Music, Cog],
         cache: SettingCacheManager,
     ):
         # Place Holder for the Global Cache PR

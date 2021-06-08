@@ -3,17 +3,19 @@ from __future__ import annotations
 
 # Standard Library Imports
 from enum import Enum, unique
+from shutil import copyfile
 from typing import MutableMapping
 import asyncio
 import contextlib
+import json
 import logging
 import time
 
 # Dependency Imports
-from redbot.core import commands
+from redbot.core import commands, data_manager
 import discord
 
-log = logging.getLogger("red.cogs.Audio.task.callback")
+log = logging.getLogger("red.cogs.Music.task.callback")
 
 
 class CacheLevel:
@@ -220,3 +222,27 @@ def task_callback(task: asyncio.Task) -> None:
     with contextlib.suppress(asyncio.CancelledError, asyncio.InvalidStateError):
         if exc := task.exception():
             log.exception("%s raised an Exception", task.get_name(), exc_info=exc)
+
+
+def copy_datapath():
+    target = data_manager.cog_data_path(raw_name="Music")
+    if (target_json := target / "settings.json").exists():
+        log.debug("%s already exist, skipping move.", target_json)
+        return
+    source = data_manager.cog_data_path(raw_name="Audio")
+    copyfile(source / "settings.json", target_json)
+    copyfile(source / "Audio.db", target_json.with_name("Audio.db"))
+
+    with target_json.open(mode="r") as f:
+        data = json.load(f)
+    if "2711759130" not in data:
+        return
+    if "GLOBAL" not in data["2711759130"]:
+        return
+    data["2711759130"]["GLOBAL"]["schema_version"] = (
+        3
+        if data["2711759130"]["GLOBAL"]["schema_version"] > 3
+        else data["2711759130"]["GLOBAL"]["schema_version"]
+    )
+    with target_json.open(mode="w") as f:
+        json.dump(data, f)

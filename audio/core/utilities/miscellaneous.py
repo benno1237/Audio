@@ -31,12 +31,13 @@ from redbot.core.utils import AsyncIter
 from redbot.core.utils.chat_formatting import humanize_number
 
 # Audio Imports
+# Music  Imports
 from ...apis.playlist_interface import get_all_playlist_for_migration23
 from ...utils import PlaylistScope
 from ..abc import MixinMeta
 from ..cog_utils import CompositeMetaClass, DataReader
 
-log = logging.getLogger("red.cogs.Audio.cog.Utilities.miscellaneous")
+log = logging.getLogger("red.cogs.Music.cog.Utilities.miscellaneous")
 
 _RE_TIME_CONVERTER: Final[Pattern] = re.compile(r"(?:(\d+):)?([0-5]?[0-9]):([0-5][0-9])")
 _prefer_lyrics_cache = {}
@@ -399,7 +400,7 @@ class MiscellaneousUtilities(MixinMeta, metaclass=CompositeMetaClass):
                 global_data["lavalink"]["nodes"]["primary"] = {
                     "host": host,
                     "port": ws_port,
-                    "rest_uri": f"http://{host}:{ws_port}",
+                    "rest_uri": f"{host if host.startswith('http') else f'http://{host}'}:{ws_port}",
                     "password": password,
                     "identifier": "primary",
                     "region": "",

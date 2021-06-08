@@ -14,11 +14,12 @@ from redbot.core.utils import AsyncIter
 import lavalink
 
 # Audio Imports
+# Music  Imports
 from ...audio_logging import debug_exc_log
 from ..abc import MixinMeta
 from ..cog_utils import CompositeMetaClass
 
-log = logging.getLogger("red.cogs.Audio.cog.Tasks.player")
+log = logging.getLogger("red.cogs.Music.cog.Tasks.player")
 
 
 class PlayerTasks(MixinMeta, metaclass=CompositeMetaClass):
@@ -40,7 +41,7 @@ class PlayerTasks(MixinMeta, metaclass=CompositeMetaClass):
                         try:
                             await p.pause(False)
                         except Exception as err:
-                            debug_exc_log(log, err, "Exception raised in Audio's unpausing %r.", p)
+                            debug_exc_log(log, err, "Exception raised in Music's unpausing %r.", p)
                     pause_times.pop(server.id, None)
             servers = stop_times.copy()
             servers.update(pause_times)
@@ -58,7 +59,7 @@ class PlayerTasks(MixinMeta, metaclass=CompositeMetaClass):
                         await self.config_cache.autoplay.set_currently_in_guild(server_obj)
                     except Exception as err:
                         debug_exc_log(
-                            log, err, "Exception raised in Audio's emptydc_timer for %s.", sid
+                            log, err, "Exception raised in Music's emptydc_timer for %s.", sid
                         )
 
                 elif sid in stop_times and await self.config_cache.empty_dc.get_context_value(
@@ -80,7 +81,7 @@ class PlayerTasks(MixinMeta, metaclass=CompositeMetaClass):
                             if "No such player for that guild" in str(err):
                                 stop_times.pop(sid, None)
                             debug_exc_log(
-                                log, err, "Exception raised in Audio's emptydc_timer for %s.", sid
+                                log, err, "Exception raised in Music's emptydc_timer for %s.", sid
                             )
                 elif sid in pause_times and await self.config_cache.empty_pause.get_context_value(
                     server_obj
@@ -95,6 +96,6 @@ class PlayerTasks(MixinMeta, metaclass=CompositeMetaClass):
                             if "No such player for that guild" in str(err):
                                 pause_times.pop(sid, None)
                             debug_exc_log(
-                                log, err, "Exception raised in Audio's pausing for %s.", sid
+                                log, err, "Exception raised in Music's pausing for %s.", sid
                             )
             await asyncio.sleep(5)

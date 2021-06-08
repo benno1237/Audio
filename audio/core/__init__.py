@@ -19,15 +19,17 @@ try:
     # Dependency Imports
     from redbot import json
 except ImportError:
+    # Standard Library Imports
     import json
 
+# Music  Imports
 # Audio Imports
 from ..utils import PlaylistScope
 from . import commands, events, tasks, utilities
 from .cog_utils import CompositeMetaClass
 
 
-class Audio(
+class Music(
     commands.Commands,
     events.Events,
     tasks.Tasks,
@@ -129,7 +131,7 @@ class Audio(
             global_db_get_timeout=5,
             status=False,
             restrict=True,
-            localpath=str(cog_data_path(raw_name="Audio")),
+            localpath=str(cog_data_path(raw_name="Music")),
             url_keyword_blacklist=[],
             url_keyword_whitelist=[],
             java_exc_path="java",

@@ -14,10 +14,11 @@ from redbot.core.utils import AsyncIter
 import lavalink
 
 # Audio Imports
+# Music  Imports
 from ..abc import MixinMeta
 from ..cog_utils import CompositeMetaClass
 
-log = logging.getLogger("red.cogs.Audio.cog.Commands.miscellaneous")
+log = logging.getLogger("red.cogs.Music.cog.Commands.miscellaneous")
 
 
 class MiscellaneousCommands(MixinMeta, metaclass=CompositeMetaClass):

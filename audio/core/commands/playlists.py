@@ -33,6 +33,7 @@ from redbot.core.utils.chat_formatting import bold, pagify
 from redbot.core.utils.predicates import MessagePredicate
 
 # Audio Imports
+# Music  Imports
 from ...apis.api_utils import FakePlaylist
 from ...apis.playlist_interface import create_playlist, delete_playlist, get_all_playlist, Playlist
 from ...audio_dataclasses import LocalPath, Query
@@ -43,7 +44,7 @@ from ...utils import PlaylistScope
 from ..abc import MixinMeta
 from ..cog_utils import CompositeMetaClass, LazyMultilineConverter, PlaylistConverter
 
-log = logging.getLogger("red.cogs.Audio.cog.Commands.playlist")
+log = logging.getLogger("red.cogs.Music.cog.Commands.playlist")
 
 
 class PlaylistCommands(MixinMeta, metaclass=CompositeMetaClass):
@@ -113,7 +114,7 @@ class PlaylistCommands(MixinMeta, metaclass=CompositeMetaClass):
             return await self.send_embed_msg(
                 ctx,
                 title="Playlists Are Not Available",
-                description="The playlist section of Audio is currently unavailable",
+                description="The playlist section of Music is currently unavailable",
                 footer=None if not await self.bot.is_owner(ctx.author) else "Check your logs.",
             )
         if scope_data is None:
@@ -787,7 +788,7 @@ class PlaylistCommands(MixinMeta, metaclass=CompositeMetaClass):
             to_write.write(playlist_data)
             to_write.seek(0)
             if to_write.getbuffer().nbytes > ctx.guild.filesize_limit - 10000:
-                datapath = cog_data_path(raw_name="Audio")
+                datapath = cog_data_path(raw_name="Music")
                 temp_file = datapath / f"{file_name}.txt"
                 temp_tar = datapath / f"{file_name}.tar.gz"
                 with temp_file.open("wb") as playlist_file:

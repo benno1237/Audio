@@ -27,6 +27,7 @@ import discord
 import lavalink
 
 # Audio Imports
+# Music  Imports
 from ...audio_dataclasses import LocalPath
 from ...converters import ScopeParser
 from ...errors import MissingGuild, TooManyMatches
@@ -43,7 +44,7 @@ from ..cog_utils import (
     PlaylistConverter,
 )
 
-log = logging.getLogger("red.cogs.Audio.cog.Commands.audioset")
+log = logging.getLogger("red.cogs.Music.cog.Commands.audioset")
 
 
 class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
@@ -1933,13 +1934,13 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         """
 
         if not local_path:
-            await self.config_cache.localpath.set_global(cog_data_path(raw_name="Audio"))
-            self.local_folder_current_path = cog_data_path(raw_name="Audio")
+            await self.config_cache.localpath.set_global(cog_data_path(raw_name="Music"))
+            self.local_folder_current_path = cog_data_path(raw_name="Music")
             return await self.send_embed_msg(
                 ctx,
                 title="Setting Changed",
                 description="The localtracks path location has been reset to {localpath}".format(
-                    localpath=str(cog_data_path(raw_name="Audio").absolute())
+                    localpath=str(cog_data_path(raw_name="Music").absolute())
                 ),
             )
 
@@ -1990,7 +1991,7 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
             ).format(localfolder=temp.absolute(), localtracks=temp.localtrack_folder.absolute())
             await self.send_embed_msg(ctx, title="Invalid Environment", description=warn_msg)
         local_path = str(temp.localtrack_folder.absolute())
-        await self.config_cache.localpath.set_global(cog_data_path(raw_name="Audio"))
+        await self.config_cache.localpath.set_global(cog_data_path(raw_name="Music"))
         self.local_folder_current_path = temp.localtrack_folder.absolute()
         return await self.send_embed_msg(
             ctx,
@@ -2405,7 +2406,7 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
                 ),
             )
 
-        datapath = cog_data_path(raw_name="Audio")
+        datapath = cog_data_path(raw_name="Music")
         logs = datapath / "logs" / "spring.log"
         zip_name = None
         try:
@@ -2463,7 +2464,7 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
             await self.send_embed_msg(
                 ctx,
                 title="Java Executable Reset",
-                description="Audio will now use `java` to run your Lavalink.jar",
+                description="Music will now use `java` to run your Lavalink.jar",
             )
         else:
             exc = Path(java_path)
@@ -2480,7 +2481,7 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
             await self.send_embed_msg(
                 ctx,
                 title="Java Executable Changed",
-                description="Audio will now use `{exc}` to run your Lavalink.jar".format(
+                description="Music will now use `{exc}` to run your Lavalink.jar".format(
                     exc=exc_absolute
                 ),
             )

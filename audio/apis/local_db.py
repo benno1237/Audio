@@ -19,6 +19,7 @@ from redbot.core.utils import AsyncIter
 from redbot.core.utils.dbtools import APSWConnectionWrapper
 
 # Audio Imports
+# Music  Imports
 from ..audio_logging import debug_exc_log
 from ..sql_statements import (
     LAVALINK_CREATE_INDEX,
@@ -60,11 +61,12 @@ from .api_utils import (
 )
 
 if TYPE_CHECKING:
+    # Music  Imports
     # Audio Imports
-    from .. import Audio
+    from .. import Music
     from ..core.utilities import SettingCacheManager
 
-log = logging.getLogger("red.cogs.Audio.api.LocalDB")
+log = logging.getLogger("red.cogs.Music.api.LocalDB")
 
 _SCHEMA_VERSION = 3
 
@@ -75,7 +77,7 @@ class BaseWrapper:
         bot: Red,
         config: Config,
         conn: APSWConnectionWrapper,
-        cog: Union["Audio", Cog],
+        cog: Union[Music, Cog],
         cache: SettingCacheManager,
     ):
         self.bot = bot
@@ -247,7 +249,7 @@ class YouTubeTableWrapper(BaseWrapper):
         bot: Red,
         config: Config,
         conn: APSWConnectionWrapper,
-        cog: Union["Audio", Cog],
+        cog: Union[Music, Cog],
         cache: SettingCacheManager,
     ):
         super().__init__(bot, config, conn, cog, cache)
@@ -288,7 +290,7 @@ class SpotifyTableWrapper(BaseWrapper):
         bot: Red,
         config: Config,
         conn: APSWConnectionWrapper,
-        cog: Union["Audio", Cog],
+        cog: Union[Music, Cog],
         cache: SettingCacheManager,
     ):
         super().__init__(bot, config, conn, cog, cache)
@@ -329,7 +331,7 @@ class LavalinkTableWrapper(BaseWrapper):
         bot: Red,
         config: Config,
         conn: APSWConnectionWrapper,
-        cog: Union["Audio", Cog],
+        cog: Union[Music, Cog],
         cache: SettingCacheManager,
     ):
         super().__init__(bot, config, conn, cog, cache)
@@ -392,7 +394,7 @@ class LocalCacheWrapper:
         bot: Red,
         config: Config,
         conn: APSWConnectionWrapper,
-        cog: Union["Audio", Cog],
+        cog: Union[Music, Cog],
         cache: SettingCacheManager,
     ):
         self.bot = bot

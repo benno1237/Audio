@@ -20,12 +20,13 @@ import discord
 import lavalink
 
 # Audio Imports
+# Music  Imports
 from ...audio_logging import debug_exc_log
 from ...errors import CommandRejected, TrackEnqueueError
 from ..abc import MixinMeta
 from ..cog_utils import CompositeMetaClass, HUMANIZED_PERM
 
-log = logging.getLogger("red.cogs.Audio.cog.Events.dpy")
+log = logging.getLogger("red.cogs.Music.cog.Events.dpy")
 
 RE_CONVERSION: Final[Pattern] = re.compile('Converting to "(.*)" failed for parameter "(.*)".')
 

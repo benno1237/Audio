@@ -12,7 +12,11 @@ from redbot.core.bot import Red
 from redbot.core.data_manager import cog_data_path
 from redbot.core.utils import get_end_user_data_statement
 
+# Audio Imports
+# Music  Imports
 # Dirty hack to made the cog always the downloaded lib and not the one that comes with Red.
+from .utils import copy_datapath
+
 if (
     getpass.getuser() == "Draper" and platform.system() == "Windows"
 ):  # Deving enviroment is annoying and I wanna have to avoid pushing untested changes upstream so i can validate audio
@@ -32,18 +36,19 @@ import lavalink  # noqa: F401 E402 F811
 sys.path.pop(0)
 
 # Audio Imports
-from .core import Audio  # noqa: E402
+# Music  Imports
+from .core import Music  # noqa: E402
 
 __red_end_user_data_statement__ = get_end_user_data_statement(__file__)
 
 
 async def setup(bot: Red):
     async with bot._config.packages() as curr_pkgs:
-        if "audio" not in curr_pkgs[:1]:
+        if "music" not in curr_pkgs[:1]:
             while "audio" in curr_pkgs:
                 curr_pkgs.remove("audio")
             curr_pkgs.insert(0, "audio")
-
-    cog = Audio(bot)
+    copy_datapath()
+    cog = Music(bot)
     bot.add_cog(cog)
     cog.start_up_task()

@@ -24,15 +24,17 @@ from redbot.core.commands import Cog, Context
 from redbot.core.utils import AsyncIter
 
 # Audio Imports
+# Music  Imports
 from ..errors import SpotifyFetchError
 
 if TYPE_CHECKING:
+    # Music  Imports
     # Audio Imports
-    from .. import Audio
+    from .. import Music
     from ..core.utilities import SettingCacheManager
 
 
-log = logging.getLogger("red.cogs.Audio.api.Spotify")
+log = logging.getLogger("red.cogs.Music.api.Spotify")
 
 
 CATEGORY_ENDPOINT = "https://api.spotify.com/v1/browse/categories"
@@ -50,7 +52,7 @@ class SpotifyWrapper:
         bot: Red,
         config: Config,
         session: aiohttp.ClientSession,
-        cog: Union["Audio", Cog],
+        cog: Union["Music", Cog],
         cache: SettingCacheManager,
     ):
         self.bot = bot

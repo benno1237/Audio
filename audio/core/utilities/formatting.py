@@ -19,12 +19,13 @@ import discord
 import lavalink
 
 # Audio Imports
+# Music  Imports
 from ...audio_dataclasses import LocalPath, Query
 from ...audio_logging import IS_DEBUG
 from ..abc import MixinMeta
 from ..cog_utils import CompositeMetaClass
 
-log = logging.getLogger("red.cogs.Audio.cog.Utilities.formatting")
+log = logging.getLogger("red.cogs.Music.cog.Utilities.formatting")
 
 RE_SQUARE = re.compile(r"[\[\]]")
 

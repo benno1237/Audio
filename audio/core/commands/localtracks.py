@@ -14,11 +14,12 @@ from redbot.core.utils.menus import close_menu, DEFAULT_CONTROLS, menu, next_pag
 import discord
 
 # Audio Imports
+# Music  Imports
 from ...audio_dataclasses import LocalPath, Query
 from ..abc import MixinMeta
 from ..cog_utils import CompositeMetaClass
 
-log = logging.getLogger("red.cogs.Audio.cog.Commands.local_track")
+log = logging.getLogger("red.cogs.Music.cog.Commands.local_track")
 
 
 class LocalTrackCommands(MixinMeta, metaclass=CompositeMetaClass):

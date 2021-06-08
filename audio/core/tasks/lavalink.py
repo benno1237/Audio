@@ -12,12 +12,13 @@ from redbot.core import data_manager
 import lavalink
 
 # Audio Imports
+# Music  Imports
 from ...errors import LavalinkDownloadFailed, ShouldAutoRecover
 from ...manager import ServerManager
 from ..abc import MixinMeta
 from ..cog_utils import CompositeMetaClass
 
-log = logging.getLogger("red.cogs.Audio.cog.Tasks.lavalink")
+log = logging.getLogger("red.cogs.Music.cog.Tasks.lavalink")
 
 
 class LavalinkTasks(MixinMeta, metaclass=CompositeMetaClass):
