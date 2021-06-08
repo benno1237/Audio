@@ -44,7 +44,7 @@ from ..sql_statements import (
 from .api_utils import QueueFetchResult
 
 log = logging.getLogger("red.cogs.Audio.api.PersistQueueWrapper")
-_ = lambda s: s
+
 
 if TYPE_CHECKING:
     # Audio Imports

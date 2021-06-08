@@ -23,7 +23,6 @@ from ..abc import MixinMeta
 from ..cog_utils import CompositeMetaClass
 
 log = logging.getLogger("red.cogs.Audio.cog.Utilities.local_tracks")
-_ = lambda s: s
 
 
 class LocalTrackUtilities(MixinMeta, metaclass=CompositeMetaClass):
@@ -111,7 +110,7 @@ class LocalTrackUtilities(MixinMeta, metaclass=CompositeMetaClass):
             return True
         elif ctx.invoked_with != "start":
             await self.send_embed_msg(
-                ctx, title=_("Invalid Environment"), description=_("No localtracks folder.")
+                ctx, title="Invalid Environment", description="No localtracks folder."
             )
         return False
 

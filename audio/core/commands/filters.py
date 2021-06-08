@@ -30,7 +30,6 @@ from ..abc import MixinMeta
 from ..cog_utils import CompositeMetaClass
 
 log = logging.getLogger("red.cogs.Audio.cog.Commands.Effects")
-_ = lambda s: s
 
 
 class EffectsCommands(MixinMeta, metaclass=CompositeMetaClass):
@@ -40,7 +39,7 @@ class EffectsCommands(MixinMeta, metaclass=CompositeMetaClass):
     async def command_effects(self, ctx: commands.Context):
         """Control all affects that can be applied to tracks."""
         if not self._player_check(ctx):
-            return await self.send_embed_msg(ctx, title=_("Nothing playing."))
+            return await self.send_embed_msg(ctx, title="Nothing playing.")
 
         player = lavalink.get_player(ctx.guild.id)
         equalizer = player.equalizer
@@ -52,15 +51,15 @@ class EffectsCommands(MixinMeta, metaclass=CompositeMetaClass):
         distortion = player.distortion
         low_pass = player.low_pass
         channel_mix = player.channel_mix
-        t_effect = _("Effect")
-        t_activated = _("State")
-        t_yes = _("Activated")
-        t_no = _("Deactivated")
+        t_effect = "Effect"
+        t_activated = "State"
+        t_yes = "Activated"
+        t_no = "Deactivated"
 
         data = [
             {
                 t_effect: equalizer.__class__.__name__,
-                t_activated: _("Active: {name}").format(name=equalizer.name)
+                t_activated: "Active: {name}".format(name=equalizer.name)
                 if equalizer.changed
                 else t_no,
             }
@@ -85,7 +84,7 @@ class EffectsCommands(MixinMeta, metaclass=CompositeMetaClass):
 
         await self.send_embed_msg(
             ctx,
-            title=_("Here is the music effects status:"),
+            title="Here is the music effects status:",
             description=box(tabulate(data)),
         )
 
@@ -98,7 +97,7 @@ class EffectsCommands(MixinMeta, metaclass=CompositeMetaClass):
         """
         if not self._player_check(ctx):
             ctx.command.reset_cooldown(ctx)
-            return await self.send_embed_msg(ctx, title=_("Nothing playing."))
+            return await self.send_embed_msg(ctx, title="Nothing playing.")
 
         player = lavalink.get_player(ctx.guild.id)
         dj_enabled = await self.config_cache.dj_status.get_context_value(ctx.guild)
@@ -107,15 +106,15 @@ class EffectsCommands(MixinMeta, metaclass=CompositeMetaClass):
             ctx.command.reset_cooldown(ctx)
             return await self.send_embed_msg(
                 ctx,
-                title=_("Unable To Manage Tracks"),
-                description=_("You must be in the voice channel to change effects."),
+                title="Unable To Manage Tracks",
+                description="You must be in the voice channel to change effects.",
             )
         if dj_enabled and not can_skip and not await self.is_requester_alone(ctx):
             ctx.command.reset_cooldown(ctx)
             return await self.send_embed_msg(
                 ctx,
-                title=_("Unable To Manage Tracks"),
-                description=_("You need the DJ role to change effects."),
+                title="Unable To Manage Tracks",
+                description="You need the DJ role to change effects.",
             )
 
         karaoke = player.karaoke
@@ -140,7 +139,7 @@ class EffectsCommands(MixinMeta, metaclass=CompositeMetaClass):
         """
         if not self._player_check(ctx):
             ctx.command.reset_cooldown(ctx)
-            return await self.send_embed_msg(ctx, title=_("Nothing playing."))
+            return await self.send_embed_msg(ctx, title="Nothing playing.")
 
         player = lavalink.get_player(ctx.guild.id)
         dj_enabled = await self.config_cache.dj_status.get_context_value(ctx.guild)
@@ -149,15 +148,15 @@ class EffectsCommands(MixinMeta, metaclass=CompositeMetaClass):
             ctx.command.reset_cooldown(ctx)
             return await self.send_embed_msg(
                 ctx,
-                title=_("Unable To Manage Tracks"),
-                description=_("You must be in the voice channel to change effects."),
+                title="Unable To Manage Tracks",
+                description="You must be in the voice channel to change effects.",
             )
         if dj_enabled and not can_skip and not await self.is_requester_alone(ctx):
             ctx.command.reset_cooldown(ctx)
             return await self.send_embed_msg(
                 ctx,
-                title=_("Unable To Manage Tracks"),
-                description=_("You need the DJ role to change effects."),
+                title="Unable To Manage Tracks",
+                description="You need the DJ role to change effects.",
             )
 
         timescale = player.timescale
@@ -200,7 +199,7 @@ class EffectsCommands(MixinMeta, metaclass=CompositeMetaClass):
         """
         if not self._player_check(ctx):
             ctx.command.reset_cooldown(ctx)
-            return await self.send_embed_msg(ctx, title=_("Nothing playing."))
+            return await self.send_embed_msg(ctx, title="Nothing playing.")
 
         player = lavalink.get_player(ctx.guild.id)
         dj_enabled = await self.config_cache.dj_status.get_context_value(ctx.guild)
@@ -209,15 +208,15 @@ class EffectsCommands(MixinMeta, metaclass=CompositeMetaClass):
             ctx.command.reset_cooldown(ctx)
             return await self.send_embed_msg(
                 ctx,
-                title=_("Unable To Manage Tracks"),
-                description=_("You must be in the voice channel to change effects."),
+                title="Unable To Manage Tracks",
+                description="You must be in the voice channel to change effects.",
             )
         if dj_enabled and not can_skip and not await self.is_requester_alone(ctx):
             ctx.command.reset_cooldown(ctx)
             return await self.send_embed_msg(
                 ctx,
-                title=_("Unable To Manage Tracks"),
-                description=_("You need the DJ role to change effects."),
+                title="Unable To Manage Tracks",
+                description="You need the DJ role to change effects.",
             )
         enabled, settings = user_input
 
@@ -232,8 +231,8 @@ class EffectsCommands(MixinMeta, metaclass=CompositeMetaClass):
                 ctx.command.reset_cooldown(ctx)
                 return await self.send_embed_msg(
                     ctx,
-                    title=_("Unable To Set Effect"),
-                    description=_("Tremolo frequency must be greater than 0."),
+                    title="Unable To Set Effect",
+                    description="Tremolo frequency must be greater than 0.",
                 )
             try:
                 tremolo.depth = depth
@@ -241,8 +240,8 @@ class EffectsCommands(MixinMeta, metaclass=CompositeMetaClass):
                 ctx.command.reset_cooldown(ctx)
                 return await self.send_embed_msg(
                     ctx,
-                    title=_("Unable To Set Effect"),
-                    description=_(
+                    title="Unable To Set Effect",
+                    description=(
                         "Tremolo depth must be greater than 0 and less than or equals to 1."
                     ),
                 )
@@ -262,7 +261,7 @@ class EffectsCommands(MixinMeta, metaclass=CompositeMetaClass):
         """
         if not self._player_check(ctx):
             ctx.command.reset_cooldown(ctx)
-            return await self.send_embed_msg(ctx, title=_("Nothing playing."))
+            return await self.send_embed_msg(ctx, title="Nothing playing.")
 
         player = lavalink.get_player(ctx.guild.id)
         dj_enabled = await self.config_cache.dj_status.get_context_value(ctx.guild)
@@ -271,15 +270,15 @@ class EffectsCommands(MixinMeta, metaclass=CompositeMetaClass):
             ctx.command.reset_cooldown(ctx)
             return await self.send_embed_msg(
                 ctx,
-                title=_("Unable To Manage Tracks"),
-                description=_("You must be in the voice channel to change effects."),
+                title="Unable To Manage Tracks",
+                description="You must be in the voice channel to change effects.",
             )
         if dj_enabled and not can_skip and not await self.is_requester_alone(ctx):
             ctx.command.reset_cooldown(ctx)
             return await self.send_embed_msg(
                 ctx,
-                title=_("Unable To Manage Tracks"),
-                description=_("You need the DJ role to change effects."),
+                title="Unable To Manage Tracks",
+                description="You need the DJ role to change effects.",
             )
         enabled, settings = user_input
 
@@ -295,8 +294,8 @@ class EffectsCommands(MixinMeta, metaclass=CompositeMetaClass):
                 ctx.command.reset_cooldown(ctx)
                 return await self.send_embed_msg(
                     ctx,
-                    title=_("Unable To Set Effect"),
-                    description=_(
+                    title="Unable To Set Effect",
+                    description=(
                         "Vibrato frequency must be greater than 0 and less than or equals to 14."
                     ),
                 )
@@ -306,8 +305,8 @@ class EffectsCommands(MixinMeta, metaclass=CompositeMetaClass):
                 ctx.command.reset_cooldown(ctx)
                 return await self.send_embed_msg(
                     ctx,
-                    title=_("Unable To Set Effect"),
-                    description=_(
+                    title="Unable To Set Effect",
+                    description=(
                         "Vibrato depth must be greater than 0 and less than or equals to 1."
                     ),
                 )
@@ -323,7 +322,7 @@ class EffectsCommands(MixinMeta, metaclass=CompositeMetaClass):
         """
         if not self._player_check(ctx):
             ctx.command.reset_cooldown(ctx)
-            return await self.send_embed_msg(ctx, title=_("Nothing playing."))
+            return await self.send_embed_msg(ctx, title="Nothing playing.")
 
         player = lavalink.get_player(ctx.guild.id)
         dj_enabled = await self.config_cache.dj_status.get_context_value(ctx.guild)
@@ -332,15 +331,15 @@ class EffectsCommands(MixinMeta, metaclass=CompositeMetaClass):
             ctx.command.reset_cooldown(ctx)
             return await self.send_embed_msg(
                 ctx,
-                title=_("Unable To Manage Tracks"),
-                description=_("You must be in the voice channel to change effects."),
+                title="Unable To Manage Tracks",
+                description="You must be in the voice channel to change effects.",
             )
         if dj_enabled and not can_skip and not await self.is_requester_alone(ctx):
             ctx.command.reset_cooldown(ctx)
             return await self.send_embed_msg(
                 ctx,
-                title=_("Unable To Manage Tracks"),
-                description=_("You need the DJ role to change effects."),
+                title="Unable To Manage Tracks",
+                description="You need the DJ role to change effects.",
             )
         enabled, settings = user_input
 
@@ -363,7 +362,7 @@ class EffectsCommands(MixinMeta, metaclass=CompositeMetaClass):
         """Distortion effect. It can generate some pretty unique audio effects."""
         if not self._player_check(ctx):
             ctx.command.reset_cooldown(ctx)
-            return await self.send_embed_msg(ctx, title=_("Nothing playing."))
+            return await self.send_embed_msg(ctx, title="Nothing playing.")
 
         player = lavalink.get_player(ctx.guild.id)
         dj_enabled = await self.config_cache.dj_status.get_context_value(ctx.guild)
@@ -372,15 +371,15 @@ class EffectsCommands(MixinMeta, metaclass=CompositeMetaClass):
             ctx.command.reset_cooldown(ctx)
             return await self.send_embed_msg(
                 ctx,
-                title=_("Unable To Manage Tracks"),
-                description=_("You must be in the voice channel to change effects."),
+                title="Unable To Manage Tracks",
+                description="You must be in the voice channel to change effects.",
             )
         if dj_enabled and not can_skip and not await self.is_requester_alone(ctx):
             ctx.command.reset_cooldown(ctx)
             return await self.send_embed_msg(
                 ctx,
-                title=_("Unable To Manage Tracks"),
-                description=_("You need the DJ role to change effects."),
+                title="Unable To Manage Tracks",
+                description="You need the DJ role to change effects.",
             )
 
         distortion = player.distortion
@@ -413,7 +412,7 @@ class EffectsCommands(MixinMeta, metaclass=CompositeMetaClass):
         """
         if not self._player_check(ctx):
             ctx.command.reset_cooldown(ctx)
-            return await self.send_embed_msg(ctx, title=_("Nothing playing."))
+            return await self.send_embed_msg(ctx, title="Nothing playing.")
 
         player = lavalink.get_player(ctx.guild.id)
         dj_enabled = await self.config_cache.dj_status.get_context_value(ctx.guild)
@@ -422,15 +421,15 @@ class EffectsCommands(MixinMeta, metaclass=CompositeMetaClass):
             ctx.command.reset_cooldown(ctx)
             return await self.send_embed_msg(
                 ctx,
-                title=_("Unable To Manage Tracks"),
-                description=_("You must be in the voice channel to change effects."),
+                title="Unable To Manage Tracks",
+                description="You must be in the voice channel to change effects.",
             )
         if dj_enabled and not can_skip and not await self.is_requester_alone(ctx):
             ctx.command.reset_cooldown(ctx)
             return await self.send_embed_msg(
                 ctx,
-                title=_("Unable To Manage Tracks"),
-                description=_("You need the DJ role to change effects."),
+                title="Unable To Manage Tracks",
+                description="You need the DJ role to change effects.",
             )
 
         channel_mix = player.channel_mix
@@ -456,7 +455,7 @@ class EffectsCommands(MixinMeta, metaclass=CompositeMetaClass):
         """
         if not self._player_check(ctx):
             ctx.command.reset_cooldown(ctx)
-            return await self.send_embed_msg(ctx, title=_("Nothing playing."))
+            return await self.send_embed_msg(ctx, title="Nothing playing.")
 
         player = lavalink.get_player(ctx.guild.id)
         dj_enabled = await self.config_cache.dj_status.get_context_value(ctx.guild)
@@ -465,15 +464,15 @@ class EffectsCommands(MixinMeta, metaclass=CompositeMetaClass):
             ctx.command.reset_cooldown(ctx)
             return await self.send_embed_msg(
                 ctx,
-                title=_("Unable To Manage Tracks"),
-                description=_("You must be in the voice channel to change effects."),
+                title="Unable To Manage Tracks",
+                description="You must be in the voice channel to change effects.",
             )
         if dj_enabled and not can_skip and not await self.is_requester_alone(ctx):
             ctx.command.reset_cooldown(ctx)
             return await self.send_embed_msg(
                 ctx,
-                title=_("Unable To Manage Tracks"),
-                description=_("You need the DJ role to change effects."),
+                title="Unable To Manage Tracks",
+                description="You need the DJ role to change effects.",
             )
 
         low_pass = player.low_pass
@@ -507,7 +506,7 @@ class EffectsCommands(MixinMeta, metaclass=CompositeMetaClass):
         """Reset all effects."""
         if not self._player_check(ctx):
             ctx.command.reset_cooldown(ctx)
-            return await self.send_embed_msg(ctx, title=_("Nothing playing."))
+            return await self.send_embed_msg(ctx, title="Nothing playing.")
 
         player = lavalink.get_player(ctx.guild.id)
         dj_enabled = await self.config_cache.dj_status.get_context_value(ctx.guild)
@@ -516,15 +515,15 @@ class EffectsCommands(MixinMeta, metaclass=CompositeMetaClass):
             ctx.command.reset_cooldown(ctx)
             return await self.send_embed_msg(
                 ctx,
-                title=_("Unable To Manage Tracks"),
-                description=_("You must be in the voice channel to change effects."),
+                title="Unable To Manage Tracks",
+                description="You must be in the voice channel to change effects.",
             )
         if dj_enabled and not can_skip and not await self.is_requester_alone(ctx):
             ctx.command.reset_cooldown(ctx)
             return await self.send_embed_msg(
                 ctx,
-                title=_("Unable To Manage Tracks"),
-                description=_("You need the DJ role to change effects."),
+                title="Unable To Manage Tracks",
+                description="You need the DJ role to change effects.",
             )
 
         player.equalizer.reset()
@@ -549,7 +548,7 @@ class EffectsCommands(MixinMeta, metaclass=CompositeMetaClass):
         Not suitable for tracks with Deep/Low Bass."""
         if not self._player_check(ctx):
             ctx.command.reset_cooldown(ctx)
-            return await self.send_embed_msg(ctx, title=_("Nothing playing."))
+            return await self.send_embed_msg(ctx, title="Nothing playing.")
 
         player = lavalink.get_player(ctx.guild.id)
         dj_enabled = await self.config_cache.dj_status.get_context_value(ctx.guild)
@@ -558,15 +557,15 @@ class EffectsCommands(MixinMeta, metaclass=CompositeMetaClass):
             ctx.command.reset_cooldown(ctx)
             return await self.send_embed_msg(
                 ctx,
-                title=_("Unable To Manage Tracks"),
-                description=_("You must be in the voice channel to apply effects."),
+                title="Unable To Manage Tracks",
+                description="You must be in the voice channel to apply effects.",
             )
         if dj_enabled and not can_skip and not await self.is_requester_alone(ctx):
             ctx.command.reset_cooldown(ctx)
             return await self.send_embed_msg(
                 ctx,
-                title=_("Unable To Manage Tracks"),
-                description=_("You need the DJ role to apply effects."),
+                title="Unable To Manage Tracks",
+                description="You need the DJ role to apply effects.",
             )
         eq = Equalizer.boost()
 
@@ -586,7 +585,7 @@ class EffectsCommands(MixinMeta, metaclass=CompositeMetaClass):
         Could also be used as a Bass Cutoff."""
         if not self._player_check(ctx):
             ctx.command.reset_cooldown(ctx)
-            return await self.send_embed_msg(ctx, title=_("Nothing playing."))
+            return await self.send_embed_msg(ctx, title="Nothing playing.")
 
         player = lavalink.get_player(ctx.guild.id)
         dj_enabled = await self.config_cache.dj_status.get_context_value(ctx.guild)
@@ -595,15 +594,15 @@ class EffectsCommands(MixinMeta, metaclass=CompositeMetaClass):
             ctx.command.reset_cooldown(ctx)
             return await self.send_embed_msg(
                 ctx,
-                title=_("Unable To Manage Tracks"),
-                description=_("You must be in the voice channel to apply effects."),
+                title="Unable To Manage Tracks",
+                description="You must be in the voice channel to apply effects.",
             )
         if dj_enabled and not can_skip and not await self.is_requester_alone(ctx):
             ctx.command.reset_cooldown(ctx)
             return await self.send_embed_msg(
                 ctx,
-                title=_("Unable To Manage Tracks"),
-                description=_("You need the DJ role to apply effectss."),
+                title="Unable To Manage Tracks",
+                description="You need the DJ role to apply effectss.",
             )
 
         eq = Equalizer.piano()
@@ -624,7 +623,7 @@ class EffectsCommands(MixinMeta, metaclass=CompositeMetaClass):
         Expect clipping on Bassy songs."""
         if not self._player_check(ctx):
             ctx.command.reset_cooldown(ctx)
-            return await self.send_embed_msg(ctx, title=_("Nothing playing."))
+            return await self.send_embed_msg(ctx, title="Nothing playing.")
 
         player = lavalink.get_player(ctx.guild.id)
         dj_enabled = await self.config_cache.dj_status.get_context_value(ctx.guild)
@@ -633,15 +632,15 @@ class EffectsCommands(MixinMeta, metaclass=CompositeMetaClass):
             ctx.command.reset_cooldown(ctx)
             return await self.send_embed_msg(
                 ctx,
-                title=_("Unable To Manage Tracks"),
-                description=_("You must be in the voice channel to apply effects."),
+                title="Unable To Manage Tracks",
+                description="You must be in the voice channel to apply effects.",
             )
         if dj_enabled and not can_skip and not await self.is_requester_alone(ctx):
             ctx.command.reset_cooldown(ctx)
             return await self.send_embed_msg(
                 ctx,
-                title=_("Unable To Manage Tracks"),
-                description=_("You need the DJ role to apply effects."),
+                title="Unable To Manage Tracks",
+                description="You need the DJ role to apply effects.",
             )
 
         eq = Equalizer.metal()
@@ -662,7 +661,7 @@ class EffectsCommands(MixinMeta, metaclass=CompositeMetaClass):
         """Toggle the nightcore effect."""
         if not self._player_check(ctx):
             ctx.command.reset_cooldown(ctx)
-            return await self.send_embed_msg(ctx, title=_("Nothing playing."))
+            return await self.send_embed_msg(ctx, title="Nothing playing.")
 
         player = lavalink.get_player(ctx.guild.id)
         dj_enabled = await self.config_cache.dj_status.get_context_value(ctx.guild)
@@ -671,15 +670,15 @@ class EffectsCommands(MixinMeta, metaclass=CompositeMetaClass):
             ctx.command.reset_cooldown(ctx)
             return await self.send_embed_msg(
                 ctx,
-                title=_("Unable To Manage Tracks"),
-                description=_("You must be in the voice channel to apply effects."),
+                title="Unable To Manage Tracks",
+                description="You must be in the voice channel to apply effects.",
             )
         if dj_enabled and not can_skip and not await self.is_requester_alone(ctx):
             ctx.command.reset_cooldown(ctx)
             return await self.send_embed_msg(
                 ctx,
-                title=_("Unable To Manage Tracks"),
-                description=_("You need the DJ role to apply effects."),
+                title="Unable To Manage Tracks",
+                description="You need the DJ role to apply effects.",
             )
         eq = filters.Equalizer(
             levels=[
@@ -721,7 +720,7 @@ class EffectsCommands(MixinMeta, metaclass=CompositeMetaClass):
         """Toggle the vaporwave effect."""
         if not self._player_check(ctx):
             ctx.command.reset_cooldown(ctx)
-            return await self.send_embed_msg(ctx, title=_("Nothing playing."))
+            return await self.send_embed_msg(ctx, title="Nothing playing.")
 
         player = lavalink.get_player(ctx.guild.id)
         dj_enabled = await self.config_cache.dj_status.get_context_value(ctx.guild)
@@ -730,15 +729,15 @@ class EffectsCommands(MixinMeta, metaclass=CompositeMetaClass):
             ctx.command.reset_cooldown(ctx)
             return await self.send_embed_msg(
                 ctx,
-                title=_("Unable To Manage Tracks"),
-                description=_("You must be in the voice channel to apply effects."),
+                title="Unable To Manage Tracks",
+                description="You must be in the voice channel to apply effects.",
             )
         if dj_enabled and not can_skip and not await self.is_requester_alone(ctx):
             ctx.command.reset_cooldown(ctx)
             return await self.send_embed_msg(
                 ctx,
-                title=_("Unable To Manage Tracks"),
-                description=_("You need the DJ role to apply effects."),
+                title="Unable To Manage Tracks",
+                description="You need the DJ role to apply effects.",
             )
         eq = filters.Equalizer(
             levels=[
@@ -784,7 +783,7 @@ class EffectsCommands(MixinMeta, metaclass=CompositeMetaClass):
         """Toggle the synth effect."""
         if not self._player_check(ctx):
             ctx.command.reset_cooldown(ctx)
-            return await self.send_embed_msg(ctx, title=_("Nothing playing."))
+            return await self.send_embed_msg(ctx, title="Nothing playing.")
 
         player = lavalink.get_player(ctx.guild.id)
         dj_enabled = await self.config_cache.dj_status.get_context_value(ctx.guild)
@@ -793,15 +792,15 @@ class EffectsCommands(MixinMeta, metaclass=CompositeMetaClass):
             ctx.command.reset_cooldown(ctx)
             return await self.send_embed_msg(
                 ctx,
-                title=_("Unable To Manage Tracks"),
-                description=_("You must be in the voice channel to apply effects."),
+                title="Unable To Manage Tracks",
+                description="You must be in the voice channel to apply effects.",
             )
         if dj_enabled and not can_skip and not await self.is_requester_alone(ctx):
             ctx.command.reset_cooldown(ctx)
             return await self.send_embed_msg(
                 ctx,
-                title=_("Unable To Manage Tracks"),
-                description=_("You need the DJ role to apply effects."),
+                title="Unable To Manage Tracks",
+                description="You need the DJ role to apply effects.",
             )
         eq = filters.Equalizer(
             levels=[

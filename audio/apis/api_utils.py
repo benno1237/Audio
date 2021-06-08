@@ -29,7 +29,6 @@ from ..errors import InvalidPlaylistScope, MissingAuthor, MissingGuild
 from ..utils import PlaylistScope
 
 log = logging.getLogger("red.cogs.Audio.api.utils")
-_ = lambda s: s
 
 
 @dataclass

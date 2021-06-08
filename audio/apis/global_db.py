@@ -35,7 +35,7 @@ if TYPE_CHECKING:
     from ..core.utilities import SettingCacheManager
 
 _API_URL = "https://api.redbot.app/"
-_ = lambda s: s
+
 log = logging.getLogger("red.cogs.Audio.api.GlobalDB")
 
 

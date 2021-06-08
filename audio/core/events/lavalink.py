@@ -24,8 +24,6 @@ from ..cog_utils import CompositeMetaClass
 log = logging.getLogger("red.cogs.Audio.cog.Events.lavalink")
 ws_audio_log = logging.getLogger("red.Audio.WS.Audio")
 
-_ = lambda s: s
-
 
 class LavalinkEvents(MixinMeta, metaclass=CompositeMetaClass):
     async def lavalink_update_handler(
@@ -151,7 +149,7 @@ class LavalinkEvents(MixinMeta, metaclass=CompositeMetaClass):
                     notify_channel = self.bot.get_channel(notify_channel_id)
                     if notify_channel and self._has_notify_perms(notify_channel):
                         await self.send_embed_msg(
-                            notify_channel, title=_("Couldn't get a valid track.")
+                            notify_channel, title="Couldn't get a valid track."
                         )
                     return
                 except TrackEnqueueError:
@@ -159,8 +157,8 @@ class LavalinkEvents(MixinMeta, metaclass=CompositeMetaClass):
                     if notify_channel and self._has_notify_perms(notify_channel):
                         await self.send_embed_msg(
                             notify_channel,
-                            title=_("Unable to Get Track"),
-                            description=_(
+                            title="Unable to Get Track",
+                            description=(
                                 "I'm unable to get a track from Lavalink at the moment, try again in a few "
                                 "minutes."
                             ),
@@ -189,13 +187,13 @@ class LavalinkEvents(MixinMeta, metaclass=CompositeMetaClass):
 
                 description = "{description}\n{extra}".format(
                     description=description,
-                    extra=_("Track length: **{length}**\nRequested by: {user.mention}").format(
+                    extra="Track length: **{length}**\nRequested by: {user.mention}".format(
                         length=dur, user=current_requester
                     ),
                 )
                 notify_message = await self.send_embed_msg(
                     notify_channel,
-                    title=_("Now Playing"),
+                    title="Now Playing",
                     description=description,
                     thumbnail=thumb,
                 )
@@ -215,7 +213,7 @@ class LavalinkEvents(MixinMeta, metaclass=CompositeMetaClass):
                 notify_channel_id = player.fetch("notify_channel")
                 notify_channel = self.bot.get_channel(notify_channel_id)
                 if notify_channel and notify and self._has_notify_perms(notify_channel):
-                    await self.send_embed_msg(notify_channel, title=_("Queue ended."))
+                    await self.send_embed_msg(notify_channel, title="Queue ended.")
                 if disconnect:
                     self.bot.dispatch("red_audio_audio_disconnect", guild)
                     await self.config_cache.autoplay.set_currently_in_guild(guild)
@@ -263,8 +261,8 @@ class LavalinkEvents(MixinMeta, metaclass=CompositeMetaClass):
                 if early_exit:
                     embed = discord.Embed(
                         colour=await self.bot.get_embed_color(message_channel),
-                        title=_("Multiple Errors Detected"),
-                        description=_(
+                        title="Multiple Errors Detected",
+                        description=(
                             "Closing the audio player "
                             "due to multiple errors being detected. "
                             "If this persists, please inform the bot owner "
@@ -278,8 +276,8 @@ class LavalinkEvents(MixinMeta, metaclass=CompositeMetaClass):
                     if event_type == lavalink.LavalinkEvents.TRACK_STUCK:
                         embed = discord.Embed(
                             colour=await self.bot.get_embed_color(message_channel),
-                            title=_("Track Stuck"),
-                            description=_(
+                            title="Track Stuck",
+                            description=(
                                 "Playback of the song has stopped due to an unexpected error.\n{error}"
                             ).format(error=description),
                         )
@@ -294,7 +292,7 @@ class LavalinkEvents(MixinMeta, metaclass=CompositeMetaClass):
                                 song.track_identifier,
                             )
                         embed = discord.Embed(
-                            title=_("Track Error"),
+                            title="Track Error",
                             colour=await self.bot.get_embed_color(message_channel),
                             description="{}\n{}".format(error, description),
                         )

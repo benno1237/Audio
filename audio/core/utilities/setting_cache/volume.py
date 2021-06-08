@@ -10,8 +10,6 @@ import discord
 # Audio Imports
 from .abc import CacheBase
 
-_ = lambda s: s
-
 
 class VolumeManager(CacheBase):
     __slots__ = (
@@ -119,11 +117,11 @@ class VolumeManager(CacheBase):
 
         mininum = min(global_value, guild_value, channel_value)
         restrictor = (
-            _("server")
+            "server"
             if mininum == guild_value
-            else _("channel")
+            else "channel"
             if mininum == channel_value
-            else _("global")
+            else "global"
         )
         return mininum, restrictor
 

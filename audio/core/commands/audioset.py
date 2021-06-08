@@ -45,8 +45,6 @@ from ..cog_utils import (
 
 log = logging.getLogger("red.cogs.Audio.cog.Commands.audioset")
 
-_ = lambda s: s
-
 
 class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
     @commands.group(name="audioset")
@@ -67,17 +65,15 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         if not 10 < volume < 500:
             await self.send_embed_msg(
                 ctx,
-                title=_("Invalid Setting"),
-                description=_("Maximum allowed volume has to be between 10% and 500%.").format(
-                    volume=volume
-                ),
+                title="Invalid Setting",
+                description="Maximum allowed volume has to be between 10% and 500%.",
             )
             return
         await self.config_cache.volume.set_global(volume)
         await self.send_embed_msg(
             ctx,
-            title=_("Setting Changed"),
-            description=_("Maximum allowed volume set to: {volume}%.").format(volume=volume),
+            title="Setting Changed",
+            description="Maximum allowed volume set to: {volume}%.".format(volume=volume),
         )
 
     @command_audioset_global.command(name="dailyqueue")
@@ -92,8 +88,8 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         await self.config_cache.daily_playlist.set_global(not daily_playlists)
         await self.send_embed_msg(
             ctx,
-            title=_("Setting Changed"),
-            description=_("Global Daily queues: {true_or_false}.").format(
+            title="Setting Changed",
+            description="Global Daily queues: {true_or_false}.".format(
                 true_or_false=ENABLED_TITLE if not daily_playlists else DISABLED_TITLE
             ),
         )
@@ -109,8 +105,8 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         await self.config_cache.daily_playlist.set_global(not daily_playlists)
         await self.send_embed_msg(
             ctx,
-            title=_("Setting Changed"),
-            description=_("Global track announcement: {true_or_false}.").format(
+            title="Setting Changed",
+            description="Global track announcement: {true_or_false}.".format(
                 true_or_false=ENABLED_TITLE if not daily_playlists else DISABLED_TITLE
             ),
         )
@@ -125,8 +121,8 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         await self.config_cache.auto_deafen.set_global(not auto_deafen)
         await self.send_embed_msg(
             ctx,
-            title=_("Setting Changed"),
-            description=_("Auto Deafen: {true_or_false}.").format(
+            title="Setting Changed",
+            description="Auto Deafen: {true_or_false}.".format(
                 true_or_false=ENABLED_TITLE if not auto_deafen else DISABLED_TITLE
             ),
         )
@@ -141,21 +137,21 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         """
         if seconds < 0:
             return await self.send_embed_msg(
-                ctx, title=_("Invalid Time"), description=_("Seconds can't be less than zero.")
+                ctx, title="Invalid Time", description="Seconds can't be less than zero."
             )
         if 10 > seconds > 0:
             seconds = 10
         if seconds == 0:
             enabled = False
             await self.send_embed_msg(
-                ctx, title=_("Setting Changed"), description=_("Global empty disconnect disabled.")
+                ctx, title="Setting Changed", description="Global empty disconnect disabled."
             )
         else:
             enabled = True
             await self.send_embed_msg(
                 ctx,
-                title=_("Setting Changed"),
-                description=_("Global empty disconnect timer set to {num_seconds}.").format(
+                title="Setting Changed",
+                description="Global empty disconnect timer set to {num_seconds}.".format(
                     num_seconds=self.get_time_string(seconds)
                 ),
             )
@@ -170,21 +166,21 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         """
         if seconds < 0:
             return await self.send_embed_msg(
-                ctx, title=_("Invalid Time"), description=_("Seconds can't be less than zero.")
+                ctx, title="Invalid Time", description="Seconds can't be less than zero."
             )
         if 10 > seconds > 0:
             seconds = 10
         if seconds == 0:
             enabled = False
             await self.send_embed_msg(
-                ctx, title=_("Setting Changed"), description=_("Global empty pause disabled.")
+                ctx, title="Setting Changed", description="Global empty pause disabled."
             )
         else:
             enabled = True
             await self.send_embed_msg(
                 ctx,
-                title=_("Setting Changed"),
-                description=_("Global empty pause timer set to {num_seconds}.").format(
+                title="Setting Changed",
+                description="Global empty pause timer set to {num_seconds}.".format(
                     num_seconds=self.get_time_string(seconds)
                 ),
             )
@@ -201,8 +197,8 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         await self.config_cache.prefer_lyrics.set_global(not prefer_lyrics)
         await self.send_embed_msg(
             ctx,
-            title=_("Setting Changed"),
-            description=_("Prefer tracks with lyrics globally: {true_or_false}.").format(
+            title="Setting Changed",
+            description="Prefer tracks with lyrics globally: {true_or_false}.".format(
                 true_or_false=ENABLED_TITLE if not prefer_lyrics else DISABLED_TITLE
             ),
         )
@@ -217,12 +213,12 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         """
         disconnect = await self.config_cache.disconnect.get_global()
         msg = ""
-        msg += _("Global auto-disconnection at queue end: {true_or_false}.").format(
+        msg += "Global auto-disconnection at queue end: {true_or_false}.".format(
             true_or_false=ENABLED_TITLE if not disconnect else DISABLED_TITLE
         )
         await self.config_cache.disconnect.set_global(not disconnect)
 
-        await self.send_embed_msg(ctx, title=_("Setting Changed"), description=msg)
+        await self.send_embed_msg(ctx, title="Setting Changed", description=msg)
 
     @command_audioset_global.command(name="jukebox")
     async def command_audioset_global_jukebox(self, ctx: commands.Context, price: int):
@@ -236,8 +232,8 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
             await self.config_cache.jukebox_price.set_global(0)
             return await self.send_embed_msg(
                 ctx,
-                title=_("Setting Not Changed"),
-                description=_(
+                title="Setting Not Changed",
+                description=(
                     "Jukebox Mode: {true_or_false}\n"
                     "Price per command: {cost} {currency}\n"
                     "\n\n**Reason**: You cannot enable this feature if the bank isn't global\n"
@@ -253,26 +249,26 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         if price < 0:
             return await self.send_embed_msg(
                 ctx,
-                title=_("Invalid Price"),
-                description=_("Price can't be less than zero."),
+                title="Invalid Price",
+                description="Price can't be less than zero.",
             )
         elif price > 2 ** 63 - 1:
             return await self.send_embed_msg(
                 ctx,
-                title=_("Invalid Price"),
-                description=_("Price can't be greater or equal to than 2^63."),
+                title="Invalid Price",
+                description="Price can't be greater or equal to than 2^63.",
             )
         elif price == 0:
             jukebox = False
             await self.send_embed_msg(
-                ctx, title=_("Setting Changed"), description=_("Global jukebox mode disabled.")
+                ctx, title="Setting Changed", description="Global jukebox mode disabled."
             )
         else:
             jukebox = True
             await self.send_embed_msg(
                 ctx,
-                title=_("Setting Changed"),
-                description=_(
+                title="Setting Changed",
+                description=(
                     "Global track queueing command price set to {price} {currency}."
                 ).format(
                     price=humanize_number(price), currency=await bank.get_currency_name(ctx.guild)
@@ -295,17 +291,17 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
             seconds = self.time_convert(seconds)
         if seconds < 0:
             return await self.send_embed_msg(
-                ctx, title=_("Invalid length"), description=_("Length can't be less than zero.")
+                ctx, title="Invalid length", description="Length can't be less than zero."
             )
         if seconds == 0:
             await self.send_embed_msg(
-                ctx, title=_("Setting Changed"), description=_("Global track max length disabled.")
+                ctx, title="Setting Changed", description="Global track max length disabled."
             )
         else:
             await self.send_embed_msg(
                 ctx,
-                title=_("Setting Changed"),
-                description=_("Global track max length set to {seconds}.").format(
+                title="Setting Changed",
+                description="Global track max length set to {seconds}.".format(
                     seconds=self.get_time_string(seconds)
                 ),
             )
@@ -320,15 +316,15 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         if not 10 < size < 20_000:
             return await self.send_embed_msg(
                 ctx,
-                title=_("Invalid Queue Size"),
-                description=_("Queue size must bet between 10 and {cap}.").format(
+                title="Invalid Queue Size",
+                description="Queue size must bet between 10 and {cap}.".format(
                     cap=humanize_number(20_000)
                 ),
             )
         await self.send_embed_msg(
             ctx,
-            title=_("Setting Changed"),
-            description=_("Maximum queue size allowed is now {size}.").format(
+            title="Setting Changed",
+            description="Maximum queue size allowed is now {size}.".format(
                 size=humanize_number(size)
             ),
         )
@@ -344,8 +340,8 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         await self.config_cache.thumbnail.set_global(not thumbnail)
         await self.send_embed_msg(
             ctx,
-            title=_("Setting Changed"),
-            description=_("Global thumbnail display: {true_or_false}.").format(
+            title="Setting Changed",
+            description="Global thumbnail display: {true_or_false}.".format(
                 true_or_false=ENABLED_TITLE if not thumbnail else DISABLED_TITLE
             ),
         )
@@ -359,8 +355,8 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         if len(country) != 2:
             return await self.send_embed_msg(
                 ctx,
-                title=_("Invalid Country Code"),
-                description=_(
+                title="Invalid Country Code",
+                description=(
                     "Please use an official [ISO 3166-1 alpha-2]"
                     "(https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) code."
                 ),
@@ -368,8 +364,8 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         country = country.upper()
         await self.send_embed_msg(
             ctx,
-            title=_("Setting Changed"),
-            description=_("Global country Code set to {country}.").format(country=country),
+            title="Setting Changed",
+            description="Global country Code set to {country}.".format(country=country),
         )
 
         await self.config_cache.country_code.set_global(country)
@@ -386,8 +382,8 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         await self.config_cache.persistent_queue.set_global(not persist_cache)
         await self.send_embed_msg(
             ctx,
-            title=_("Setting Changed"),
-            description=_("Global queue persistence: {true_or_false}.").format(
+            title="Setting Changed",
+            description="Global queue persistence: {true_or_false}.".format(
                 true_or_false=ENABLED_TITLE if not persist_cache else DISABLED_TITLE
             ),
         )
@@ -408,8 +404,8 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         await self.config_cache.blacklist_whitelist.add_to_whitelist(None, {keyword})
         return await self.send_embed_msg(
             ctx,
-            title=_("Allowlist Modified"),
-            description=_("Added `{whitelisted}` to the allowlist.").format(whitelisted=keyword),
+            title="Allowlist Modified",
+            description="Added `{whitelisted}` to the allowlist.".format(whitelisted=keyword),
         )
 
     @command_audioset_global_whitelist.command(name="list", aliases=["show"])
@@ -419,7 +415,7 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         whitelist = await self.config_cache.blacklist_whitelist.get_context_whitelist(None)
 
         if not whitelist:
-            return await self.send_embed_msg(ctx, title=_("Nothing in the allowlist."))
+            return await self.send_embed_msg(ctx, title="Nothing in the allowlist.")
         whitelist = sorted(whitelist)
         text = ""
         total = len(whitelist)
@@ -435,7 +431,7 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
                 pages.append(box(text, lang="ini"))
         embed_colour = await ctx.embed_colour()
         pages = list(
-            discord.Embed(title=_("Global Allowlist"), description=page, colour=embed_colour)
+            discord.Embed(title="Global Allowlist", description=page, colour=embed_colour)
             for page in pages
         )
         await menu(ctx, pages, DEFAULT_CONTROLS)
@@ -445,12 +441,12 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         """Clear all keywords from the allowlist."""
         whitelist = await self.config_cache.blacklist_whitelist.get_whitelist(None)
         if not whitelist:
-            return await self.send_embed_msg(ctx, title=_("Nothing in the allowlist."))
+            return await self.send_embed_msg(ctx, title="Nothing in the allowlist.")
         await self.config_cache.blacklist_whitelist.clear_whitelist()
         return await self.send_embed_msg(
             ctx,
-            title=_("Allowlist Modified"),
-            description=_("All entries have been removed from the allowlist."),
+            title="Allowlist Modified",
+            description="All entries have been removed from the allowlist.",
         )
 
     @command_audioset_global_whitelist.command(name="delete", aliases=["del", "remove"])
@@ -464,10 +460,8 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         await self.config_cache.blacklist_whitelist.remove_from_whitelist(None, {keyword})
         return await self.send_embed_msg(
             ctx,
-            title=_("Allowlist Modified"),
-            description=_("Removed `{whitelisted}` from the allowlist.").format(
-                whitelisted=keyword
-            ),
+            title="Allowlist Modified",
+            description="Removed `{whitelisted}` from the allowlist.".format(whitelisted=keyword),
         )
 
     @command_audioset_global.group(
@@ -485,8 +479,8 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         await self.config_cache.blacklist_whitelist.add_to_blacklist(None, {keyword})
         return await self.send_embed_msg(
             ctx,
-            title=_("Denylist Modified"),
-            description=_("Added `{blacklisted}` to the denylist.").format(blacklisted=keyword),
+            title="Denylist Modified",
+            description="Added `{blacklisted}` to the denylist.".format(blacklisted=keyword),
         )
 
     @command_audioset_global_blacklist.command(name="list", aliases=["show"])
@@ -495,7 +489,7 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         """List all keywords added to the denylist."""
         blacklist = await self.config_cache.blacklist_whitelist.get_context_blacklist(None)
         if not blacklist:
-            return await self.send_embed_msg(ctx, title=_("Nothing in the denylist."))
+            return await self.send_embed_msg(ctx, title="Nothing in the denylist.")
         blacklist = sorted(blacklist)
         text = ""
         total = len(blacklist)
@@ -511,7 +505,7 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
                 pages.append(box(text, lang="ini"))
         embed_colour = await ctx.embed_colour()
         pages = list(
-            discord.Embed(title=_("Global Denylist"), description=page, colour=embed_colour)
+            discord.Embed(title="Global Denylist", description=page, colour=embed_colour)
             for page in pages
         )
         await menu(ctx, pages, DEFAULT_CONTROLS)
@@ -521,12 +515,12 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         """Clear all keywords added to the denylist."""
         blacklist = await self.config_cache.blacklist_whitelist.get_blacklist(None)
         if not blacklist:
-            return await self.send_embed_msg(ctx, title=_("Nothing in the denylist."))
+            return await self.send_embed_msg(ctx, title="Nothing in the denylist.")
         await self.config_cache.blacklist_whitelist.clear_blacklist(None)
         return await self.send_embed_msg(
             ctx,
-            title=_("Denylist Modified"),
-            description=_("All entries have been removed from the denylist."),
+            title="Denylist Modified",
+            description="All entries have been removed from the denylist.",
         )
 
     @command_audioset_global_blacklist.command(name="delete", aliases=["del", "remove"])
@@ -540,10 +534,8 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         await self.config_cache.blacklist_whitelist.remove_from_blacklist(None, {keyword})
         return await self.send_embed_msg(
             ctx,
-            title=_("Denylist Modified"),
-            description=_("Removed `{blacklisted}` from the denylist.").format(
-                blacklisted=keyword
-            ),
+            title="Denylist Modified",
+            description="Removed `{blacklisted}` from the denylist.".format(blacklisted=keyword),
         )
 
     @command_audioset_global.command(name="restrict")
@@ -557,8 +549,8 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         await self.config_cache.url_restrict.set_global(not restrict)
         await self.send_embed_msg(
             ctx,
-            title=_("Setting Changed"),
-            description=_("Commercial links only globally: {true_or_false}.").format(
+            title="Setting Changed",
+            description="Commercial links only globally: {true_or_false}.".format(
                 true_or_false=ENABLED_TITLE if not restrict else DISABLED_TITLE
             ),
         )
@@ -570,8 +562,8 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         await self.config_cache.status.set_global(not status)
         await self.send_embed_msg(
             ctx,
-            title=_("Setting Changed"),
-            description=_("Song titles as status: {true_or_false}.").format(
+            title="Setting Changed",
+            description="Song titles as status: {true_or_false}.".format(
                 true_or_false=ENABLED_TITLE if not status else DISABLED_TITLE
             ),
         )
@@ -600,20 +592,18 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
 
         if level is None:
             msg = (
-                _("Max age:          [{max_age}]\n")
-                + _("Spotify cache:    [{spotify_status}]\n")
-                + _("Youtube cache:    [{youtube_status}]\n")
-                + _("Lavalink cache:   [{lavalink_status}]\n")
+                "Max age:          [{max_age}]\n"
+                + "Spotify cache:    [{spotify_status}]\n"
+                + "Youtube cache:    [{youtube_status}]\n"
+                + "Lavalink cache:   [{lavalink_status}]\n"
             ).format(
-                max_age=str(await self.config_cache.local_cache_age.get_global())
-                + " "
-                + _("days"),
+                max_age=str(await self.config_cache.local_cache_age.get_global()) + " " + "days",
                 spotify_status=ENABLED_TITLE if has_spotify_cache else DISABLED_TITLE,
                 youtube_status=ENABLED_TITLE if has_youtube_cache else DISABLED_TITLE,
                 lavalink_status=ENABLED_TITLE if has_lavalink_cache else DISABLED_TITLE,
             )
             await self.send_embed_msg(
-                ctx, title=_("Cache Settings"), description=box(msg, lang="ini"), no_embed=True
+                ctx, title="Cache Settings", description=box(msg, lang="ini"), no_embed=True
             )
             return await ctx.send_help()
         if level not in [5, 3, 2, 1, 0, -1, -2, -3]:
@@ -647,19 +637,19 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         has_youtube_cache = newcache.is_superset(youtube_cache)
         has_lavalink_cache = newcache.is_superset(lavalink_cache)
         msg = (
-            _("Max age:          [{max_age}]\n")
-            + _("Spotify cache:    [{spotify_status}]\n")
-            + _("Youtube cache:    [{youtube_status}]\n")
-            + _("Lavalink cache:   [{lavalink_status}]\n")
+            "Max age:          [{max_age}]\n"
+            + "Spotify cache:    [{spotify_status}]\n"
+            + "Youtube cache:    [{youtube_status}]\n"
+            + "Lavalink cache:   [{lavalink_status}]\n"
         ).format(
-            max_age=str(await self.config_cache.local_cache_age.get_global()) + " " + _("days"),
+            max_age=str(await self.config_cache.local_cache_age.get_global()) + " " + "days",
             spotify_status=ENABLED_TITLE if has_spotify_cache else DISABLED_TITLE,
             youtube_status=ENABLED_TITLE if has_youtube_cache else DISABLED_TITLE,
             lavalink_status=ENABLED_TITLE if has_lavalink_cache else DISABLED_TITLE,
         )
 
         await self.send_embed_msg(
-            ctx, title=_("Cache Settings"), description=box(msg, lang="ini"), no_embed=True
+            ctx, title="Cache Settings", description=box(msg, lang="ini"), no_embed=True
         )
         await self.config_cache.local_cache_level.set_global(newcache.value)
 
@@ -672,14 +662,14 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         """
         msg = ""
         if age < 7:
-            msg = _(
+            msg = (
                 "Cache age cannot be less than 7 days. If you wish to disable it run "
                 "{prefix}audioset cache.\n"
             ).format(prefix=ctx.prefix)
             age = 7
-        msg += _("I've set the cache age to {age} days").format(age=age)
+        msg += "I've set the cache age to {age} days".format(age=age)
         await self.config_cache.local_cache_age.set_global(age)
-        await self.send_embed_msg(ctx, title=_("Setting Changed"), description=msg)
+        await self.send_embed_msg(ctx, title="Setting Changed", description=msg)
 
     @command_audioset_global.group(name="globalapi")
     async def command_audioset_global_globalapi(self, ctx: commands.Context):
@@ -696,8 +686,8 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         if not state:  # Ensure a call is made if the API is enabled to update user perms
             self.global_api_user = await self.api_interface.global_cache_api.get_perms()
 
-        msg = _("Global DB is {status}").format(status=ENABLED if not state else DISABLED)
-        await self.send_embed_msg(ctx, title=_("Setting Changed"), description=msg)
+        msg = "Global DB is {status}".format(status=ENABLED if not state else DISABLED)
+        await self.send_embed_msg(ctx, title="Setting Changed", description=msg)
 
     @command_audioset_global_globalapi.command(name="timeout")
     async def command_audioset_global_globalapi_timeout(
@@ -709,7 +699,7 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         """
 
         await self.config_cache.global_api_timeout.set_global(timeout)
-        await ctx.send(_("Request timeout set to {time} second(s)").format(time=timeout))
+        await ctx.send("Request timeout set to {time} second(s)".format(time=timeout))
 
     @command_audioset_global.command(name="historicalqueue")
     async def command_audioset_global_historical_queue(self, ctx: commands.Context):
@@ -721,8 +711,8 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         await self.config_cache.daily_global_playlist.set_global(not daily_playlists)
         await self.send_embed_msg(
             ctx,
-            title=_("Setting Changed"),
-            description=_("Global historical queues: {true_or_false}.").format(
+            title="Setting Changed",
+            description="Global historical queues: {true_or_false}.".format(
                 true_or_false=ENABLED_TITLE if not daily_playlists else DISABLED_TITLE
             ),
         )
@@ -760,9 +750,9 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         disabled = DISABLED_TITLE
         enabled = ENABLED_TITLE
 
-        msg = "----" + _("Global Settings") + "----        \n"
+        msg = "----" + "Global Settings" + "----        \n"
 
-        msg += _(
+        msg += (
             "Songs as status:              [{status}]\n"
             "Historical playlist:          [{historical_playlist}]\n"
             "Default persist queue:        [{persist_queue}]\n"
@@ -778,9 +768,9 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         over_daily_playlist = await self.config_cache.daily_playlist.get_global()
         msg += (
             "\n---"
-            + _("Global Rules")
+            + "Global Rules"
             + "---        \n"
-            + _(
+            + (
                 "Allow notify messages:        [{notify}]\n"
                 "Allow daily playlist:         [{daily_playlist}]\n"
                 "Enforced auto-disconnect:     [{dc}]\n"
@@ -819,16 +809,16 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
 
         msg += (
             "\n---"
-            + _("Cache Settings")
+            + "Cache Settings"
             + "---        \n"
-            + _("Max age:                [{max_age}]\n")
-            + _("Local Spotify cache:    [{spotify_status}]\n")
-            + _("Local Youtube cache:    [{youtube_status}]\n")
-            + _("Local Lavalink cache:   [{lavalink_status}]\n")
-            + _("Global cache status:    [{global_cache}]\n")
-            + _("Global timeout:         [{num_seconds}]\n")
+            + "Max age:                [{max_age}]\n"
+            + "Local Spotify cache:    [{spotify_status}]\n"
+            + "Local Youtube cache:    [{youtube_status}]\n"
+            + "Local Lavalink cache:   [{lavalink_status}]\n"
+            + "Global cache status:    [{global_cache}]\n"
+            + "Global timeout:         [{num_seconds}]\n"
         ).format(
-            max_age=str(await self.config_cache.local_cache_age.get_global()) + " " + _("days"),
+            max_age=str(await self.config_cache.local_cache_age.get_global()) + " " + "days",
             spotify_status=ENABLED_TITLE if has_spotify_cache else DISABLED_TITLE,
             youtube_status=ENABLED_TITLE if has_youtube_cache else DISABLED_TITLE,
             lavalink_status=ENABLED_TITLE if has_lavalink_cache else DISABLED_TITLE,
@@ -855,16 +845,16 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         if dj_enabled and not can_skip and not await self._has_dj_role(ctx, ctx.author):
             return await self.send_embed_msg(
                 ctx,
-                title=_("Unable To Change Volume"),
-                description=_("You need the DJ role to change the volume."),
+                title="Unable To Change Volume",
+                description="You need the DJ role to change the volume.",
             )
         global_value, guild_value, __ = await self.config_cache.volume.get_context_max(ctx.guild)
         max_value = min(global_value, guild_value)
         if not 10 < volume <= max_value:
             await self.send_embed_msg(
                 ctx,
-                title=_("Invalid Setting"),
-                description=_("Maximum allowed volume has to be between 10% and {cap}%.").format(
+                title="Invalid Setting",
+                description="Maximum allowed volume has to be between 10% and {cap}%.".format(
                     cap=max_value
                 ),
             )
@@ -872,8 +862,8 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         await self.config_cache.volume.set_channel(channel, volume)
         await self.send_embed_msg(
             ctx,
-            title=_("Setting Changed"),
-            description=_("Maximum allowed volume set to: {volume}%.").format(volume=volume),
+            title="Setting Changed",
+            description="Maximum allowed volume set to: {volume}%.".format(volume=volume),
         )
 
     @command_audioset_channel.command(name="info", aliases=["settings", "config"])
@@ -885,7 +875,7 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         volume = await self.config_cache.volume.get_channel(channel)
         msg = (
             "----"
-            + _("Channel Settings")
+            + "Channel Settings"
             + "----        \nVolume:   [{vol}%]\n".format(
                 vol=volume,
             )
@@ -916,8 +906,8 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         await self.config_cache.blacklist_whitelist.add_to_whitelist(ctx.guild, {keyword})
         return await self.send_embed_msg(
             ctx,
-            title=_("Allowlist Modified"),
-            description=_("Added `{whitelisted}` to the allowlist.").format(whitelisted=keyword),
+            title="Allowlist Modified",
+            description="Added `{whitelisted}` to the allowlist.".format(whitelisted=keyword),
         )
 
     @command_audioset_guild_whitelist.command(name="list", aliases=["show"])
@@ -928,7 +918,7 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
             ctx.guild, printable=True
         )
         if not whitelist:
-            return await self.send_embed_msg(ctx, title=_("Nothing in the allowlist."))
+            return await self.send_embed_msg(ctx, title="Nothing in the allowlist.")
         whitelist = sorted(whitelist)
         text = ""
         total = len(whitelist)
@@ -944,7 +934,7 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
                 pages.append(box(text, lang="ini"))
         embed_colour = await ctx.embed_colour()
         pages = list(
-            discord.Embed(title=_("Allowlist"), description=page, colour=embed_colour)
+            discord.Embed(title="Allowlist", description=page, colour=embed_colour)
             for page in pages
         )
         await menu(ctx, pages, DEFAULT_CONTROLS)
@@ -954,12 +944,12 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         """Clear all keywords from the allowlist."""
         whitelist = await self.config_cache.blacklist_whitelist.get_whitelist(ctx.guild)
         if not whitelist:
-            return await self.send_embed_msg(ctx, title=_("Nothing in the allowlist."))
+            return await self.send_embed_msg(ctx, title="Nothing in the allowlist.")
         await self.config_cache.blacklist_whitelist.clear_whitelist(ctx.guild)
         return await self.send_embed_msg(
             ctx,
-            title=_("Allowlist Modified"),
-            description=_("All entries have been removed from the allowlist."),
+            title="Allowlist Modified",
+            description="All entries have been removed from the allowlist.",
         )
 
     @command_audioset_guild_whitelist.command(name="delete", aliases=["del", "remove"])
@@ -973,10 +963,8 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         await self.config_cache.blacklist_whitelist.remove_from_whitelist(ctx.guild, {keyword})
         return await self.send_embed_msg(
             ctx,
-            title=_("Allowlist Modified"),
-            description=_("Removed `{whitelisted}` from the allowlist.").format(
-                whitelisted=keyword
-            ),
+            title="Allowlist Modified",
+            description="Removed `{whitelisted}` from the allowlist.".format(whitelisted=keyword),
         )
 
     @command_audioset_guild.group(
@@ -995,8 +983,8 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         await self.config_cache.blacklist_whitelist.add_to_blacklist(ctx.guild, {keyword})
         return await self.send_embed_msg(
             ctx,
-            title=_("Denylist Modified"),
-            description=_("Added `{blacklisted}` to the denylist.").format(blacklisted=keyword),
+            title="Denylist Modified",
+            description="Added `{blacklisted}` to the denylist.".format(blacklisted=keyword),
         )
 
     @command_audioset_guild_blacklist.command(name="list", aliases=["show"])
@@ -1007,7 +995,7 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
             ctx.guild, printable=True
         )
         if not blacklist:
-            return await self.send_embed_msg(ctx, title=_("Nothing in the denylist."))
+            return await self.send_embed_msg(ctx, title="Nothing in the denylist.")
         blacklist = sorted(blacklist)
         text = ""
         total = len(blacklist)
@@ -1023,7 +1011,7 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
                 pages.append(box(text, lang="ini"))
         embed_colour = await ctx.embed_colour()
         pages = list(
-            discord.Embed(title=_("Denylist"), description=page, colour=embed_colour)
+            discord.Embed(title="Denylist", description=page, colour=embed_colour)
             for page in pages
         )
         await menu(ctx, pages, DEFAULT_CONTROLS)
@@ -1034,8 +1022,8 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         await self.config_cache.blacklist_whitelist.clear_blacklist(ctx.guild)
         return await self.send_embed_msg(
             ctx,
-            title=_("Denylist Modified"),
-            description=_("All entries have been removed from the denylist."),
+            title="Denylist Modified",
+            description="All entries have been removed from the denylist.",
         )
 
     @command_audioset_guild_blacklist.command(name="delete", aliases=["del", "remove"])
@@ -1049,10 +1037,8 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         await self.config_cache.blacklist_whitelist.remove_from_blacklist(ctx.guild, {keyword})
         return await self.send_embed_msg(
             ctx,
-            title=_("Denylist Modified"),
-            description=_("Removed `{blacklisted}` from the denylist.").format(
-                blacklisted=keyword
-            ),
+            title="Denylist Modified",
+            description="Removed `{blacklisted}` from the denylist.".format(blacklisted=keyword),
         )
 
     @command_audioset_guild.command(name="volume")
@@ -1063,16 +1049,16 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         if dj_enabled and not can_skip and not await self._has_dj_role(ctx, ctx.author):
             return await self.send_embed_msg(
                 ctx,
-                title=_("Unable To Change Volume"),
-                description=_("You need the DJ role to change the volume."),
+                title="Unable To Change Volume",
+                description="You need the DJ role to change the volume.",
             )
 
         global_value, __, __ = await self.config_cache.volume.get_context_max(ctx.guild)
         if not 10 < volume <= global_value:
             await self.send_embed_msg(
                 ctx,
-                title=_("Invalid Setting"),
-                description=_("Maximum allowed volume has to be between 10% and {cap}%.").format(
+                title="Invalid Setting",
+                description="Maximum allowed volume has to be between 10% and {cap}%.".format(
                     cap=global_value
                 ),
             )
@@ -1080,8 +1066,8 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         await self.config_cache.volume.set_guild(ctx.guild, volume)
         await self.send_embed_msg(
             ctx,
-            title=_("Setting Changed"),
-            description=_("Maximum allowed volume set to: {volume}%.").format(volume=volume),
+            title="Setting Changed",
+            description="Maximum allowed volume set to: {volume}%.".format(volume=volume),
         )
 
     @command_audioset_guild.command(name="maxqueue")
@@ -1096,15 +1082,15 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         if not 10 < size < global_value:
             return await self.send_embed_msg(
                 ctx,
-                title=_("Invalid Queue Size"),
-                description=_("Queue size must bet between 10 and {cap}.").format(
+                title="Invalid Queue Size",
+                description="Queue size must bet between 10 and {cap}.".format(
                     cap=humanize_number(global_value)
                 ),
             )
         await self.send_embed_msg(
             ctx,
-            title=_("Setting Changed"),
-            description=_("Maximum queue size allowed is now {size}.").format(
+            title="Setting Changed",
+            description="Maximum queue size allowed is now {size}.".format(
                 size=humanize_number(size)
             ),
         )
@@ -1124,8 +1110,8 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
             await self.config_cache.daily_playlist.set_guild(ctx.guild, False)
             return await self.send_embed_msg(
                 ctx,
-                title=_("Setting Not Changed"),
-                description=_(
+                title="Setting Not Changed",
+                description=(
                     "Daily queues: {true_or_false}, "
                     "\n\n**Reason**: The bot owner has disabled this feature."
                 ).format(true_or_false=DISABLED_TITLE),
@@ -1135,8 +1121,8 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         await self.config_cache.daily_playlist.set_guild(ctx.guild, not daily_playlists)
         await self.send_embed_msg(
             ctx,
-            title=_("Setting Changed"),
-            description=_("Daily queues: {true_or_false}.").format(
+            title="Setting Changed",
+            description="Daily queues: {true_or_false}.".format(
                 true_or_false=ENABLED_TITLE if not daily_playlists else DISABLED_TITLE
             ),
         )
@@ -1154,8 +1140,8 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
             await self.config_cache.autoplay.set_guild(ctx.guild, False)
             return await self.send_embed_msg(
                 ctx,
-                title=_("Setting Not Changed"),
-                description=_(
+                title="Setting Not Changed",
+                description=(
                     "Auto-disconnection at queue end: {true_or_false}\n"
                     "Auto-play has been disabled."
                     "\n\n**Reason**: The bot owner has enforced this feature."
@@ -1165,16 +1151,16 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         disconnect = await self.config_cache.disconnect.get_guild(ctx.guild)
         autoplay = await self.config_cache.autoplay.get_guild(ctx.guild)
         msg = ""
-        msg += _("Auto-disconnection at queue end: {true_or_false}.").format(
+        msg += "Auto-disconnection at queue end: {true_or_false}.".format(
             true_or_false=ENABLED_TITLE if not disconnect else DISABLED_TITLE
         )
         if disconnect is not True and autoplay is True:
-            msg += _("\nAuto-play has been disabled.")
+            msg += "\nAuto-play has been disabled."
             await self.config_cache.autoplay.set_guild(ctx.guild, False)
 
         await self.config_cache.disconnect.set_guild(ctx.guild, not disconnect)
 
-        await self.send_embed_msg(ctx, title=_("Setting Changed"), description=msg)
+        await self.send_embed_msg(ctx, title="Setting Changed", description=msg)
 
     @command_audioset_guild.command(name="dj")
     @commands.admin_or_permissions(manage_roles=True)
@@ -1187,8 +1173,8 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         if not dj_role:
             await self.send_embed_msg(
                 ctx,
-                title=_("Missing DJ Role"),
-                description=_(
+                title="Missing DJ Role",
+                description=(
                     "Please set a role to use with DJ mode. Enter the role name or ID now."
                 ),
             )
@@ -1198,15 +1184,13 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
                 await self.bot.wait_for("message", timeout=15.0, check=pred)
                 await ctx.invoke(self.command_audioset_guild_role_create, role_name=pred.result)
             except asyncio.TimeoutError:
-                return await self.send_embed_msg(
-                    ctx, title=_("Response timed out, try again later.")
-                )
+                return await self.send_embed_msg(ctx, title="Response timed out, try again later.")
         dj_enabled = await self.config_cache.dj_status.get_guild(ctx.guild)
         await self.config_cache.dj_status.set_guild(ctx.guild, not dj_enabled)
         await self.send_embed_msg(
             ctx,
-            title=_("Setting Changed"),
-            description=_("DJ role: {true_or_false}.").format(
+            title="Setting Changed",
+            description="DJ role: {true_or_false}.".format(
                 true_or_false=ENABLED_TITLE if not dj_enabled else DISABLED_TITLE
             ),
         )
@@ -1225,8 +1209,8 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
             await self.config_cache.empty_dc_timer.set_guild(ctx.guild, seconds)
             return await self.send_embed_msg(
                 ctx,
-                title=_("Setting Not Changed"),
-                description=_(
+                title="Setting Not Changed",
+                description=(
                     "Empty disconnect: {true_or_false}\n"
                     "Empty disconnect timer set to: {time_to_auto_dc}\n"
                     "Auto-play has been disabled."
@@ -1238,21 +1222,21 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
 
         if seconds < 0:
             return await self.send_embed_msg(
-                ctx, title=_("Invalid Time"), description=_("Seconds can't be less than zero.")
+                ctx, title="Invalid Time", description="Seconds can't be less than zero."
             )
         if 10 > seconds > 0:
             seconds = 10
         if seconds == 0:
             enabled = False
             await self.send_embed_msg(
-                ctx, title=_("Setting Changed"), description=_("Empty disconnect disabled.")
+                ctx, title="Setting Changed", description="Empty disconnect disabled."
             )
         else:
             enabled = True
             await self.send_embed_msg(
                 ctx,
-                title=_("Setting Changed"),
-                description=_("Empty disconnect timer set to {num_seconds}.").format(
+                title="Setting Changed",
+                description="Empty disconnect timer set to {num_seconds}.".format(
                     num_seconds=self.get_time_string(seconds)
                 ),
             )
@@ -1269,8 +1253,8 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
             await self.config_cache.empty_pause_timer.set_guild(ctx.guild, seconds)
             return await self.send_embed_msg(
                 ctx,
-                title=_("Setting Not Changed"),
-                description=_(
+                title="Setting Not Changed",
+                description=(
                     "Empty pause: {true_or_false}\n"
                     "Empty pause timer set to: {time_to_auto_dc}\n"
                     "Auto-play has been disabled."
@@ -1282,21 +1266,21 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
 
         if seconds < 0:
             return await self.send_embed_msg(
-                ctx, title=_("Invalid Time"), description=_("Seconds can't be less than zero.")
+                ctx, title="Invalid Time", description="Seconds can't be less than zero."
             )
         if 10 > seconds > 0:
             seconds = 10
         if seconds == 0:
             enabled = False
             await self.send_embed_msg(
-                ctx, title=_("Setting Changed"), description=_("Empty pause disabled.")
+                ctx, title="Setting Changed", description="Empty pause disabled."
             )
         else:
             enabled = True
             await self.send_embed_msg(
                 ctx,
-                title=_("Setting Changed"),
-                description=_("Empty pause timer set to {num_seconds}.").format(
+                title="Setting Changed",
+                description="Empty pause timer set to {num_seconds}.".format(
                     num_seconds=self.get_time_string(seconds)
                 ),
             )
@@ -1312,8 +1296,8 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
             await self.config_cache.prefer_lyrics.set_guild(ctx.guild, True)
             return await self.send_embed_msg(
                 ctx,
-                title=_("Setting Not Changed"),
-                description=_(
+                title="Setting Not Changed",
+                description=(
                     "Prefer tracks with lyrics: {true_or_false}."
                     "\n\n**Reason**: The bot owner has enforced this feature."
                 ).format(true_or_false=ENABLED_TITLE),
@@ -1323,8 +1307,8 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         await self.config_cache.prefer_lyrics.set_guild(ctx.guild, not prefer_lyrics)
         await self.send_embed_msg(
             ctx,
-            title=_("Setting Changed"),
-            description=_("Prefer tracks with lyrics: {true_or_false}.").format(
+            title="Setting Changed",
+            description="Prefer tracks with lyrics: {true_or_false}.".format(
                 true_or_false=ENABLED_TITLE if not prefer_lyrics else DISABLED_TITLE
             ),
         )
@@ -1339,8 +1323,8 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
             await self.config_cache.jukebox_price.set_guild(ctx.guild, jukebox_price)
             return await self.send_embed_msg(
                 ctx,
-                title=_("Setting Not Changed"),
-                description=_(
+                title="Setting Not Changed",
+                description=(
                     "Jukebox Mode: {true_or_false}\n"
                     "Price per command: {cost} {currency}\n"
                     "\n\n**Reason**: The bot owner has enforced this feature."
@@ -1353,26 +1337,26 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         if price < 0:
             return await self.send_embed_msg(
                 ctx,
-                title=_("Invalid Price"),
-                description=_("Price can't be less than zero."),
+                title="Invalid Price",
+                description="Price can't be less than zero.",
             )
         elif price > 2 ** 63 - 1:
             return await self.send_embed_msg(
                 ctx,
-                title=_("Invalid Price"),
-                description=_("Price can't be greater or equal to than 2^63."),
+                title="Invalid Price",
+                description="Price can't be greater or equal to than 2^63.",
             )
         elif price == 0:
             jukebox = False
             await self.send_embed_msg(
-                ctx, title=_("Setting Changed"), description=_("Jukebox mode disabled.")
+                ctx, title="Setting Changed", description="Jukebox mode disabled."
             )
         else:
             jukebox = True
             await self.send_embed_msg(
                 ctx,
-                title=_("Setting Changed"),
-                description=_(
+                title="Setting Changed",
+                description=(
                     "Jukebox mode enabled, command price set to {price} {currency}."
                 ).format(
                     price=humanize_number(price), currency=await bank.get_currency_name(ctx.guild)
@@ -1400,8 +1384,8 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         await self.config_cache.dj_roles.add_guild(ctx.guild, {role_name})
         await self.send_embed_msg(
             ctx,
-            title=_("Settings Changed"),
-            description=_("Role added to DJ list: {role.name}.").format(role=role_name),
+            title="Settings Changed",
+            description="Role added to DJ list: {role.name}.".format(role=role_name),
         )
 
     @command_audioset_guild_role.command(name="delete", aliases=["remove", "del"])
@@ -1417,8 +1401,8 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         await self.config_cache.dj_roles.remove_guild(ctx.guild, {role_name})
         await self.send_embed_msg(
             ctx,
-            title=_("Settings Changed"),
-            description=_("Role removed from DJ list: {role.name}.").format(role=role_name),
+            title="Settings Changed",
+            description="Role removed from DJ list: {role.name}.".format(role=role_name),
         )
 
     @command_audioset_guild_role.command(name="list", aliases=["show"])
@@ -1464,29 +1448,29 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         if not 0 <= seconds <= global_value:
             return await self.send_embed_msg(
                 ctx,
-                title=_("Invalid length"),
-                description=_("Length can't be less than zero or greater than {cap}.").format(
+                title="Invalid length",
+                description="Length can't be less than zero or greater than {cap}.".format(
                     cap=self.get_time_string(global_value)
                 ),
             )
         if seconds == 0:
             if global_value != 0:
                 await self.send_embed_msg(
-                    ctx, title=_("Setting Changed"), description=_("Track max length disabled.")
+                    ctx, title="Setting Changed", description="Track max length disabled."
                 )
             else:
                 return await self.send_embed_msg(
                     ctx,
-                    title=_("Setting Not Changed"),
-                    description=_(
+                    title="Setting Not Changed",
+                    description=(
                         "Track max length cannot be disabled as it is restricted by the bot owner."
                     ),
                 )
         else:
             await self.send_embed_msg(
                 ctx,
-                title=_("Setting Changed"),
-                description=_("Track max length set to {seconds}.").format(
+                title="Setting Changed",
+                description="Track max length set to {seconds}.".format(
                     seconds=self.get_time_string(seconds)
                 ),
             )
@@ -1500,8 +1484,8 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
             await self.config_cache.notify.set_guild(ctx.guild, False)
             return await self.send_embed_msg(
                 ctx,
-                title=_("Setting Not Changed"),
-                description=_(
+                title="Setting Not Changed",
+                description=(
                     "Notify mode: {true_or_false}, "
                     "\n\n**Reason**: The bot owner has disabled this feature."
                 ).format(true_or_false=DISABLED_TITLE),
@@ -1510,8 +1494,8 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         await self.config_cache.notify.set_guild(ctx.guild, not notify)
         await self.send_embed_msg(
             ctx,
-            title=_("Setting Changed"),
-            description=_("Notify mode: {true_or_false}.").format(
+            title="Setting Changed",
+            description="Notify mode: {true_or_false}.".format(
                 true_or_false=ENABLED_TITLE if not notify else DISABLED_TITLE
             ),
         )
@@ -1524,8 +1508,8 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
             await self.config_cache.auto_deafen.set_guild(ctx.guild, True)
             return await self.send_embed_msg(
                 ctx,
-                title=_("Setting Not Changed"),
-                description=_(
+                title="Setting Not Changed",
+                description=(
                     "Auto-deafen: {true_or_false}."
                     "\n\n**Reason**: The bot owner has enforced this feature."
                 ).format(true_or_false=ENABLED_TITLE),
@@ -1534,8 +1518,8 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         await self.config_cache.auto_deafen.set_guild(ctx.guild, not auto_deafen)
         await self.send_embed_msg(
             ctx,
-            title=_("Setting Changed"),
-            description=_("Auto-deafen: {true_or_false}.").format(
+            title="Setting Changed",
+            description="Auto-deafen: {true_or_false}.".format(
                 true_or_false=ENABLED_TITLE if not auto_deafen else DISABLED_TITLE
             ),
         )
@@ -1552,8 +1536,8 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
             await self.config_cache.url_restrict.set_guild(ctx.guild, True)
             return await self.send_embed_msg(
                 ctx,
-                title=_("Setting Not Changed"),
-                description=_(
+                title="Setting Not Changed",
+                description=(
                     "Commercial links only: {true_or_false}."
                     "\n\n**Reason**: The bot owner has enforced this feature."
                 ).format(true_or_false=ENABLED_TITLE),
@@ -1562,8 +1546,8 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         await self.config_cache.url_restrict.set_guild(ctx.guild, not restrict)
         await self.send_embed_msg(
             ctx,
-            title=_("Setting Changed"),
-            description=_("Commercial links only: {true_or_false}.").format(
+            title="Setting Changed",
+            description="Commercial links only: {true_or_false}.".format(
                 true_or_false=ENABLED_TITLE if not restrict else DISABLED_TITLE
             ),
         )
@@ -1576,8 +1560,8 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
             await self.config_cache.thumbnail.set_guild(ctx.guild, True)
             return await self.send_embed_msg(
                 ctx,
-                title=_("Setting Not Changed"),
-                description=_(
+                title="Setting Not Changed",
+                description=(
                     "Thumbnail display: {true_or_false}."
                     "\n\n**Reason**: The bot owner has enforced this feature."
                 ).format(true_or_false=ENABLED_TITLE),
@@ -1586,8 +1570,8 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         await self.config_cache.thumbnail.set_guild(ctx.guild, not thumbnail)
         await self.send_embed_msg(
             ctx,
-            title=_("Setting Changed"),
-            description=_("Thumbnail display: {true_or_false}.").format(
+            title="Setting Changed",
+            description="Thumbnail display: {true_or_false}.".format(
                 true_or_false=ENABLED_TITLE if not thumbnail else DISABLED_TITLE
             ),
         )
@@ -1599,8 +1583,8 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         if percent < 0:
             return await self.send_embed_msg(
                 ctx,
-                title=_("Invalid percentage"),
-                description=_("Percentage can't be less than zero."),
+                title="Invalid percentage",
+                description="Percentage can't be less than zero.",
             )
         elif percent > 100:
             percent = 100
@@ -1608,15 +1592,15 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
             enabled = False
             await self.send_embed_msg(
                 ctx,
-                title=_("Setting Changed"),
-                description=_("Voting disabled. All users can use queue management commands."),
+                title="Setting Changed",
+                description="Voting disabled. All users can use queue management commands.",
             )
         else:
             enabled = True
             await self.send_embed_msg(
                 ctx,
-                title=_("Setting Changed"),
-                description=_("Vote percentage set to {percent}%.").format(percent=percent),
+                title="Setting Changed",
+                description="Vote percentage set to {percent}%.".format(percent=percent),
             )
 
         await self.config_cache.votes.set_guild(ctx.guild, enabled)
@@ -1629,8 +1613,8 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         if len(country) != 2:
             return await self.send_embed_msg(
                 ctx,
-                title=_("Invalid Country Code"),
-                description=_(
+                title="Invalid Country Code",
+                description=(
                     "Please use an official [ISO 3166-1 alpha-2]"
                     "(https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) code."
                 ),
@@ -1638,8 +1622,8 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         country = country.upper()
         await self.send_embed_msg(
             ctx,
-            title=_("Setting Changed"),
-            description=_("Country Code set to {country}.").format(country=country),
+            title="Setting Changed",
+            description="Country Code set to {country}.".format(country=country),
         )
 
         await self.config_cache.country_code.set_guild(ctx.guild, country)
@@ -1655,8 +1639,8 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         await self.config_cache.persistent_queue.set_guild(ctx.guild, not persist_cache)
         await self.send_embed_msg(
             ctx,
-            title=_("Setting Changed"),
-            description=_("Persisting queues: {true_or_false}.").format(
+            title="Setting Changed",
+            description="Persisting queues: {true_or_false}.".format(
                 true_or_false=ENABLED_TITLE if not persist_cache else DISABLED_TITLE
             ),
         )
@@ -1674,8 +1658,8 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
             await self.config_cache.autoplay.set_guild(ctx.guild, False)
             return await self.send_embed_msg(
                 ctx,
-                title=_("Setting Not Changed"),
-                description=_(
+                title="Setting Not Changed",
+                description=(
                     "Auto-disconnection at queue end: {true_or_false}\n"
                     "Auto-play has been disabled."
                     "\n\n**Reason**: The bot owner has disabled this feature."
@@ -1685,18 +1669,18 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         autoplay = await self.config_cache.autoplay.get_guild(ctx.guild)
         repeat = await self.config_cache.repeat.get_guild(ctx.guild)
         disconnect = await self.config_cache.disconnect.get_guild(ctx.guild)
-        msg = _("Auto-play when queue ends: {true_or_false}.").format(
+        msg = "Auto-play when queue ends: {true_or_false}.".format(
             true_or_false=ENABLED_TITLE if not autoplay else DISABLED_TITLE
         )
         await self.config_cache.autoplay.set_guild(ctx.guild, not autoplay)
         if autoplay is not True and repeat is True:
-            msg += _("\nRepeat has been disabled.")
+            msg += "\nRepeat has been disabled."
             await self.config_cache.repeat.set_guild(ctx.guild, False)
         if autoplay is not True and disconnect is True:
-            msg += _("\nAuto-disconnecting at queue end has been disabled.")
+            msg += "\nAuto-disconnecting at queue end has been disabled."
             await self.config_cache.disconnect.set_guild(ctx.guild, False)
 
-        await self.send_embed_msg(ctx, title=_("Setting Changed"), description=msg)
+        await self.send_embed_msg(ctx, title="Setting Changed", description=msg)
         if self._player_check(ctx):
             await self.set_player_settings(ctx)
 
@@ -1742,11 +1726,11 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         if self.playlist_api is None:
             return await self.send_embed_msg(
                 ctx,
-                title=_("Playlists Are Not Available"),
-                description=_("The playlist section of Audio is currently unavailable"),
+                title="Playlists Are Not Available",
+                description="The playlist section of Audio is currently unavailable",
                 footer=discord.Embed.Empty
                 if not await self.bot.is_owner(ctx.author)
-                else _("Check your logs."),
+                else "Check your logs.",
             )
         if scope_data is None:
             scope_data = [None, ctx.author, ctx.guild, False]
@@ -1761,38 +1745,38 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         if playlist is None:
             return await self.send_embed_msg(
                 ctx,
-                title=_("No Playlist Found"),
-                description=_("Could not match '{arg}' to a playlist").format(arg=playlist_arg),
+                title="No Playlist Found",
+                description="Could not match '{arg}' to a playlist".format(arg=playlist_arg),
             )
         try:
             tracks = playlist.tracks
             if not tracks:
                 return await self.send_embed_msg(
                     ctx,
-                    title=_("No Tracks Found"),
-                    description=_("Playlist {name} has no tracks.").format(name=playlist.name),
+                    title="No Tracks Found",
+                    description="Playlist {name} has no tracks.".format(name=playlist.name),
                 )
             playlist_data = dict(enabled=True, id=playlist.id, name=playlist.name, scope=scope)
             await self.config.guild(ctx.guild).autoplaylist.set(playlist_data)
         except RuntimeError:
             return await self.send_embed_msg(
                 ctx,
-                title=_("No Playlist Found"),
-                description=_("Playlist {id} does not exist in {scope} scope.").format(
+                title="No Playlist Found",
+                description="Playlist {id} does not exist in {scope} scope.".format(
                     id=playlist_arg, scope=self.humanize_scope(scope, the=True)
                 ),
             )
         except MissingGuild:
             return await self.send_embed_msg(
                 ctx,
-                title=_("Missing Arguments"),
-                description=_("You need to specify the Guild ID for the guild to lookup."),
+                title="Missing Arguments",
+                description="You need to specify the Guild ID for the guild to lookup.",
             )
         else:
             return await self.send_embed_msg(
                 ctx,
-                title=_("Setting Changed"),
-                description=_(
+                title="Setting Changed",
+                description=(
                     "Playlist {name} (`{id}`) [**{scope}**] will be used for autoplay."
                 ).format(
                     name=playlist.name,
@@ -1816,8 +1800,8 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         await self.config.guild(ctx.guild).autoplaylist.set(playlist_data)
         return await self.send_embed_msg(
             ctx,
-            title=_("Setting Changed"),
-            description=_("Set auto-play playlist to play recently played tracks."),
+            title="Setting Changed",
+            description="Set auto-play playlist to play recently played tracks.",
         )
 
     @command_audioset_guild.command(name="info", aliases=["settings"])
@@ -1855,8 +1839,8 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         disabled = DISABLED_TITLE
         enabled = ENABLED_TITLE
 
-        msg = "----" + _("Server Settings") + "----        \n"
-        msg += _(
+        msg = "----" + "Server Settings" + "----        \n"
+        msg += (
             "DJ mode:             [{dj_mode}]\n"
             "DJ roles:            [{dj_roles}]\n"
             "Vote mode:           [{vote_enabled}]\n"
@@ -1917,18 +1901,18 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
             pid = autoplaylist["id"]
             pscope = autoplaylist["scope"]
             if pscope == PlaylistScope.GUILD.value:
-                pscope = _("Server")
+                pscope = "Server"
             elif pscope == PlaylistScope.USER.value:
-                pscope = _("User")
+                pscope = "User"
             else:
-                pscope = _("Global")
+                pscope = "Global"
             msg += (
                 "\n---"
-                + _("Auto-play Settings")
+                + "Auto-play Settings"
                 + "---        \n"
-                + _("Playlist name:    [{pname}]\n")
-                + _("Playlist ID:      [{pid}]\n")
-                + _("Playlist scope:   [{pscope}]\n")
+                + "Playlist name:    [{pname}]\n"
+                + "Playlist ID:      [{pid}]\n"
+                + "Playlist scope:   [{pscope}]\n"
             ).format(pname=pname, pid=pid, pscope=pscope)
 
         await self.send_embed_msg(ctx, description=box(msg, lang="ini"), no_embed=True)
@@ -1953,13 +1937,13 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
             self.local_folder_current_path = cog_data_path(raw_name="Audio")
             return await self.send_embed_msg(
                 ctx,
-                title=_("Setting Changed"),
-                description=_(
-                    "The localtracks path location has been reset to {localpath}"
-                ).format(localpath=str(cog_data_path(raw_name="Audio").absolute())),
+                title="Setting Changed",
+                description="The localtracks path location has been reset to {localpath}".format(
+                    localpath=str(cog_data_path(raw_name="Audio").absolute())
+                ),
             )
 
-        info_msg = _(
+        info_msg = (
             "This setting is only for bot owners to set a localtracks folder location "
             "In the example below, the full path for 'ParentDirectory' "
             "must be passed to this command.\n"
@@ -1991,27 +1975,27 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         if not temp.exists() or not temp.is_dir():
             return await self.send_embed_msg(
                 ctx,
-                title=_("Invalid Path"),
-                description=_("{local_path} does not seem like a valid path.").format(
+                title="Invalid Path",
+                description="{local_path} does not seem like a valid path.".format(
                     local_path=local_path
                 ),
             )
 
         if not temp.localtrack_folder.exists():
-            warn_msg = _(
+            warn_msg = (
                 "`{localtracks}` does not exist. "
                 "The path will still be saved, but please check the path and "
                 "create a localtracks folder in `{localfolder}` before attempting "
                 "to play local tracks."
             ).format(localfolder=temp.absolute(), localtracks=temp.localtrack_folder.absolute())
-            await self.send_embed_msg(ctx, title=_("Invalid Environment"), description=warn_msg)
+            await self.send_embed_msg(ctx, title="Invalid Environment", description=warn_msg)
         local_path = str(temp.localtrack_folder.absolute())
         await self.config_cache.localpath.set_global(cog_data_path(raw_name="Audio"))
         self.local_folder_current_path = temp.localtrack_folder.absolute()
         return await self.send_embed_msg(
             ctx,
-            title=_("Setting Changed"),
-            description=_("The localtracks path location has been set to {localpath}").format(
+            title="Setting Changed",
+            description="The localtracks path location has been set to {localpath}".format(
                 localpath=local_path
             ),
         )
@@ -2028,8 +2012,8 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
 
             await self.send_embed_msg(
                 ctx,
-                title=_("Restarting Lavalink"),
-                description=_("It can take a couple of minutes for Lavalink to fully start up."),
+                title="Restarting Lavalink",
+                description="It can take a couple of minutes for Lavalink to fully start up.",
             )
 
     @command_audioset_lavalink.group(name="node")
@@ -2052,9 +2036,9 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         ):
             return await self.send_embed_msg(
                 ctx,
-                title=_("Setting Not Changed"),
-                description=_("{node} doesn't exist.\nAvailable nodes: {nodes}.").format(
-                    nodes=humanize_list(list(nodes), style="or")
+                title="Setting Not Changed",
+                description="{node} doesn't exist.\nAvailable nodes: {nodes}.".format(
+                    nodes=humanize_list(list(nodes), style="or"), node=node
                 ),
             )
 
@@ -2063,14 +2047,14 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         except Exception:
             return await self.send_embed_msg(
                 ctx,
-                title=_("Setting Not Changed"),
-                description=_("`{rest_uri}` is not a valid hostname").format(rest_uri=host),
+                title="Setting Not Changed",
+                description="`{rest_uri}` is not a valid hostname".format(rest_uri=host),
             )
         if not url.scheme or url.scheme not in ["https", "http"]:
             return await self.send_embed_msg(
                 ctx,
-                title=_("Setting Not Changed"),
-                description=_(
+                title="Setting Not Changed",
+                description=(
                     "`{rest_uri}` is not valid, it must start with `https://` or `http://`"
                 ).format(rest_uri=host),
             )
@@ -2078,8 +2062,8 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         if not hostname:
             return await self.send_embed_msg(
                 ctx,
-                title=_("Setting Not Changed"),
-                description=_("`Unable to retrieve hostname from specified host.").format(
+                title="Setting Not Changed",
+                description="`Unable to retrieve hostname from `{rest_uri}`.".format(
                     rest_uri=host
                 ),
             )
@@ -2101,11 +2085,11 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
 
         footer = None
         if await self.update_external_status():
-            footer = _("External node set to True.")
+            footer = "External node set to True."
         await self.send_embed_msg(
             ctx,
-            title=_("Setting Changed"),
-            description=_(
+            title="Setting Changed",
+            description=(
                 "URI set to      `{rest_uri}`\n"
                 "Hostname set to `{uri_host}`\n"
                 "Port set to     `{uri_port}`\n"
@@ -2117,8 +2101,8 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         except ProcessLookupError:
             await self.send_embed_msg(
                 ctx,
-                title=_("Failed To Shutdown Lavalink"),
-                description=_("Please reload Audio (`{prefix}reload audio`).").format(
+                title="Failed To Shutdown Lavalink",
+                description="Please reload Audio (`{prefix}reload audio`).".format(
                     prefix=ctx.prefix
                 ),
             )
@@ -2132,20 +2116,20 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         if node not in (nodes := await self.config_cache.node_config.get_all_identifiers()):
             return await self.send_embed_msg(
                 ctx,
-                title=_("Setting Not Changed"),
-                description=_("{node} doesn't exist.\nAvailable nodes: {nodes}.").format(
-                    nodes=humanize_list(list(nodes), style="or")
+                title="Setting Not Changed",
+                description="{node} doesn't exist.\nAvailable nodes: {nodes}.".format(
+                    nodes=humanize_list(list(nodes), style="or"), node=node
                 ),
             )
         await self.config_cache.node_config.set_password(node_identifier=node, set_to=password)
 
         footer = None
         if await self.update_external_status():
-            footer = _("External node set to True.")
+            footer = "External node set to True."
         await self.send_embed_msg(
             ctx,
-            title=_("Setting Changed"),
-            description=_("Server password set to {password}.").format(password=password),
+            title="Setting Changed",
+            description="Server password set to {password}.".format(password=password),
             footer=footer,
         )
 
@@ -2154,8 +2138,8 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         except ProcessLookupError:
             await self.send_embed_msg(
                 ctx,
-                title=_("Failed To Shutdown Lavalink"),
-                description=_("Please reload Audio (`{prefix}reload audio`).").format(
+                title="Failed To Shutdown Lavalink",
+                description="Please reload Audio (`{prefix}reload audio`).".format(
                     prefix=ctx.prefix
                 ),
             )
@@ -2168,9 +2152,9 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         if node not in (nodes := await self.config_cache.node_config.get_all_identifiers()):
             return await self.send_embed_msg(
                 ctx,
-                title=_("Setting Not Changed"),
-                description=_("{node} doesn't exist.\nAvailable nodes: {nodes}.").format(
-                    nodes=humanize_list(list(nodes), style="or")
+                title="Setting Not Changed",
+                description="{node} doesn't exist.\nAvailable nodes: {nodes}.".format(
+                    nodes=humanize_list(list(nodes), style="or"), node=node
                 ),
             )
         await self.config_cache.node_config.set_port(node_identifier=node, set_to=port)
@@ -2183,11 +2167,11 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
 
         footer = None
         if await self.update_external_status():
-            footer = _("External node set to True.")
+            footer = "External node set to True."
         await self.send_embed_msg(
             ctx,
-            title=_("Setting Changed"),
-            description=_(
+            title="Setting Changed",
+            description=(
                 "URI set to      `{rest_uri}`\n"
                 "Hostname set to `{uri_host}`\n"
                 "Port set to     `{uri_port}`\n"
@@ -2200,8 +2184,8 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         except ProcessLookupError:
             await self.send_embed_msg(
                 ctx,
-                title=_("Failed To Shutdown Lavalink"),
-                description=_("Please reload Audio (`{prefix}reload audio`).").format(
+                title="Failed To Shutdown Lavalink",
+                description="Please reload Audio (`{prefix}reload audio`).".format(
                     prefix=ctx.prefix
                 ),
             )
@@ -2214,9 +2198,9 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         if node not in (nodes := await self.config_cache.node_config.get_all_identifiers()):
             return await self.send_embed_msg(
                 ctx,
-                title=_("Setting Not Changed"),
-                description=_("{node} doesn't exist.\nAvailable nodes: {nodes}.").format(
-                    nodes=humanize_list(list(nodes), style="or")
+                title="Setting Not Changed",
+                description="{node} doesn't exist.\nAvailable nodes: {nodes}.".format(
+                    nodes=humanize_list(list(nodes), style="or"), node=node
                 ),
             )
         try:
@@ -2224,14 +2208,14 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         except Exception:
             return await self.send_embed_msg(
                 ctx,
-                title=_("Setting Not Changed"),
-                description=_("`{rest_uri}` is not a valid hostname").format(rest_uri=rest_uri),
+                title="Setting Not Changed",
+                description="`{rest_uri}` is not a valid hostname".format(rest_uri=rest_uri),
             )
         if not url.scheme or url.scheme not in ["https", "http"]:
             return await self.send_embed_msg(
                 ctx,
-                title=_("Setting Not Changed"),
-                description=_(
+                title="Setting Not Changed",
+                description=(
                     "`{rest_uri}` is not valid, it must start with `https://` or `http://`"
                 ).format(rest_uri=rest_uri),
             )
@@ -2252,11 +2236,11 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
 
         footer = None
         if await self.update_external_status():
-            footer = _("External node set to True.")
+            footer = "External node set to True."
         await self.send_embed_msg(
             ctx,
-            title=_("Setting Changed"),
-            description=_(
+            title="Setting Changed",
+            description=(
                 "URI set to      `{rest_uri}`\n"
                 "Hostname set to `{uri_host}`\n"
                 "Port set to     `{uri_port}`\n"
@@ -2269,8 +2253,8 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         except ProcessLookupError:
             await self.send_embed_msg(
                 ctx,
-                title=_("Failed To Shutdown Lavalink"),
-                description=_("Please reload Audio (`{prefix}reload audio`).").format(
+                title="Failed To Shutdown Lavalink",
+                description="Please reload Audio (`{prefix}reload audio`).".format(
                     prefix=ctx.prefix
                 ),
             )
@@ -2285,9 +2269,9 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         if node not in (nodes := await self.config_cache.node_config.get_all_identifiers()):
             return await self.send_embed_msg(
                 ctx,
-                title=_("Setting Not Changed"),
-                description=_("{node} doesn't exist.\nAvailable nodes: {nodes}.").format(
-                    nodes=humanize_list(list(nodes), style="or")
+                title="Setting Not Changed",
+                description="{node} doesn't exist.\nAvailable nodes: {nodes}.".format(
+                    nodes=humanize_list(list(nodes), style="or"), node=node
                 ),
             )
         await self.config_cache.node_config.set_region(node_identifier=node, set_to=region)
@@ -2295,12 +2279,12 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
 
         footer = None
         if await self.update_external_status():
-            footer = _("External node set to True.")
+            footer = "External node set to True."
         await self.send_embed_msg(
             ctx,
-            title=_("Setting Changed"),
-            description=_("Node will now serve the following region: {region}.").format(
-                region=region if region else _("all")
+            title="Setting Changed",
+            description="Node will now serve the following region: {region}.".format(
+                region=region if region else "all"
             ),
             footer=footer,
         )
@@ -2310,8 +2294,8 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         except ProcessLookupError:
             await self.send_embed_msg(
                 ctx,
-                title=_("Failed To Shutdown Lavalink"),
-                description=_("Please reload Audio (`{prefix}reload audio`).").format(
+                title="Failed To Shutdown Lavalink",
+                description="Please reload Audio (`{prefix}reload audio`).".format(
                     prefix=ctx.prefix
                 ),
             )
@@ -2326,21 +2310,21 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         if node not in (nodes := await self.config_cache.node_config.get_all_identifiers()):
             return await self.send_embed_msg(
                 ctx,
-                title=_("Setting Not Changed"),
-                description=_("{node} doesn't exist.\nAvailable nodes: {nodes}.").format(
-                    nodes=humanize_list(list(nodes), style="or")
+                title="Setting Not Changed",
+                description="{node} doesn't exist.\nAvailable nodes: {nodes}.".format(
+                    nodes=humanize_list(list(nodes), style="or"), node=node
                 ),
             )
         await self.config_cache.node_config.set_shard_id(node_identifier=node, set_to=shard_id)
         shard_id = await self.config_cache.node_config.get_shard_id(node_identifier=node)
         footer = None
         if await self.update_external_status():
-            footer = _("External node set to True.")
+            footer = "External node set to True."
         if shard_id != -1:
             await self.send_embed_msg(
                 ctx,
-                title=_("Setting Changed"),
-                description=_("Node will now only serve shard: {shard_id}.").format(
+                title="Setting Changed",
+                description="Node will now only serve shard: {shard_id}.".format(
                     shard_id=shard_id
                 ),
                 footer=footer,
@@ -2348,8 +2332,8 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         else:
             await self.send_embed_msg(
                 ctx,
-                title=_("Setting Changed"),
-                description=_("Node will now serve all shards."),
+                title="Setting Changed",
+                description="Node will now serve all shards.",
                 footer=footer,
             )
 
@@ -2358,8 +2342,8 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         except ProcessLookupError:
             await self.send_embed_msg(
                 ctx,
-                title=_("Failed To Shutdown Lavalink"),
-                description=_("Please reload Audio (`{prefix}reload audio`).").format(
+                title="Failed To Shutdown Lavalink",
+                description="Please reload Audio (`{prefix}reload audio`).".format(
                     prefix=ctx.prefix
                 ),
             )
@@ -2374,20 +2358,20 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         if node not in (nodes := await self.config_cache.node_config.get_all_identifiers()):
             return await self.send_embed_msg(
                 ctx,
-                title=_("Setting Not Changed"),
-                description=_("{node} doesn't exist.\nAvailable nodes: {nodes}.").format(
-                    nodes=humanize_list(list(nodes), style="or")
+                title="Setting Not Changed",
+                description="{node} doesn't exist.\nAvailable nodes: {nodes}.".format(
+                    nodes=humanize_list(list(nodes), style="or"), node=node
                 ),
             )
         state = await self.config_cache.node_config.set_search_only(node_identifier=node)
         await self.config_cache.node_config.set_search_only(node_identifier=node, set_to=not state)
         footer = None
         if await self.update_external_status():
-            footer = _("External node set to True.")
+            footer = "External node set to True."
         await self.send_embed_msg(
             ctx,
-            title=_("Setting Changed"),
-            description=_("Search only: {shard_id}.").format(
+            title="Setting Changed",
+            description="Search only: {shard_id}.".format(
                 shard_id=ENABLED_TITLE if not state else DISABLED_TITLE
             ),
             footer=footer,
@@ -2398,8 +2382,8 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         except ProcessLookupError:
             await self.send_embed_msg(
                 ctx,
-                title=_("Failed To Shutdown Lavalink"),
-                description=_("Please reload Audio (`{prefix}reload audio`).").format(
+                title="Failed To Shutdown Lavalink",
+                description="Please reload Audio (`{prefix}reload audio`).".format(
                     prefix=ctx.prefix
                 ),
             )
@@ -2414,8 +2398,8 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         if not await self.config_cache.use_managed_lavalink.get_context_value(ctx.guild):
             return await self.send_embed_msg(
                 ctx,
-                title=_("Invalid Environment"),
-                description=_(
+                title="Invalid Environment",
+                description=(
                     "You cannot changed the Java executable path of "
                     "external Lavalink instances from the Audio Cog."
                 ),
@@ -2427,9 +2411,9 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         try:
             try:
                 if not (logs.exists() and logs.is_file()):
-                    return await ctx.send(_("No logs found in your data folder."))
+                    return await ctx.send("No logs found in your data folder.")
             except OSError:
-                return await ctx.send(_("No logs found in your data folder."))
+                return await ctx.send("No logs found in your data folder.")
 
             def check(path):
                 return os.path.getsize(str(path)) > (8388608 - 1000)
@@ -2441,7 +2425,7 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
                     tar.add(str(logs), arcname="spring.log", recursive=False)
                 if check(zip_name):
                     await ctx.send(
-                        _("Logs are too large, you can find them in {path}").format(
+                        "Logs are too large, you can find them in {path}".format(
                             path=zip_name.absolute()
                         )
                     )
@@ -2451,7 +2435,7 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
             else:
                 await ctx.author.send(file=discord.File(str(logs)))
         except discord.HTTPException:
-            await ctx.send(_("I need to be able to DM you to send you the logs."))
+            await ctx.send("I need to be able to DM you to send you the logs.")
         finally:
             if zip_name is not None:
                 zip_name.unlink(missing_ok=True)
@@ -2468,8 +2452,8 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         if not internal:
             return await self.send_embed_msg(
                 ctx,
-                title=_("Invalid Environment"),
-                description=_(
+                title="Invalid Environment",
+                description=(
                     "You cannot changed the Java executable path of "
                     "external Lavalink instances from the Audio Cog."
                 ),
@@ -2478,8 +2462,8 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
             await self.config_cache.java_exec.set_global(None)
             await self.send_embed_msg(
                 ctx,
-                title=_("Java Executable Reset"),
-                description=_("Audio will now use `java` to run your Lavalink.jar"),
+                title="Java Executable Reset",
+                description="Audio will now use `java` to run your Lavalink.jar",
             )
         else:
             exc = Path(java_path)
@@ -2487,16 +2471,16 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
             if not exc.exists() or not exc.is_file():
                 return await self.send_embed_msg(
                     ctx,
-                    title=_("Invalid Environment"),
-                    description=_("`{java_path}` is not a valid executable").format(
+                    title="Invalid Environment",
+                    description="`{java_path}` is not a valid executable".format(
                         java_path=exc_absolute
                     ),
                 )
             await self.config_cache.java_exec.set_global(exc_absolute)
             await self.send_embed_msg(
                 ctx,
-                title=_("Java Executable Changed"),
-                description=_("Audio will now use `{exc}` to run your Lavalink.jar").format(
+                title="Java Executable Changed",
+                description="Audio will now use `{exc}` to run your Lavalink.jar".format(
                     exc=exc_absolute
                 ),
             )
@@ -2506,8 +2490,8 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         except ProcessLookupError:
             await self.send_embed_msg(
                 ctx,
-                title=_("Failed To Shutdown Lavalink"),
-                description=_(
+                title="Failed To Shutdown Lavalink",
+                description=(
                     "For it to take effect please reload Audio (`{prefix}reload audio`)."
                 ).format(
                     prefix=ctx.prefix,
@@ -2519,8 +2503,8 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
             except ProcessLookupError:
                 await self.send_embed_msg(
                     ctx,
-                    title=_("Failed To Shutdown Lavalink"),
-                    description=_("Please reload Audio (`{prefix}reload audio`).").format(
+                    title="Failed To Shutdown Lavalink",
+                    description="Please reload Audio (`{prefix}reload audio`).".format(
                         prefix=ctx.prefix
                     ),
                 )
@@ -2533,8 +2517,8 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
 
         if not managed:
             embed = discord.Embed(
-                title=_("Setting Changed"),
-                description=_("Managed node: {true_or_false}.").format(
+                title="Setting Changed",
+                description="Managed node: {true_or_false}.".format(
                     true_or_false=ENABLED_TITLE if not managed else DISABLED_TITLE
                 ),
             )
@@ -2546,8 +2530,8 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
             except ProcessLookupError:
                 await self.send_embed_msg(
                     ctx,
-                    title=_("Failed To Shutdown Lavalink"),
-                    description=_(
+                    title="Failed To Shutdown Lavalink",
+                    description=(
                         "Managed node: {true_or_false}\n"
                         "For it to take effect please reload "
                         "Audio (`{prefix}reload audio`)."
@@ -2559,8 +2543,8 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
             else:
                 await self.send_embed_msg(
                     ctx,
-                    title=_("Setting Changed"),
-                    description=_("Managed node: {true_or_false}.").format(
+                    title="Setting Changed",
+                    description="Managed node: {true_or_false}.".format(
                         true_or_false=ENABLED_TITLE if not managed else DISABLED_TITLE
                     ),
                 )
@@ -2569,8 +2553,8 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         except ProcessLookupError:
             await self.send_embed_msg(
                 ctx,
-                title=_("Failed To Shutdown Lavalink"),
-                description=_("Please reload Audio (`{prefix}reload audio`).").format(
+                title="Failed To Shutdown Lavalink",
+                description="Please reload Audio (`{prefix}reload audio`).".format(
                     prefix=ctx.prefix
                 ),
             )
@@ -2592,21 +2576,21 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         if not await self.config_cache.use_managed_lavalink.get_global():
             return await self.send_embed_msg(
                 ctx,
-                title=_("Setting Not Changed"),
-                description=_("You are only able to set this if you are running a managed node."),
+                title="Setting Not Changed",
+                description="You are only able to set this if you are running a managed node.",
             )
         await self.config_cache.managed_lavalink_meta.set_global_build(build)
         if build:
             await self.send_embed_msg(
                 ctx,
-                title=_("Setting Changed"),
-                description=_("Lavalink downloader will get build: {build}.").format(build=build),
+                title="Setting Changed",
+                description="Lavalink downloader will get build: {build}.".format(build=build),
             )
         else:
             await self.send_embed_msg(
                 ctx,
-                title=_("Setting Changed"),
-                description=_("Lavalink downloader attempt to get the latest known version."),
+                title="Setting Changed",
+                description="Lavalink downloader attempt to get the latest known version.",
             )
 
     @command_audioset_lavalink_managed_downloader.command(name="url")
@@ -2622,23 +2606,23 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         if not await self.config_cache.use_managed_lavalink.get_global():
             return await self.send_embed_msg(
                 ctx,
-                title=_("Setting Not Changed"),
-                description=_("You are only able to set this if you are running a node."),
+                title="Setting Not Changed",
+                description="You are only able to set this if you are running a node.",
             )
         await self.config_cache.managed_lavalink_meta.set_global_build(url)
         if url:
             await self.send_embed_msg(
                 ctx,
-                title=_("Setting Changed"),
-                description=_("Lavalink downloader will get the following jar: <{url}>.").format(
+                title="Setting Changed",
+                description="Lavalink downloader will get the following jar: <{url}>.".format(
                     url=url
                 ),
             )
         else:
             await self.send_embed_msg(
                 ctx,
-                title=_("Setting Changed"),
-                description=_("Lavalink downloader attempt to get the latest known version."),
+                title="Setting Changed",
+                description="Lavalink downloader attempt to get the latest known version.",
             )
 
     @command_audioset_lavalink_managed.group(name="config", aliases=["conf", "yaml"])
@@ -2660,16 +2644,16 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         if not await self.config_cache.use_managed_lavalink.get_global():
             return await self.send_embed_msg(
                 ctx,
-                title=_("Setting Not Changed"),
-                description=_("You are only able to set this if you are running a managed node."),
+                title="Setting Not Changed",
+                description="You are only able to set this if you are running a managed node.",
             )
 
         await self.config_cache.managed_lavalink_yaml.set_server_address(set_to=host)
         host = await self.config_cache.managed_lavalink_yaml.get_server_address()
         await self.send_embed_msg(
             ctx,
-            title=_("Setting Changed"),
-            description=_(
+            title="Setting Changed",
+            description=(
                 "Managed node will now accept connection on {host}.\n\n"
                 "Run `{p}{cmd}` for it to take effect."
             ).format(
@@ -2690,16 +2674,16 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         if not await self.config_cache.use_managed_lavalink.get_global():
             return await self.send_embed_msg(
                 ctx,
-                title=_("Setting Not Changed"),
-                description=_("You are only able to set this if you are running a managed node."),
+                title="Setting Not Changed",
+                description="You are only able to set this if you are running a managed node.",
             )
 
         await self.config_cache.managed_lavalink_yaml.set_lavalink_password(set_to=password)
         password = await self.config_cache.managed_lavalink_yaml.get_lavalink_password()
         await self.send_embed_msg(
             ctx,
-            title=_("Setting Changed"),
-            description=_(
+            title="Setting Changed",
+            description=(
                 "Managed node will now accept {password} as the authorization token.\n\n"
                 "Run `{p}{cmd}` for it to take effect."
             ).format(
@@ -2720,16 +2704,16 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         if not await self.config_cache.use_managed_lavalink.get_global():
             return await self.send_embed_msg(
                 ctx,
-                title=_("Setting Not Changed"),
-                description=_("You are only able to set this if you are running a managed node."),
+                title="Setting Not Changed",
+                description="You are only able to set this if you are running a managed node.",
             )
 
         await self.config_cache.managed_lavalink_yaml.set_server_port(set_to=port)
         port = await self.config_cache.managed_lavalink_yaml.get_server_port()
         await self.send_embed_msg(
             ctx,
-            title=_("Setting Changed"),
-            description=_(
+            title="Setting Changed",
+            description=(
                 "Managed node will now accept connection on {port}.\n\n"
                 "Run `{p}{cmd}` for it to take effect."
             ).format(
@@ -2743,8 +2727,8 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         if not await self.config_cache.use_managed_lavalink.get_global():
             return await self.send_embed_msg(
                 ctx,
-                title=_("Setting Not Changed"),
-                description=_("You are only able to set this if you are running a managed node."),
+                title="Setting Not Changed",
+                description="You are only able to set this if you are running a managed node.",
             )
 
         state = await self.config_cache.managed_lavalink_yaml.get_jda_nsa()
@@ -2752,8 +2736,8 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         if not state:
             await self.send_embed_msg(
                 ctx,
-                title=_("Setting Changed"),
-                description=_(
+                title="Setting Changed",
+                description=(
                     "Managed node will now start with JDA-NAS enabled.\n\n"
                     "Run `{p}{cmd}` for it to take effect."
                 ).format(p=ctx.prefix, cmd=self.command_audioset_lavalink_restart.qualified_name),
@@ -2761,8 +2745,8 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         else:
             await self.send_embed_msg(
                 ctx,
-                title=_("Setting Changed"),
-                description=_(
+                title="Setting Changed",
+                description=(
                     "Managed node will now start with JDA-NAS disabled.\n\n"
                     "Run `{p}{cmd}` for it to take effect."
                 ).format(p=ctx.prefix, cmd=self.command_audioset_lavalink_restart.qualified_name),
@@ -2778,8 +2762,8 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         if not await self.config_cache.use_managed_lavalink.get_global():
             return await self.send_embed_msg(
                 ctx,
-                title=_("Setting Not Changed"),
-                description=_("You are only able to set this if you are running a managed node."),
+                title="Setting Not Changed",
+                description="You are only able to set this if you are running a managed node.",
             )
 
         state = await self.config_cache.managed_lavalink_yaml.get_source_http()
@@ -2787,8 +2771,8 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         if not state:
             await self.send_embed_msg(
                 ctx,
-                title=_("Setting Changed"),
-                description=_(
+                title="Setting Changed",
+                description=(
                     "Managed node will allow playback from direct URLs.\n\n"
                     "Run `{p}{cmd}` for it to take effect."
                 ).format(p=ctx.prefix, cmd=self.command_audioset_lavalink_restart.qualified_name),
@@ -2796,8 +2780,8 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         else:
             await self.send_embed_msg(
                 ctx,
-                title=_("Setting Changed"),
-                description=_(
+                title="Setting Changed",
+                description=(
                     "Managed node will not play from direct URLs anymore.\n\n"
                     "Run `{p}{cmd}` for it to take effect."
                 ).format(p=ctx.prefix, cmd=self.command_audioset_lavalink_restart.qualified_name),
@@ -2811,8 +2795,8 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         if not await self.config_cache.use_managed_lavalink.get_global():
             return await self.send_embed_msg(
                 ctx,
-                title=_("Setting Not Changed"),
-                description=_("You are only able to set this if you are running a managed node."),
+                title="Setting Not Changed",
+                description="You are only able to set this if you are running a managed node.",
             )
 
         state = await self.config_cache.managed_lavalink_yaml.get_source_bandcamp()
@@ -2820,8 +2804,8 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         if not state:
             await self.send_embed_msg(
                 ctx,
-                title=_("Setting Changed"),
-                description=_(
+                title="Setting Changed",
+                description=(
                     "Managed node will allow playback from Bandcamp.\n\n"
                     "Run `{p}{cmd}` for it to take effect."
                 ).format(p=ctx.prefix, cmd=self.command_audioset_lavalink_restart.qualified_name),
@@ -2829,8 +2813,8 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         else:
             await self.send_embed_msg(
                 ctx,
-                title=_("Setting Changed"),
-                description=_(
+                title="Setting Changed",
+                description=(
                     "Managed node will not play from Bandcamp anymore.\n\n"
                     "Run `{p}{cmd}` for it to take effect."
                 ).format(p=ctx.prefix, cmd=self.command_audioset_lavalink_restart.qualified_name),
@@ -2842,8 +2826,8 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         if not await self.config_cache.use_managed_lavalink.get_global():
             return await self.send_embed_msg(
                 ctx,
-                title=_("Setting Not Changed"),
-                description=_("You are only able to set this if you are running a managed node."),
+                title="Setting Not Changed",
+                description="You are only able to set this if you are running a managed node.",
             )
 
         state = await self.config_cache.managed_lavalink_yaml.get_source_local()
@@ -2851,8 +2835,8 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         if not state:
             await self.send_embed_msg(
                 ctx,
-                title=_("Setting Changed"),
-                description=_(
+                title="Setting Changed",
+                description=(
                     "Managed node will allow playback from local files.\n\n"
                     "Run `{p}{cmd}` for it to take effect."
                 ).format(p=ctx.prefix, cmd=self.command_audioset_lavalink_restart.qualified_name),
@@ -2860,8 +2844,8 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         else:
             await self.send_embed_msg(
                 ctx,
-                title=_("Setting Changed"),
-                description=_(
+                title="Setting Changed",
+                description=(
                     "Managed node will not play from local files anymore.\n\n"
                     "Run `{p}{cmd}` for it to take effect."
                 ).format(p=ctx.prefix, cmd=self.command_audioset_lavalink_restart.qualified_name),
@@ -2875,8 +2859,8 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         if not await self.config_cache.use_managed_lavalink.get_global():
             return await self.send_embed_msg(
                 ctx,
-                title=_("Setting Not Changed"),
-                description=_("You are only able to set this if you are running a managed node."),
+                title="Setting Not Changed",
+                description="You are only able to set this if you are running a managed node.",
             )
 
         state = await self.config_cache.managed_lavalink_yaml.get_source_soundcloud()
@@ -2884,8 +2868,8 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         if not state:
             await self.send_embed_msg(
                 ctx,
-                title=_("Setting Changed"),
-                description=_(
+                title="Setting Changed",
+                description=(
                     "Managed node will allow playback from Soundcloud.\n\n"
                     "Run `{p}{cmd}` for it to take effect."
                 ).format(p=ctx.prefix, cmd=self.command_audioset_lavalink_restart.qualified_name),
@@ -2893,8 +2877,8 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         else:
             await self.send_embed_msg(
                 ctx,
-                title=_("Setting Changed"),
-                description=_(
+                title="Setting Changed",
+                description=(
                     "Managed node will not play from Soundcloud anymore.\n\n"
                     "Run `{p}{cmd}` for it to take effect."
                 ).format(p=ctx.prefix, cmd=self.command_audioset_lavalink_restart.qualified_name),
@@ -2906,8 +2890,8 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         if not await self.config_cache.use_managed_lavalink.get_global():
             return await self.send_embed_msg(
                 ctx,
-                title=_("Setting Not Changed"),
-                description=_("You are only able to set this if you are running a managed node."),
+                title="Setting Not Changed",
+                description="You are only able to set this if you are running a managed node.",
             )
 
         state = await self.config_cache.managed_lavalink_yaml.get_source_youtube()
@@ -2915,8 +2899,8 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         if not state:
             await self.send_embed_msg(
                 ctx,
-                title=_("Setting Changed"),
-                description=_(
+                title="Setting Changed",
+                description=(
                     "Managed node will allow playback from YouTube.\n\n"
                     "Run `{p}{cmd}` for it to take effect."
                 ).format(p=ctx.prefix, cmd=self.command_audioset_lavalink_restart.qualified_name),
@@ -2924,8 +2908,8 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         else:
             await self.send_embed_msg(
                 ctx,
-                title=_("Setting Changed"),
-                description=_(
+                title="Setting Changed",
+                description=(
                     "Managed node will not play from YouTube anymore.\n\n"
                     "Run `{p}{cmd}` for it to take effect."
                 ).format(p=ctx.prefix, cmd=self.command_audioset_lavalink_restart.qualified_name),
@@ -2937,8 +2921,8 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         if not await self.config_cache.use_managed_lavalink.get_global():
             return await self.send_embed_msg(
                 ctx,
-                title=_("Setting Not Changed"),
-                description=_("You are only able to set this if you are running a managed node."),
+                title="Setting Not Changed",
+                description="You are only able to set this if you are running a managed node.",
             )
 
         state = await self.config_cache.managed_lavalink_yaml.get_source_twitch()
@@ -2946,8 +2930,8 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         if not state:
             await self.send_embed_msg(
                 ctx,
-                title=_("Setting Changed"),
-                description=_(
+                title="Setting Changed",
+                description=(
                     "Managed node will allow playback from Twitch.\n\n"
                     "Run `{p}{cmd}` for it to take effect."
                 ).format(p=ctx.prefix, cmd=self.command_audioset_lavalink_restart.qualified_name),
@@ -2955,8 +2939,8 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         else:
             await self.send_embed_msg(
                 ctx,
-                title=_("Setting Changed"),
-                description=_(
+                title="Setting Changed",
+                description=(
                     "Managed node will not play from Twitch anymore.\n\n"
                     "Run `{p}{cmd}` for it to take effect."
                 ).format(p=ctx.prefix, cmd=self.command_audioset_lavalink_restart.qualified_name),
@@ -2973,8 +2957,8 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         if not await self.config_cache.use_managed_lavalink.get_global():
             return await self.send_embed_msg(
                 ctx,
-                title=_("Setting Not Changed"),
-                description=_("You are only able to set this if you are running a managed node."),
+                title="Setting Not Changed",
+                description="You are only able to set this if you are running a managed node.",
             )
         state = await self.config_cache.managed_lavalink_meta.get_global_stable()
         await self.config_cache.managed_lavalink_meta.set_global_stable(not state)
@@ -2982,14 +2966,14 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         if not state:
             await self.send_embed_msg(
                 ctx,
-                title=_("Setting Changed"),
-                description=_("Managed node downloader will use the stable track for JARs."),
+                title="Setting Changed",
+                description="Managed node downloader will use the stable track for JARs.",
             )
         else:
             await self.send_embed_msg(
                 ctx,
-                title=_("Setting Changed"),
-                description=_("Managed node downloader will use the pre-release track for JARs."),
+                title="Setting Changed",
+                description="Managed node downloader will use the pre-release track for JARs.",
             )
 
     @command_audioset_lavalink_managed_downloader.command(name="update")
@@ -2998,8 +2982,8 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         if not await self.config_cache.use_managed_lavalink.get_global():
             return await self.send_embed_msg(
                 ctx,
-                title=_("Setting Not Changed"),
-                description=_("You are only able to set this if you are running a managed node."),
+                title="Setting Not Changed",
+                description="You are only able to set this if you are running a managed node.",
             )
         state = await self.config_cache.managed_lavalink_server_auto_update.get_global()
         await self.config_cache.managed_lavalink_server_auto_update.set_global(not state)
@@ -3007,16 +2991,16 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         if not state:
             await self.send_embed_msg(
                 ctx,
-                title=_("Setting Changed"),
-                description=_(
+                title="Setting Changed",
+                description=(
                     "Managed node downloader will now auto-update upon cog reload and bot restart."
                 ),
             )
         else:
             await self.send_embed_msg(
                 ctx,
-                title=_("Setting Changed"),
-                description=_(
+                title="Setting Changed",
+                description=(
                     "Managed node downloader will no longer auto-update and will depend on Red version updates."
                 ),
             )
@@ -3027,11 +3011,11 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
 
         name, tag, url, date = await get_latest_lavalink_release(date=True)
         version, build = tag.split("_")
-        msg = "----" + _("Release Builds") + "----        \n"
-        msg += _("Release Version:  [{version}]\n").format(version=version)
-        msg += _("Release Build:    [{build}]\n").format(build=build)
-        msg += _("Release Date:     [{published}]\n").format(published=date)
-        msg += _("Release URL:      [{url}]\n\n").format(url=url)
+        msg = "----" + "Release Builds" + "----        \n"
+        msg += "Release Version:  [{version}]\n".format(version=version)
+        msg += "Release Build:    [{build}]\n".format(build=build)
+        msg += "Release Date:     [{published}]\n".format(published=date)
+        msg += "Release URL:      [{url}]\n\n".format(url=url)
 
         if await self.config_cache.managed_lavalink_meta.get_global_stable():
             with contextlib.suppress(Exception):
@@ -3040,11 +3024,11 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
                 )
                 alpha_version, alpha_build = alpha_tag.split("_")
                 if int(alpha_build) > int(build):
-                    msg += "----" + _("Alpha Builds") + "----        \n"
-                    msg += _("Alpha Version:  [{version}]\n").format(version=alpha_version)
-                    msg += _("Alpha Build:    [{build}]\n").format(build=alpha_build)
-                    msg += _("Alpha Date:     [{published}]\n").format(published=alpha_date)
-                    msg += _("Alpha URL:      [{url}]\n\n").format(url=alpha_url)
+                    msg += "----" + "Alpha Builds" + "----        \n"
+                    msg += "Alpha Version:  [{version}]\n".format(version=alpha_version)
+                    msg += "Alpha Build:    [{build}]\n".format(build=alpha_build)
+                    msg += "Alpha Date:     [{published}]\n".format(published=alpha_date)
+                    msg += "Alpha URL:      [{url}]\n\n".format(url=alpha_url)
 
         await self.send_embed_msg(ctx, description=box(msg, lang="ini"), no_embed=True)
 
@@ -3054,9 +3038,9 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         if node not in (nodes := await self.config_cache.node_config.get_all_identifiers()):
             return await self.send_embed_msg(
                 ctx,
-                title=_("Setting Not Changed"),
-                description=_("{node} doesn't exist.\nAvailable nodes: {nodes}.").format(
-                    nodes=humanize_list(list(nodes), style="or")
+                title="Setting Not Changed",
+                description="{node} doesn't exist.\nAvailable nodes: {nodes}.".format(
+                    nodes=humanize_list(list(nodes), style="or"), node=node
                 ),
             )
         node_obj = lavalink.fetch_node(name=node)
@@ -3070,35 +3054,31 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         shard = await self.config_cache.node_config.get_shard_id(node_identifier=node)
         search_only = await self.config_cache.node_config.get_search_only(node_identifier=node)
 
-        msg = "----" + _("Connection Settings") + "----        \n"
-        msg += _("Host:                   [{host}]\n").format(host=host)
-        msg += _("Port:                   [{port}]\n").format(port=port)
-        msg += _("Password:               [{password}]\n").format(password=password)
-        msg += _("Dedicated shard:        [{shard}]\n").format(
-            shard=shard if shard >= 0 else _("All")
-        )
-        msg += _("Region:                 [{region}]\n").format(
-            region=region if region else _("All")
-        )
-        msg += _("Rest URI:               [{rest_uri}]\n").format(rest_uri=rest_uri)
-        msg += _("Search Mode:            [{search}]\n").format(
+        msg = "----" + "Connection Settings" + "----        \n"
+        msg += "Host:                   [{host}]\n".format(host=host)
+        msg += "Port:                   [{port}]\n".format(port=port)
+        msg += "Password:               [{password}]\n".format(password=password)
+        msg += "Dedicated shard:        [{shard}]\n".format(shard=shard if shard >= 0 else "All")
+        msg += "Region:                 [{region}]\n".format(region=region if region else "All")
+        msg += "Rest URI:               [{rest_uri}]\n".format(rest_uri=rest_uri)
+        msg += "Search Mode:            [{search}]\n".format(
             search=ENABLED_TITLE if search_only else DISABLED_TITLE
         )
 
         msg += (
             "\n---"
-            + _("Lavalink Settings")
+            + "Lavalink Settings"
             + "---        \n"
-            + _("Cog version:            [{version}]\n")
-            + _("Red-Lavalink:           [{lavalink_version}]\n")
-            + _("Managed Lavalink:       [{managed}]\n")
+            + "Cog version:            [{version}]\n"
+            + "Red-Lavalink:           [{lavalink_version}]\n"
+            + "Managed Lavalink:       [{managed}]\n"
         ).format(
             version=__version__,
             lavalink_version=lavalink.__version__,
             managed=ENABLED_TITLE if managed else DISABLED_TITLE,
         )
-        msg += "\n----" + _("Node Info") + "----        \n"
-        _unknown = _("Unknown")
+        msg += "\n----" + "Node Info" + "----        \n"
+        _unknown = "Unknown"
         if node_obj:
             try:
                 node_info = await node_obj.server_metadata()
@@ -3140,7 +3120,7 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
                     else _unknown,
                 )
 
-                msg += _(
+                msg += (
                     "Build:                  [{llbuild}]\n"
                     "Version:                [{llversion}]\n"
                     "Branch:                 [{llbranch}]\n"
@@ -3160,13 +3140,13 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
             except Exception:
                 pass
         if managed:
-            msg += _("Lavalink auto-update:   [{update}]\n").format(
+            msg += "Lavalink auto-update:   [{update}]\n".format(
                 update=await self.config_cache.managed_lavalink_server_auto_update.get_global(),
             )
 
             custom_url = await self.config_cache.managed_lavalink_meta.get_global_url()
             if custom_url:
-                msg += _(
+                msg += (
                     "Lavalink build:         [{build}]\nLavalink URL:           [{url}]\n"
                 ).format(
                     build=await self.config_cache.managed_lavalink_meta.get_global_build(),
@@ -3174,20 +3154,20 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
                 )
             else:
                 if await self.config_cache.managed_lavalink_meta.get_global_stable():
-                    user_friendly = _("Stable")
+                    user_friendly = "Stable"
                 else:
-                    user_friendly = _("Alpha")
-                msg += _("Download track:         [{track}]\n").format(
+                    user_friendly = "Alpha"
+                msg += "Download track:         [{track}]\n".format(
                     track=user_friendly,
                 )
 
-        msg += "\n----" + _("Miscellaneous Settings") + "----        \n"
-        msg += _("Localtracks path:       [{localpath}]\n").format(localpath=local_path)
+        msg += "\n----" + "Miscellaneous Settings" + "----        \n"
+        msg += "Localtracks path:       [{localpath}]\n".format(localpath=local_path)
 
         try:
             await self.send_embed_msg(ctx.author, description=box(msg, lang="ini"), no_embed=True)
         except discord.HTTPException:
-            await ctx.send(_("I need to be able to DM you to send you this info."))
+            await ctx.send("I need to be able to DM you to send you this info.")
 
     @command_audioset_lavalink.command(name="stats")
     @commands.bot_has_permissions(embed_links=True, add_reactions=True)
@@ -3216,24 +3196,22 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
                 )
                 msg += f"{p.guild.name} [`{connect_dur}`]: {current_title}\n"
             except AttributeError:
-                msg += "{} [`{}`]: **{}**\n".format(
-                    p.guild.name, connect_dur, _("Nothing playing.")
-                )
+                msg += "{} [`{}`]: **{}**\n".format(p.guild.name, connect_dur, "Nothing playing.")
 
         if total_num == 0:
-            return await self.send_embed_msg(ctx, title=_("Not connected anywhere."))
+            return await self.send_embed_msg(ctx, title="Not connected anywhere.")
         servers_embed = []
         pages = 1
         for page in pagify(msg, delims=["\n"], page_length=1500):
             em = discord.Embed(
                 colour=await ctx.embed_colour(),
-                title=_("Playing in {num}/{total} servers:").format(
+                title="Playing in {num}/{total} servers:".format(
                     num=humanize_number(server_num), total=humanize_number(total_num)
                 ),
                 description=page,
             )
             em.set_footer(
-                text=_("Page {}/{}").format(
+                text="Page {}/{}".format(
                     humanize_number(pages), humanize_number((math.ceil(len(msg) / 1500)))
                 )
             )
@@ -3255,8 +3233,8 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
             await self.api_interface.persistent_queue_api.drop(player.guild.id)
         return await self.send_embed_msg(
             ctx,
-            title=_("Admin Action."),
-            description=_("Successfully disconnected from all voice channels."),
+            title="Admin Action.",
+            description="Successfully disconnected from all voice channels.",
         )
 
     @command_audioset_lavalink_disconnect.command(name="active")
@@ -3270,8 +3248,8 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
             await self.api_interface.persistent_queue_api.drop(player.guild.id)
         return await self.send_embed_msg(
             ctx,
-            title=_("Admin Action."),
-            description=_("Successfully disconnected from all active voice channels."),
+            title="Admin Action.",
+            description="Successfully disconnected from all active voice channels.",
         )
 
     @command_audioset_lavalink_disconnect.command(name="idle")
@@ -3286,8 +3264,8 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
             await self.api_interface.persistent_queue_api.drop(player.guild.id)
         return await self.send_embed_msg(
             ctx,
-            title=_("Admin Action."),
-            description=_("Successfully disconnected from all idle voice channels."),
+            title="Admin Action.",
+            description="Successfully disconnected from all idle voice channels.",
         )
 
     @command_audioset_lavalink_disconnect.command(name="specific", aliases=["this"])
@@ -3300,8 +3278,8 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         except (KeyError, IndexError, AttributeError):
             return await self.send_embed_msg(
                 ctx,
-                title=_("Player Not Found."),
-                description=_(
+                title="Player Not Found.",
+                description=(
                     "The specified player was not found ensure to provide the correct server ID.."
                 ),
             )
@@ -3310,8 +3288,8 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         await self.api_interface.persistent_queue_api.drop(player.guild.id)
         return await self.send_embed_msg(
             ctx,
-            title=_("Admin Action."),
-            description=_("Successfully disconnected from the specified server."),
+            title="Admin Action.",
+            description="Successfully disconnected from the specified server.",
         )
 
     # --------------------------- USER COMMANDS ----------------------------
@@ -3325,8 +3303,8 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         if len(country) != 2:
             return await self.send_embed_msg(
                 ctx,
-                title=_("Invalid Country Code"),
-                description=_(
+                title="Invalid Country Code",
+                description=(
                     "Please use an official [ISO 3166-1 alpha-2]"
                     "(https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) code."
                 ),
@@ -3334,8 +3312,8 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         country = country.upper()
         await self.send_embed_msg(
             ctx,
-            title=_("Setting Changed"),
-            description=_("Country Code set to {country}.").format(country=country),
+            title="Setting Changed",
+            description="Country Code set to {country}.".format(country=country),
         )
 
         await self.config_cache.country_code.set_user(ctx.author, country)
@@ -3347,9 +3325,9 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         country_code = await self.config_cache.country_code.get_user(ctx.author)
         msg = (
             "----"
-            + _("User Settings")
+            + "User Settings"
             + "----        \nSpotify search:   [{country_code}]\n".format(
-                country_code=country_code if country_code else _("Not set"),
+                country_code=country_code if country_code else "Not set",
             )
         )
         await self.send_embed_msg(ctx, description=box(msg, lang="ini"), no_embed=True)
@@ -3391,34 +3369,32 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
         )
         cache_enabled = CacheLevel.set_lavalink().is_subset(current_level)
         vote_enabled = await self.config_cache.votes.get_context_value(ctx.guild)
-        msg = "----" + _("Context Settings") + "----        \n"
-        msg += _("Auto-disconnect:  [{dc}]\n").format(dc=ENABLED_TITLE if dc else DISABLED_TITLE)
-        msg += _("Auto-play:        [{autoplay}]\n").format(
+        msg = "----" + "Context Settings" + "----        \n"
+        msg += "Auto-disconnect:  [{dc}]\n".format(dc=ENABLED_TITLE if dc else DISABLED_TITLE)
+        msg += "Auto-play:        [{autoplay}]\n".format(
             autoplay=ENABLED_TITLE if autoplay else DISABLED_TITLE
         )
         if emptydc_enabled:
-            msg += _("Disconnect timer: [{num_seconds}]\n").format(
+            msg += "Disconnect timer: [{num_seconds}]\n".format(
                 num_seconds=self.get_time_string(emptydc_timer)
             )
         if emptypause_enabled:
-            msg += _("Auto Pause timer: [{num_seconds}]\n").format(
+            msg += "Auto Pause timer: [{num_seconds}]\n".format(
                 num_seconds=self.get_time_string(emptypause_timer)
             )
         if dj_enabled and dj_roles:
-            msg += _("DJ Roles:         [{number}]\n").format(number=len(dj_roles))
+            msg += "DJ Roles:         [{number}]\n".format(number=len(dj_roles))
         if jukebox:
-            msg += _("Jukebox:          [{jukebox_name}]\n").format(jukebox_name=jukebox)
-            msg += _("Command price:    [{jukebox_price}]\n").format(
+            msg += "Jukebox:          [{jukebox_name}]\n".format(jukebox_name=jukebox)
+            msg += "Command price:    [{jukebox_price}]\n".format(
                 jukebox_price=humanize_number(jukebox_price)
             )
         if maxlength > 0:
-            msg += _("Max track length: [{length}]\n").format(
-                length=self.get_time_string(maxlength)
-            )
+            msg += "Max track length: [{length}]\n".format(length=self.get_time_string(maxlength))
         if maxqueue > 0:
-            msg += _("Max queue length: [{length}]\n").format(length=humanize_number(maxqueue))
+            msg += "Max queue length: [{length}]\n".format(length=humanize_number(maxqueue))
 
-        msg += _(
+        msg += (
             "Repeat:           [{repeat}]\n"
             "Shuffle:          [{shuffle}]\n"
             "Shuffle bumped:   [{bumpped_shuffle}]\n"
@@ -3438,11 +3414,11 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
             volume=volume,
         )
         if thumbnail:
-            msg += _("Thumbnails:       [{0}]\n").format(
+            msg += "Thumbnails:       [{0}]\n".format(
                 ENABLED_TITLE if thumbnail else DISABLED_TITLE
             )
         if vote_percent > 0:
-            msg += _(
+            msg += (
                 "Vote skip:        [{vote_enabled}]\nVote percentage:  [{vote_percent}%]\n"
             ).format(
                 vote_percent=vote_percent,
@@ -3456,26 +3432,26 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
                 pid = autoplaylist["id"]
                 pscope = autoplaylist["scope"]
                 if pscope == PlaylistScope.GUILD.value:
-                    pscope = _("Server")
+                    pscope = "Server"
                 elif pscope == PlaylistScope.USER.value:
-                    pscope = _("User")
+                    pscope = "User"
                 else:
-                    pscope = _("Global")
+                    pscope = "Global"
             elif cache_enabled:
-                pname = _("Cached")
-                pid = _("Cached")
-                pscope = _("Cached")
+                pname = "Cached"
+                pid = "Cached"
+                pscope = "Cached"
             else:
-                pname = _("US Top 100")
-                pid = _("US Top 100")
-                pscope = _("US Top 100")
+                pname = "US Top 100"
+                pid = "US Top 100"
+                pscope = "US Top 100"
             msg += (
                 "\n---"
-                + _("Auto-play Settings")
+                + "Auto-play Settings"
                 + "---        \n"
-                + _("Playlist name:    [{pname}]\n")
-                + _("Playlist ID:      [{pid}]\n")
-                + _("Playlist scope:   [{pscope}]\n")
+                + "Playlist name:    [{pname}]\n"
+                + "Playlist ID:      [{pid}]\n"
+                + "Playlist scope:   [{pscope}]\n"
             ).format(pname=pname, pid=pid, pscope=pscope)
 
         await self.send_embed_msg(ctx, description=box(msg, lang="ini"), no_embed=True)
@@ -3486,7 +3462,7 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
     @commands.is_owner()
     async def command_audioset_youtubeapi(self, ctx: commands.Context):
         """Instructions to set the YouTube API key."""
-        message = _(
+        message = (
             "1. Go to Google Developers Console and log in with your Google account.\n"
             "(https://console.developers.google.com/)\n"
             "2. You should be prompted to create a new project (name does not matter).\n"
@@ -3505,7 +3481,7 @@ class AudioSetCommands(MixinMeta, metaclass=CompositeMetaClass):
     @commands.is_owner()
     async def command_audioset_spotifyapi(self, ctx: commands.Context):
         """Instructions to set the Spotify API tokens."""
-        message = _(
+        message = (
             "1. Go to Spotify developers and log in with your Spotify account.\n"
             "(https://developer.spotify.com/dashboard/applications)\n"
             '2. Click "Create An App".\n'

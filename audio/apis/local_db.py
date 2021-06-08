@@ -65,7 +65,7 @@ if TYPE_CHECKING:
     from ..core.utilities import SettingCacheManager
 
 log = logging.getLogger("red.cogs.Audio.api.LocalDB")
-_ = lambda s: s
+
 _SCHEMA_VERSION = 3
 
 

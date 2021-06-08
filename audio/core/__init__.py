@@ -8,6 +8,10 @@ import asyncio
 import datetime
 
 # Dependency Imports
+from redbot.core import Config
+from redbot.core.bot import Red
+from redbot.core.commands import Cog
+from redbot.core.data_manager import cog_data_path
 import aiohttp
 import discord
 
@@ -17,18 +21,10 @@ try:
 except ImportError:
     import json
 
-# Dependency Imports
-from redbot.core import Config
-from redbot.core.bot import Red
-from redbot.core.commands import Cog
-from redbot.core.data_manager import cog_data_path
-
 # Audio Imports
 from ..utils import PlaylistScope
 from . import commands, events, tasks, utilities
 from .cog_utils import CompositeMetaClass
-
-_ = lambda s: s
 
 
 class Audio(

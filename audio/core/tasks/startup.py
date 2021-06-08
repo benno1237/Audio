@@ -28,7 +28,6 @@ from ..abc import MixinMeta
 from ..cog_utils import _OWNER_NOTIFICATION, _SCHEMA_VERSION, CompositeMetaClass
 
 log = logging.getLogger("red.cogs.Audio.cog.Tasks.startup")
-_ = lambda s: s
 
 
 class StartUpTasks(MixinMeta, metaclass=CompositeMetaClass):
@@ -260,7 +259,7 @@ class StartUpTasks(MixinMeta, metaclass=CompositeMetaClass):
                         notify_channel = self.bot.get_channel(notify_channel)
                         if notify_channel:
                             await self.send_embed_msg(
-                                notify_channel, title=_("Couldn't get a valid track.")
+                                notify_channel, title="Couldn't get a valid track."
                             )
                         return
                     except TrackEnqueueError:
@@ -268,8 +267,8 @@ class StartUpTasks(MixinMeta, metaclass=CompositeMetaClass):
                         if notify_channel:
                             await self.send_embed_msg(
                                 notify_channel,
-                                title=_("Unable to Get Track"),
-                                description=_(
+                                title="Unable to Get Track",
+                                description=(
                                     "I'm unable to get a track from Lavalink at the moment, "
                                     "try again in a few minutes."
                                 ),
@@ -283,8 +282,7 @@ class StartUpTasks(MixinMeta, metaclass=CompositeMetaClass):
         if current_notification == _OWNER_NOTIFICATION:
             return
         if current_notification < 1 <= _OWNER_NOTIFICATION:
-            msg = _(
-                """Hello, this message brings you an important update regarding the core Audio cog:
+            msg = """Hello, this message brings you an important update regarding the core Audio cog:
 
 Starting from Audio v2.3.0+ you can take advantage of the **Global Audio API**, a new service offered by the Cog-Creators organization that allows your bot to greatly reduce the amount of requests done to YouTube / Spotify. This reduces the likelihood of YouTube rate-limiting your bot for making requests too often.
 See `[p]help audioset global globalapi` for more information.
@@ -295,6 +293,5 @@ Note: by using this service you accept that your bot's IP address will be disclo
 
 On a related note, it is highly recommended that you enable your local cache if you haven't yet.
 To do so, run `[p]audioset global cache 5`. This cache, which stores only metadata, will make repeated audio requests faster and further reduce the likelihood of YouTube rate-limiting your bot. Since it's only metadata the required disk space for this cache is expected to be negligible."""
-            )
             await send_to_owners_with_prefix_replaced(self.bot, msg)
             await self.config.owner_notification.set(1)

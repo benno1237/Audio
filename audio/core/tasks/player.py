@@ -19,7 +19,6 @@ from ..abc import MixinMeta
 from ..cog_utils import CompositeMetaClass
 
 log = logging.getLogger("red.cogs.Audio.cog.Tasks.player")
-_ = lambda s: s
 
 
 class PlayerTasks(MixinMeta, metaclass=CompositeMetaClass):

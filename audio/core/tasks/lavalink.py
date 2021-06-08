@@ -18,7 +18,6 @@ from ..abc import MixinMeta
 from ..cog_utils import CompositeMetaClass
 
 log = logging.getLogger("red.cogs.Audio.cog.Tasks.lavalink")
-_ = lambda s: s
 
 
 class LavalinkTasks(MixinMeta, metaclass=CompositeMetaClass):

@@ -31,7 +31,6 @@ if TYPE_CHECKING:
     from .. import Audio
     from ..core.utilities import SettingCacheManager
 
-_ = lambda s: s
 
 log = logging.getLogger("red.cogs.Audio.api.Spotify")
 
@@ -186,7 +185,7 @@ class SpotifyWrapper:
         with contextlib.suppress(KeyError):
             if result["error"]["status"] == 401:
                 raise SpotifyFetchError(
-                    message=_(
+                    message=(
                         "The Spotify API key or client secret has not been set properly. "
                         "\nUse `{prefix}audioset spotifyapi` for instructions."
                     )

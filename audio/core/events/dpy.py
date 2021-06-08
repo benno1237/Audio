@@ -26,7 +26,7 @@ from ..abc import MixinMeta
 from ..cog_utils import CompositeMetaClass, HUMANIZED_PERM
 
 log = logging.getLogger("red.cogs.Audio.cog.Events.dpy")
-_ = lambda s: s
+
 RE_CONVERSION: Final[Pattern] = re.compile('Converting to "(.*)" failed for parameter "(.*)".')
 
 
@@ -43,7 +43,7 @@ class DpyEvents(MixinMeta, metaclass=CompositeMetaClass):
             # This message does not need to be shown to non Owners,
             if is_owner:
                 await ctx.send(
-                    _(
+                    (
                         "You have attempted to run our Lavalink node on an unsupported"
                         " architecture. Only settings related commands will be available."
                     )
@@ -87,7 +87,7 @@ class DpyEvents(MixinMeta, metaclass=CompositeMetaClass):
                 voice: discord.VoiceState = ctx.author.voice
                 if ctx.author.voice:
                     if voice.self_deaf or voice.deaf:
-                        msg = _("You are unable to run this command while deafened.")
+                        msg = "You are unable to run this command while deafened."
                         raise CommandRejected(message=msg, reason="deafened")
 
         current_perms = ctx.channel.permissions_for(ctx.me)
@@ -111,14 +111,14 @@ class DpyEvents(MixinMeta, metaclass=CompositeMetaClass):
                 humanize_list(list(missing_permissions)),
             )
             if not surpass_ignore:
-                text = _(
+                text = (
                     "I'm missing permissions in this server, "
                     "Please address this as soon as possible.\n\n"
                     "Expected Permissions:\n"
                 )
                 for perm, value in missing_perms.items():
                     text += "{perm}: [{status}]\n".format(
-                        status=_("Enabled") if value else _("Disabled"),
+                        status="Enabled" if value else "Disabled",
                         perm=HUMANIZED_PERM.get(perm),
                     )
                 text = text.strip()
@@ -150,7 +150,7 @@ class DpyEvents(MixinMeta, metaclass=CompositeMetaClass):
             if not dj_roles:
                 await self.config_cache.dj_status.set_guild(ctx.guild, None)
                 await self.config_cache.dj_roles.set_guild(ctx.guild, None)
-                await self.send_embed_msg(ctx, title=_("No DJ role found. Disabling DJ mode."))
+                await self.send_embed_msg(ctx, title="No DJ role found. Disabling DJ mode.")
 
     async def cog_after_invoke(self, ctx: commands.Context) -> None:
         await self.maybe_run_pending_db_tasks(ctx)
@@ -162,13 +162,13 @@ class DpyEvents(MixinMeta, metaclass=CompositeMetaClass):
             handled = True
             await self.send_embed_msg(
                 ctx,
-                title=_("Unable To Run Command"),
+                title="Unable To Run Command",
                 description=error.message,
                 error=True,
             )
         elif isinstance(error, commands.ArgParserFailure):
             handled = True
-            msg = _("`{user_input}` is not a valid value for `{command}`").format(
+            msg = "`{user_input}` is not a valid value for `{command}`".format(
                 user_input=error.user_input,
                 command=error.cmd,
             )
@@ -176,7 +176,7 @@ class DpyEvents(MixinMeta, metaclass=CompositeMetaClass):
                 msg += f"\n{error.custom_help_msg}"
             await self.send_embed_msg(
                 ctx,
-                title=_("Unable To Parse Argument"),
+                title="Unable To Parse Argument",
                 description=msg,
                 error=True,
             )
@@ -188,8 +188,8 @@ class DpyEvents(MixinMeta, metaclass=CompositeMetaClass):
                 if match := RE_CONVERSION.search(error.args[0]):
                     await self.send_embed_msg(
                         ctx,
-                        title=_("Invalid Argument"),
-                        description=_(
+                        title="Invalid Argument",
+                        description=(
                             "The argument you gave for `{}` is not valid: I was expecting a `{}`."
                         ).format(match.group(2), match.group(1)),
                         error=True,
@@ -197,7 +197,7 @@ class DpyEvents(MixinMeta, metaclass=CompositeMetaClass):
                 else:
                     await self.send_embed_msg(
                         ctx,
-                        title=_("Invalid Argument"),
+                        title="Invalid Argument",
                         description=error.args[0],
                         error=True,
                     )
@@ -209,8 +209,8 @@ class DpyEvents(MixinMeta, metaclass=CompositeMetaClass):
             handled = True
             await self.send_embed_msg(
                 ctx,
-                title=_("Invalid Environment"),
-                description=_("Connection to Lavalink has been lost."),
+                title="Invalid Environment",
+                description="Connection to Lavalink has been lost.",
                 error=True,
             )
             debug_exc_log(log, error, "This is a handled error")
@@ -218,8 +218,8 @@ class DpyEvents(MixinMeta, metaclass=CompositeMetaClass):
             handled = True
             await self.send_embed_msg(
                 ctx,
-                title=_("No Player Available"),
-                description=_("The bot is not connected to a voice channel."),
+                title="No Player Available",
+                description="The bot is not connected to a voice channel.",
                 error=True,
             )
             debug_exc_log(log, error, "This is a handled error")
@@ -227,8 +227,8 @@ class DpyEvents(MixinMeta, metaclass=CompositeMetaClass):
             handled = True
             await self.send_embed_msg(
                 ctx,
-                title=_("Unable to Get Track"),
-                description=_(
+                title="Unable to Get Track",
+                description=(
                     "I'm unable to get a track from Lavalink at the moment, "
                     "try again in a few minutes."
                 ),
@@ -239,8 +239,8 @@ class DpyEvents(MixinMeta, metaclass=CompositeMetaClass):
             handled = True
             await self.send_embed_msg(
                 ctx,
-                title=_("There was an issue communicating with Discord."),
-                description=_("This error has been reported to the bot owner."),
+                title="There was an issue communicating with Discord.",
+                description="This error has been reported to the bot owner.",
                 error=True,
             )
             log.exception(

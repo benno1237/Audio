@@ -29,8 +29,6 @@ from redbot.core.utils import AsyncIter
 # My Modded Imports
 import lavalink
 
-_ = lambda s: s
-
 _RE_REMOVE_START: Final[Pattern] = re.compile(r"^(sc|list) ")
 _RE_YOUTUBE_TIMESTAMP: Final[Pattern] = re.compile(r"[&|?]t=(\d+)s?")
 _RE_YOUTUBE_INDEX: Final[Pattern] = re.compile(r"&index=(\d+)")

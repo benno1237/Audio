@@ -14,7 +14,6 @@ from redbot.core import commands
 import discord
 
 log = logging.getLogger("red.cogs.Audio.task.callback")
-_ = lambda s: s
 
 
 class CacheLevel:

@@ -28,7 +28,7 @@ if TYPE_CHECKING:
     from ..core.utilities import SettingCacheManager
 
 log = logging.getLogger("red.cogs.Audio.api.YouTube")
-_ = lambda s: s
+
 SEARCH_ENDPOINT = "https://www.googleapis.com/youtube/v3/search"
 
 
@@ -76,11 +76,9 @@ class YouTubeWrapper:
             if r.status == 400:
                 if r.reason == "Bad Request":
                     raise YouTubeApiError(
-                        _(
-                            "Your YouTube Data API token is invalid.\n"
-                            "Check the YouTube API key again and follow the instructions "
-                            "at `{prefix}audioset youtubeapi`."
-                        )
+                        "Your YouTube Data API token is invalid.\n"
+                        "Check the YouTube API key again and follow the instructions "
+                        "at `{prefix}audioset youtubeapi`."
                     )
                 return None
             elif r.status == 404:
@@ -88,7 +86,7 @@ class YouTubeWrapper:
             elif r.status == 403:
                 if r.reason in ["Forbidden", "quotaExceeded"]:
                     raise YouTubeApiError(
-                        _(
+                        (
                             "YouTube API error code: 403\nYour YouTube API key may have "
                             "reached the account's query limit for today. Please check "
                             "<https://developers.google.com/youtube/v3/getting-started#quota> "

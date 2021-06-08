@@ -37,7 +37,7 @@ from ..abc import MixinMeta
 from ..cog_utils import CompositeMetaClass, DataReader
 
 log = logging.getLogger("red.cogs.Audio.cog.Utilities.miscellaneous")
-_ = lambda s: s
+
 _RE_TIME_CONVERTER: Final[Pattern] = re.compile(r"(?:(\d+):)?([0-5]?[0-9]):([0-5][0-9])")
 _prefer_lyrics_cache = {}
 
@@ -64,8 +64,8 @@ class MiscellaneousUtilities(MixinMeta, metaclass=CompositeMetaClass):
                 bal = await bank.get_balance(ctx.author)
                 await self.send_embed_msg(
                     ctx,
-                    title=_("Not enough {currency}").format(currency=credits_name),
-                    description=_(
+                    title="Not enough {currency}".format(currency=credits_name),
+                    description=(
                         "{required_credits} {currency} required, but you have {bal}."
                     ).format(
                         currency=credits_name,

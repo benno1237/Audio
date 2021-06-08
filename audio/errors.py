@@ -8,8 +8,6 @@ from typing import Optional
 from redbot.core.commands import UserFeedbackCheckFailure
 import aiohttp
 
-_ = lambda s: s
-
 
 class AudioError(Exception):
     """Base exception for errors in the Audio cog."""

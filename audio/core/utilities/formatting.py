@@ -25,7 +25,7 @@ from ..abc import MixinMeta
 from ..cog_utils import CompositeMetaClass
 
 log = logging.getLogger("red.cogs.Audio.cog.Utilities.formatting")
-_ = lambda s: s
+
 RE_SQUARE = re.compile(r"[\[\]]")
 
 
@@ -75,7 +75,7 @@ class FormattingUtilities(MixinMeta, metaclass=CompositeMetaClass):
                 search_track_num = 5
             if playlist:
                 name = "**[{}]({})** - {} {}".format(
-                    entry.get("name"), entry.get("url"), str(entry.get("tracks")), _("tracks")
+                    entry.get("name"), entry.get("url"), str(entry.get("tracks")), "tracks"
                 )
             else:
                 name = f"{list(entry.keys())[0]}"
@@ -85,7 +85,7 @@ class FormattingUtilities(MixinMeta, metaclass=CompositeMetaClass):
             colour=await ctx.embed_colour(), title=title, description=search_list
         )
         embed.set_footer(
-            text=_("Page {page_num}/{total_pages}").format(
+            text="Page {page_num}/{total_pages}".format(
                 page_num=page_num, total_pages=search_num_pages
             )
         )
@@ -96,10 +96,10 @@ class FormattingUtilities(MixinMeta, metaclass=CompositeMetaClass):
     ):
         if not self._player_check(ctx):
             if self.lavalink_connection_aborted:
-                msg = _("Connection to Lavalink has failed")
+                msg = "Connection to Lavalink has failed"
                 description = EmptyEmbed
                 if await self.bot.is_owner(ctx.author):
-                    description = _("Please check your console or logs for details.")
+                    description = "Please check your console or logs for details."
                 return await self.send_embed_msg(ctx, title=msg, description=description)
             try:
                 await lavalink.connect(
@@ -107,10 +107,10 @@ class FormattingUtilities(MixinMeta, metaclass=CompositeMetaClass):
                     deafen=await self.config_cache.auto_deafen.get_context_value(ctx.guild),
                 )
             except AttributeError:
-                return await self.send_embed_msg(ctx, title=_("Connect to a voice channel first."))
+                return await self.send_embed_msg(ctx, title="Connect to a voice channel first.")
             except IndexError:
                 return await self.send_embed_msg(
-                    ctx, title=_("Connection to Lavalink has not yet been established.")
+                    ctx, title="Connection to Lavalink has not yet been established."
                 )
         player = lavalink.get_player(ctx.guild.id)
         player.store("notify_channel", ctx.channel.id)
@@ -118,7 +118,7 @@ class FormattingUtilities(MixinMeta, metaclass=CompositeMetaClass):
             player.guild
         ):
             return await self.send_embed_msg(
-                ctx, title=_("Unable To Play Tracks"), description=_("Queue size limit reached.")
+                ctx, title="Unable To Play Tracks", description="Queue size limit reached."
             )
         if not await self.maybe_charge_requester(
             ctx, await self.config_cache.jukebox_price.get_context_value(ctx.guild)
@@ -158,7 +158,7 @@ class FormattingUtilities(MixinMeta, metaclass=CompositeMetaClass):
                     search_choice.invoked_from = "localtrack"
             return await ctx.invoke(self.command_play, queries=[search_choice])
 
-        songembed = discord.Embed(title=_("Track Enqueued"), description=description)
+        songembed = discord.Embed(title="Track Enqueued", description=description)
         queue_dur = await self.queue_duration(ctx)
         queue_total_duration = self.format_time(queue_dur)
         before_queue_length = len(player.queue)
@@ -173,7 +173,7 @@ class FormattingUtilities(MixinMeta, metaclass=CompositeMetaClass):
                 log.debug("Query is not allowed in %r (%d)", ctx.guild.name, ctx.guild.id)
             self.update_player_lock(ctx, False)
             return await self.send_embed_msg(
-                ctx, title=_("This track is not allowed in this server.")
+                ctx, title="This track is not allowed in this server."
             )
         elif (
             max_length := await self.config_cache.max_track_length.get_context_value(ctx.guild)
@@ -193,7 +193,7 @@ class FormattingUtilities(MixinMeta, metaclass=CompositeMetaClass):
                     "red_audio_track_enqueue", player.guild, search_choice, ctx.author
                 )
             else:
-                return await self.send_embed_msg(ctx, title=_("Track exceeds maximum length."))
+                return await self.send_embed_msg(ctx, title="Track exceeds maximum length.")
         else:
             search_choice.extras.update(
                 {
@@ -208,7 +208,7 @@ class FormattingUtilities(MixinMeta, metaclass=CompositeMetaClass):
 
         if not await self.config_cache.shuffle.get_context_value(ctx.guild) and queue_dur > 0:
             songembed.set_footer(
-                text=_("{time} until track playback: #{position} in queue").format(
+                text="{time} until track playback: #{position} in queue".format(
                     time=queue_total_duration, position=before_queue_length + 1
                 )
             )
@@ -268,19 +268,19 @@ class FormattingUtilities(MixinMeta, metaclass=CompositeMetaClass):
                         search_track_num, discord.utils.escape_markdown(track.to_string_user())
                     )
         if hasattr(tracks[0], "uri") and hasattr(tracks[0], "track_identifier"):
-            title = _("Tracks Found:")
-            footer = _("search results")
+            title = "Tracks Found:"
+            footer = "search results"
         elif folder:
-            title = _("Folders Found:")
-            footer = _("local folders")
+            title = "Folders Found:"
+            footer = "local folders"
         else:
-            title = _("Files Found:")
-            footer = _("local tracks")
+            title = "Files Found:"
+            footer = "local tracks"
         embed = discord.Embed(
             colour=await ctx.embed_colour(), title=title, description=search_list
         )
         embed.set_footer(
-            text=(_("Page {page_num}/{total_pages}") + " | {num_results} {footer}").format(
+            text=("Page {page_num}/{total_pages}" + " | {num_results} {footer}").format(
                 page_num=page_num,
                 total_pages=search_num_pages,
                 num_results=len(tracks),
@@ -387,8 +387,8 @@ class FormattingUtilities(MixinMeta, metaclass=CompositeMetaClass):
 
     def format_playlist_picker_data(self, pid, pname, ptracks, pauthor, scope) -> str:
         """Format the values into a prettified codeblock."""
-        author = self.bot.get_user(pauthor) or pauthor or _("Unknown")
-        line = _(
+        author = self.bot.get_user(pauthor) or pauthor or "Unknown"
+        line = (
             " - Name:   <{pname}>\n"
             " - Scope:  < {scope} >\n"
             " - ID:     < {pid} >\n"

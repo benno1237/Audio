@@ -44,7 +44,6 @@ from ..abc import MixinMeta
 from ..cog_utils import CompositeMetaClass, LazyMultilineConverter, PlaylistConverter
 
 log = logging.getLogger("red.cogs.Audio.cog.Commands.playlist")
-_ = lambda s: s
 
 
 class PlaylistCommands(MixinMeta, metaclass=CompositeMetaClass):
@@ -113,9 +112,9 @@ class PlaylistCommands(MixinMeta, metaclass=CompositeMetaClass):
         if self.playlist_api is None:
             return await self.send_embed_msg(
                 ctx,
-                title=_("Playlists Are Not Available"),
-                description=_("The playlist section of Audio is currently unavailable"),
-                footer=None if not await self.bot.is_owner(ctx.author) else _("Check your logs."),
+                title="Playlists Are Not Available",
+                description="The playlist section of Audio is currently unavailable",
+                footer=None if not await self.bot.is_owner(ctx.author) else "Check your logs.",
             )
         if scope_data is None:
             scope_data = [None, ctx.author, ctx.guild, False]
@@ -137,8 +136,8 @@ class PlaylistCommands(MixinMeta, metaclass=CompositeMetaClass):
                 if playlist is None:
                     return await self.send_embed_msg(
                         ctx,
-                        title=_("Playlist Not Found"),
-                        description=_("Could not match '{arg}' to a playlist").format(
+                        title="Playlist Not Found",
+                        description="Could not match '{arg}' to a playlist".format(
                             arg=playlist_arg
                         ),
                     )
@@ -156,7 +155,7 @@ class PlaylistCommands(MixinMeta, metaclass=CompositeMetaClass):
 
                 if not to_append:
                     return await self.send_embed_msg(
-                        ctx, title=_("Could not find a track matching your query.")
+                        ctx, title="Could not find a track matching your query."
                     )
                 track_list = playlist.tracks
                 current_count = len(track_list)
@@ -180,8 +179,8 @@ class PlaylistCommands(MixinMeta, metaclass=CompositeMetaClass):
                     if to in tracks_obj_list:
                         await self.send_embed_msg(
                             ctx,
-                            title=_("Skipping track"),
-                            description=_(
+                            title="Skipping track",
+                            description=(
                                 "{track} is already in {playlist} (`{id}`) [**{scope}**]."
                             ).format(
                                 track=to.title,
@@ -189,9 +188,7 @@ class PlaylistCommands(MixinMeta, metaclass=CompositeMetaClass):
                                 id=playlist.id,
                                 scope=scope_name,
                             ),
-                            footer=_("Playlist limit reached: Could not add track.").format(
-                                not_added
-                            )
+                            footer="Playlist limit reached: Could not add track."
                             if not_added > 0
                             else None,
                         )
@@ -215,8 +212,8 @@ class PlaylistCommands(MixinMeta, metaclass=CompositeMetaClass):
                     track_title = to_append[0]["info"]["title"]
                     await self.send_embed_msg(
                         ctx,
-                        title=_("Track added"),
-                        description=_(
+                        title="Track added",
+                        description=(
                             "{track} appended to {playlist} (`{id}`) [**{scope}**]."
                         ).format(
                             track=track_title,
@@ -229,20 +226,20 @@ class PlaylistCommands(MixinMeta, metaclass=CompositeMetaClass):
                         continue
                     return
 
-                desc = _("{num} tracks appended to {playlist} (`{id}`) [**{scope}**].").format(
+                desc = "{num} tracks appended to {playlist} (`{id}`) [**{scope}**].".format(
                     num=appended, playlist=playlist.name, id=playlist.id, scope=scope_name
                 )
                 if to_append_count > appended:
                     diff = to_append_count - appended
-                    desc += _(
+                    desc += (
                         "\n{existing} {plural} already in the playlist and were skipped."
-                    ).format(existing=diff, plural=_("tracks are") if diff != 1 else _("track is"))
+                    ).format(existing=diff, plural="tracks are" if diff != 1 else "track is")
 
-                embed = discord.Embed(title=_("Playlist Modified"), description=desc)
+                embed = discord.Embed(title="Playlist Modified", description=desc)
                 await self.send_embed_msg(
                     ctx,
                     embed=embed,
-                    footer=_("Playlist limit reached: Could not add track.").format(not_added)
+                    footer="Playlist limit reached: Could not add track."
                     if not_added > 0
                     else None,
                 )
@@ -298,11 +295,11 @@ class PlaylistCommands(MixinMeta, metaclass=CompositeMetaClass):
         if self.playlist_api is None:
             return await self.send_embed_msg(
                 ctx,
-                title=_("Playlists Are Not Available"),
-                description=_("The playlist section of Audio is currently unavailable"),
+                title="Playlists Are Not Available",
+                description="The playlist section of Audio is currently unavailable",
                 footer=discord.Embed.Empty
                 if not await self.bot.is_owner(ctx.author)
-                else _("Check your logs."),
+                else "Check your logs.",
             )
         if scope_data is None:
             scope_data = [
@@ -339,10 +336,8 @@ class PlaylistCommands(MixinMeta, metaclass=CompositeMetaClass):
                 ctx.command.reset_cooldown(ctx)
                 return await self.send_embed_msg(
                     ctx,
-                    title=_("Playlist Not Found"),
-                    description=_("Could not match '{arg}' to a playlist.").format(
-                        arg=playlist_arg
-                    ),
+                    title="Playlist Not Found",
+                    description="Could not match '{arg}' to a playlist.".format(arg=playlist_arg),
                 )
 
             temp_playlist = cast(Playlist, FakePlaylist(to_author.id, to_scope))
@@ -363,14 +358,14 @@ class PlaylistCommands(MixinMeta, metaclass=CompositeMetaClass):
                 to_guild,
             )
             if to_scope == PlaylistScope.GLOBAL.value:
-                to_scope_name = _("the Global")
+                to_scope_name = "the Global"
             elif to_scope == PlaylistScope.USER.value:
                 to_scope_name = to_author
             else:
                 to_scope_name = to_guild
 
             if from_scope == PlaylistScope.GLOBAL.value:
-                from_scope_name = _("the Global")
+                from_scope_name = "the Global"
             elif from_scope == PlaylistScope.USER.value:
                 from_scope_name = from_author
             else:
@@ -378,8 +373,8 @@ class PlaylistCommands(MixinMeta, metaclass=CompositeMetaClass):
 
             return await self.send_embed_msg(
                 ctx,
-                title=_("Playlist Copied"),
-                description=_(
+                title="Playlist Copied",
+                description=(
                     "Playlist {name} (`{from_id}`) copied from {from_scope} to {to_scope} (`{to_id}`)."
                 ).format(
                     name=from_playlist.name,
@@ -427,11 +422,11 @@ class PlaylistCommands(MixinMeta, metaclass=CompositeMetaClass):
         if self.playlist_api is None:
             return await self.send_embed_msg(
                 ctx,
-                title=_("Playlists Are Not Available"),
-                description=_("The playlist section of Audio is currently unavailable"),
+                title="Playlists Are Not Available",
+                description="The playlist section of Audio is currently unavailable",
                 footer=discord.Embed.Empty
                 if not await self.bot.is_owner(ctx.author)
-                else _("Check your logs."),
+                else "Check your logs.",
             )
         if scope_data is None:
             scope_data = [None, ctx.author, ctx.guild, False]
@@ -450,8 +445,8 @@ class PlaylistCommands(MixinMeta, metaclass=CompositeMetaClass):
             if playlist_name.isnumeric():
                 return await self.send_embed_msg(
                     ctx,
-                    title=_("Invalid Playlist Name"),
-                    description=_(
+                    title="Invalid Playlist Name",
+                    description=(
                         "Playlist names must be a single word (up to 32 "
                         "characters) and not numbers only."
                     ),
@@ -461,8 +456,8 @@ class PlaylistCommands(MixinMeta, metaclass=CompositeMetaClass):
             )
             return await self.send_embed_msg(
                 ctx,
-                title=_("Playlist Created"),
-                description=_("Empty playlist {name} (`{id}`) [**{scope}**] created.").format(
+                title="Playlist Created",
+                description="Empty playlist {name} (`{id}`) [**{scope}**] created.".format(
                     name=playlist.name, id=playlist.id, scope=scope_name
                 ),
             )
@@ -508,11 +503,11 @@ class PlaylistCommands(MixinMeta, metaclass=CompositeMetaClass):
         if self.playlist_api is None:
             return await self.send_embed_msg(
                 ctx,
-                title=_("Playlists Are Not Available"),
-                description=_("The playlist section of Audio is currently unavailable"),
+                title="Playlists Are Not Available",
+                description="The playlist section of Audio is currently unavailable",
                 footer=discord.Embed.Empty
                 if not await self.bot.is_owner(ctx.author)
-                else _("Check your logs."),
+                else "Check your logs.",
             )
         if scope_data is None:
             scope_data = [None, ctx.author, ctx.guild, False]
@@ -527,10 +522,8 @@ class PlaylistCommands(MixinMeta, metaclass=CompositeMetaClass):
             if playlist is None:
                 return await self.send_embed_msg(
                     ctx,
-                    title=_("Playlist Not Found"),
-                    description=_("Could not match '{arg}' to a playlist.").format(
-                        arg=playlist_arg
-                    ),
+                    title="Playlist Not Found",
+                    description="Could not match '{arg}' to a playlist.".format(arg=playlist_arg),
                 )
             if not await self.can_manage_playlist(
                 scope, playlist, ctx, author, guild, bypass=False
@@ -550,8 +543,8 @@ class PlaylistCommands(MixinMeta, metaclass=CompositeMetaClass):
 
             await self.send_embed_msg(
                 ctx,
-                title=_("Playlist Deleted"),
-                description=_("{name} (`{id}`) [**{scope}**] playlist deleted.").format(
+                title="Playlist Deleted",
+                description="{name} (`{id}`) [**{scope}**] playlist deleted.".format(
                     name=playlist.name, id=playlist.id, scope=scope_name
                 ),
             )
@@ -600,11 +593,11 @@ class PlaylistCommands(MixinMeta, metaclass=CompositeMetaClass):
         if self.playlist_api is None:
             return await self.send_embed_msg(
                 ctx,
-                title=_("Playlists Are Not Available"),
-                description=_("The playlist section of Audio is currently unavailable"),
+                title="Playlists Are Not Available",
+                description="The playlist section of Audio is currently unavailable",
                 footer=discord.Embed.Empty
                 if not await self.bot.is_owner(ctx.author)
-                else _("Check your logs."),
+                else "Check your logs.",
             )
         async with ctx.typing():
             if scope_data is None:
@@ -625,10 +618,8 @@ class PlaylistCommands(MixinMeta, metaclass=CompositeMetaClass):
                 ctx.command.reset_cooldown(ctx)
                 return await self.send_embed_msg(
                     ctx,
-                    title=_("Playlist Not Found"),
-                    description=_("Could not match '{arg}' to a playlist.").format(
-                        arg=playlist_arg
-                    ),
+                    title="Playlist Not Found",
+                    description="Could not match '{arg}' to a playlist.".format(arg=playlist_arg),
                 )
             if not await self.can_manage_playlist(
                 scope, playlist, ctx, author, guild, bypass=False
@@ -664,8 +655,8 @@ class PlaylistCommands(MixinMeta, metaclass=CompositeMetaClass):
             await playlist.edit({"tracks": tracklist})
             await self.send_embed_msg(
                 ctx,
-                title=_("Playlist Modified"),
-                description=_(
+                title="Playlist Modified",
+                description=(
                     "Removed {track_diff} duplicated "
                     "tracks from {name} (`{id}`) [**{scope}**] playlist."
                 ).format(
@@ -678,8 +669,8 @@ class PlaylistCommands(MixinMeta, metaclass=CompositeMetaClass):
         else:
             await self.send_embed_msg(
                 ctx,
-                title=_("Playlist Has Not Been Modified"),
-                description=_(
+                title="Playlist Has Not Been Modified",
+                description=(
                     "{name} (`{id}`) [**{scope}**] playlist has no duplicate tracks."
                 ).format(name=playlist.name, id=playlist.id, scope=scope_name),
             )
@@ -737,11 +728,11 @@ class PlaylistCommands(MixinMeta, metaclass=CompositeMetaClass):
         if self.playlist_api is None:
             return await self.send_embed_msg(
                 ctx,
-                title=_("Playlists Are Not Available"),
-                description=_("The playlist section of Audio is currently unavailable"),
+                title="Playlists Are Not Available",
+                description="The playlist section of Audio is currently unavailable",
                 footer=discord.Embed.Empty
                 if not await self.bot.is_owner(ctx.author)
-                else _("Check your logs."),
+                else "Check your logs.",
             )
         if scope_data is None:
             scope_data = [None, ctx.author, ctx.guild, False]
@@ -758,10 +749,8 @@ class PlaylistCommands(MixinMeta, metaclass=CompositeMetaClass):
                 ctx.command.reset_cooldown(ctx)
                 return await self.send_embed_msg(
                     ctx,
-                    title=_("Playlist Not Found"),
-                    description=_("Could not match '{arg}' to a playlist.").format(
-                        arg=playlist_arg
-                    ),
+                    title="Playlist Not Found",
+                    description="Could not match '{arg}' to a playlist.".format(arg=playlist_arg),
                 )
 
             schema = 2
@@ -769,7 +758,7 @@ class PlaylistCommands(MixinMeta, metaclass=CompositeMetaClass):
 
             if not playlist.tracks:
                 ctx.command.reset_cooldown(ctx)
-                return await self.send_embed_msg(ctx, title=_("That playlist has no tracks."))
+                return await self.send_embed_msg(ctx, title="That playlist has no tracks.")
             if version == "v2":
                 v2_valid_urls = ["https://www.youtube.com/watch?v=", "https://soundcloud.com/"]
                 song_list = []
@@ -812,10 +801,10 @@ class PlaylistCommands(MixinMeta, metaclass=CompositeMetaClass):
                     )
                 try:
                     if os.path.getsize(str(temp_tar)) > ctx.guild.filesize_limit - 10000:
-                        await ctx.send(_("This playlist is too large to be send in this server."))
+                        await ctx.send("This playlist is too large to be send in this server.")
                     else:
                         await ctx.send(
-                            content=_("Playlist is too large, here is the compressed version."),
+                            content="Playlist is too large, here is the compressed version.",
                             file=discord.File(str(temp_tar)),
                         )
                 except Exception as exc:
@@ -870,11 +859,11 @@ class PlaylistCommands(MixinMeta, metaclass=CompositeMetaClass):
         if self.playlist_api is None:
             return await self.send_embed_msg(
                 ctx,
-                title=_("Playlists Are Not Available"),
-                description=_("The playlist section of Audio is currently unavailable"),
+                title="Playlists Are Not Available",
+                description="The playlist section of Audio is currently unavailable",
                 footer=discord.Embed.Empty
                 if not await self.bot.is_owner(ctx.author)
-                else _("Check your logs."),
+                else "Check your logs.",
             )
         if scope_data is None:
             scope_data = [None, ctx.author, ctx.guild, False]
@@ -895,10 +884,8 @@ class PlaylistCommands(MixinMeta, metaclass=CompositeMetaClass):
                 ctx.command.reset_cooldown(ctx)
                 return await self.send_embed_msg(
                     ctx,
-                    title=_("Playlist Not Found"),
-                    description=_("Could not match '{arg}' to a playlist.").format(
-                        arg=playlist_arg
-                    ),
+                    title="Playlist Not Found",
+                    description="Could not match '{arg}' to a playlist.".format(arg=playlist_arg),
                 )
             track_len = len(playlist.tracks)
 
@@ -929,11 +916,11 @@ class PlaylistCommands(MixinMeta, metaclass=CompositeMetaClass):
                 msg = "No tracks."
 
             if not playlist.url:
-                embed_title = _(
+                embed_title = (
                     "Playlist info for {playlist_name} (`{id}`) [**{scope}**]:\n"
                 ).format(playlist_name=playlist.name, id=playlist.id, scope=scope_name)
             else:
-                embed_title = _(
+                embed_title = (
                     "Playlist info for {playlist_name} (`{id}`) [**{scope}**]:\nURL: {url}"
                 ).format(
                     playlist_name=playlist.name, url=playlist.url, id=playlist.id, scope=scope_name
@@ -946,9 +933,9 @@ class PlaylistCommands(MixinMeta, metaclass=CompositeMetaClass):
                 embed = discord.Embed(
                     colour=await ctx.embed_colour(), title=embed_title, description=page
                 )
-                author_obj = self.bot.get_user(playlist.author) or playlist.author or _("Unknown")
+                author_obj = self.bot.get_user(playlist.author) or playlist.author or "Unknown"
                 embed.set_footer(
-                    text=_("Page {page}/{pages} | Author: {author_name} | {num} track(s)").format(
+                    text="Page {page}/{pages} | Author: {author_name} | {num} track(s)".format(
                         author_name=author_obj, num=track_len, pages=total_pages, page=numb
                     )
                 )
@@ -993,11 +980,11 @@ class PlaylistCommands(MixinMeta, metaclass=CompositeMetaClass):
         if self.playlist_api is None:
             return await self.send_embed_msg(
                 ctx,
-                title=_("Playlists Are Not Available"),
-                description=_("The playlist section of Audio is currently unavailable"),
+                title="Playlists Are Not Available",
+                description="The playlist section of Audio is currently unavailable",
                 footer=discord.Embed.Empty
                 if not await self.bot.is_owner(ctx.author)
-                else _("Check your logs."),
+                else "Check your logs.",
             )
         if scope_data is None:
             scope_data = [None, ctx.author, ctx.guild, False]
@@ -1035,10 +1022,8 @@ class PlaylistCommands(MixinMeta, metaclass=CompositeMetaClass):
                     ctx.command.reset_cooldown(ctx)
                     return await self.send_embed_msg(
                         ctx,
-                        title=_("Playlist Not Found"),
-                        description=_("No saved playlists available in this server.").format(
-                            scope=name
-                        ),
+                        title="Playlist Not Found",
+                        description="No saved playlists available in this server.",
                     )
             else:
                 try:
@@ -1054,8 +1039,8 @@ class PlaylistCommands(MixinMeta, metaclass=CompositeMetaClass):
                     ctx.command.reset_cooldown(ctx)
                     return await self.send_embed_msg(
                         ctx,
-                        title=_("Missing Arguments"),
-                        description=_("You need to specify the Guild ID for the guild to lookup."),
+                        title="Missing Arguments",
+                        description="You need to specify the Guild ID for the guild to lookup.",
                     )
 
                 if scope == PlaylistScope.GUILD.value:
@@ -1063,23 +1048,23 @@ class PlaylistCommands(MixinMeta, metaclass=CompositeMetaClass):
                 elif scope == PlaylistScope.USER.value:
                     name = f"{author}"
                 else:
-                    name = _("Global")
+                    name = "Global"
 
                 if not playlists and specified_user:
                     ctx.command.reset_cooldown(ctx)
                     return await self.send_embed_msg(
                         ctx,
-                        title=_("Playlist Not Found"),
-                        description=_(
-                            "No saved playlists for {scope} created by {author}."
-                        ).format(scope=name, author=author),
+                        title="Playlist Not Found",
+                        description="No saved playlists for {scope} created by {author}.".format(
+                            scope=name, author=author
+                        ),
                     )
                 elif not playlists:
                     ctx.command.reset_cooldown(ctx)
                     return await self.send_embed_msg(
                         ctx,
-                        title=_("Playlist Not Found"),
-                        description=_("No saved playlists for {scope}.").format(scope=name),
+                        title="Playlist Not Found",
+                        description="No saved playlists for {scope}.".format(scope=name),
                     )
 
             playlist_list = []
@@ -1089,16 +1074,14 @@ class PlaylistCommands(MixinMeta, metaclass=CompositeMetaClass):
                     ("\n" + space * 4).join(
                         (
                             bold(playlist.name),
-                            _("ID: {id}").format(id=playlist.id),
-                            _("Tracks: {num}").format(num=len(playlist.tracks)),
-                            _("Author: {name}").format(
+                            "ID: {id}".format(id=playlist.id),
+                            "Tracks: {num}".format(num=len(playlist.tracks)),
+                            "Author: {name}".format(
                                 name=self.bot.get_user(playlist.author)
                                 or playlist.author
-                                or _("Unknown")
+                                or "Unknown"
                             ),
-                            _("Scope: {scope}\n").format(
-                                scope=self.humanize_scope(playlist.scope)
-                            ),
+                            "Scope: {scope}\n".format(scope=self.humanize_scope(playlist.scope)),
                         )
                     )
                 )
@@ -1149,11 +1132,11 @@ class PlaylistCommands(MixinMeta, metaclass=CompositeMetaClass):
         if self.playlist_api is None:
             return await self.send_embed_msg(
                 ctx,
-                title=_("Playlists Are Not Available"),
-                description=_("The playlist section of Audio is currently unavailable"),
+                title="Playlists Are Not Available",
+                description="The playlist section of Audio is currently unavailable",
                 footer=discord.Embed.Empty
                 if not await self.bot.is_owner(ctx.author)
-                else _("Check your logs."),
+                else "Check your logs.",
             )
         async with ctx.typing():
             if scope_data is None:
@@ -1174,20 +1157,20 @@ class PlaylistCommands(MixinMeta, metaclass=CompositeMetaClass):
                 ctx.command.reset_cooldown(ctx)
                 return await self.send_embed_msg(
                     ctx,
-                    title=_("Invalid Playlist Name"),
-                    description=_(
+                    title="Invalid Playlist Name",
+                    description=(
                         "Playlist names must be a single word "
                         "(up to 32 characters) and not numbers only."
                     ),
                 )
             if not self._player_check(ctx):
                 ctx.command.reset_cooldown(ctx)
-                return await self.send_embed_msg(ctx, title=_("Nothing playing."))
+                return await self.send_embed_msg(ctx, title="Nothing playing.")
 
             player = lavalink.get_player(ctx.guild.id)
             if not player.queue:
                 ctx.command.reset_cooldown(ctx)
-                return await self.send_embed_msg(ctx, title=_("There's nothing in the queue."))
+                return await self.send_embed_msg(ctx, title="There's nothing in the queue.")
             tracklist = []
             np_song = self.get_track_json(player, "np")
             tracklist.append(np_song)
@@ -1210,14 +1193,14 @@ class PlaylistCommands(MixinMeta, metaclass=CompositeMetaClass):
                 )
         await self.send_embed_msg(
             ctx,
-            title=_("Playlist Created"),
-            description=_(
+            title="Playlist Created",
+            description=(
                 "Playlist {name} (`{id}`) [**{scope}**] "
                 "saved from current queue: {num} tracks added."
             ).format(
                 name=playlist.name, num=len(playlist.tracks), id=playlist.id, scope=scope_name
             ),
-            footer=_("Playlist limit reached: Could not add {} tracks.").format(not_added)
+            footer="Playlist limit reached: Could not add {} tracks.".format(not_added)
             if not_added > 0
             else None,
         )
@@ -1264,11 +1247,11 @@ class PlaylistCommands(MixinMeta, metaclass=CompositeMetaClass):
         if self.playlist_api is None:
             return await self.send_embed_msg(
                 ctx,
-                title=_("Playlists Are Not Available"),
-                description=_("The playlist section of Audio is currently unavailable"),
+                title="Playlists Are Not Available",
+                description="The playlist section of Audio is currently unavailable",
                 footer=discord.Embed.Empty
                 if not await self.bot.is_owner(ctx.author)
-                else _("Check your logs."),
+                else "Check your logs.",
             )
         if scope_data is None:
             scope_data = [None, ctx.author, ctx.guild, False]
@@ -1286,10 +1269,8 @@ class PlaylistCommands(MixinMeta, metaclass=CompositeMetaClass):
             if playlist is None:
                 return await self.send_embed_msg(
                     ctx,
-                    title=_("Playlist Not Found"),
-                    description=_("Could not match '{arg}' to a playlist.").format(
-                        arg=playlist_arg
-                    ),
+                    title="Playlist Not Found",
+                    description="Could not match '{arg}' to a playlist.".format(arg=playlist_arg),
                 )
             if not await self.can_manage_playlist(
                 scope, playlist, ctx, author, guild, bypass=False
@@ -1299,7 +1280,7 @@ class PlaylistCommands(MixinMeta, metaclass=CompositeMetaClass):
             track_list = playlist.tracks
             clean_list = [track for track in track_list if url != track["info"]["uri"]]
             if len(track_list) == len(clean_list):
-                return await self.send_embed_msg(ctx, title=_("URL not in playlist."))
+                return await self.send_embed_msg(ctx, title="URL not in playlist.")
             del_count = len(track_list) - len(clean_list)
             if not clean_list:
                 await delete_playlist(
@@ -1310,16 +1291,14 @@ class PlaylistCommands(MixinMeta, metaclass=CompositeMetaClass):
                     guild=guild,
                     author=playlist.author,
                 )
-                return await self.send_embed_msg(
-                    ctx, title=_("No tracks left, removing playlist.")
-                )
+                return await self.send_embed_msg(ctx, title="No tracks left, removing playlist.")
             update = {"tracks": clean_list, "url": None}
             await playlist.edit(update)
             if del_count > 1:
                 await self.send_embed_msg(
                     ctx,
-                    title=_("Playlist Modified"),
-                    description=_(
+                    title="Playlist Modified",
+                    description=(
                         "{num} entries have been removed "
                         "from the playlist {playlist_name} (`{id}`) [**{scope}**]."
                     ).format(
@@ -1332,8 +1311,8 @@ class PlaylistCommands(MixinMeta, metaclass=CompositeMetaClass):
             else:
                 await self.send_embed_msg(
                     ctx,
-                    title=_("Playlist Modified"),
-                    description=_(
+                    title="Playlist Modified",
+                    description=(
                         "The track has been removed from the playlist: "
                         "{playlist_name} (`{id}`) [**{scope}**]."
                     ).format(playlist_name=playlist.name, id=playlist.id, scope=scope_name),
@@ -1384,11 +1363,11 @@ class PlaylistCommands(MixinMeta, metaclass=CompositeMetaClass):
         if self.playlist_api is None:
             return await self.send_embed_msg(
                 ctx,
-                title=_("Playlists Are Not Available"),
-                description=_("The playlist section of Audio is currently unavailable"),
+                title="Playlists Are Not Available",
+                description="The playlist section of Audio is currently unavailable",
                 footer=discord.Embed.Empty
                 if not await self.bot.is_owner(ctx.author)
-                else _("Check your logs."),
+                else "Check your logs.",
             )
         if scope_data is None:
             scope_data = [None, ctx.author, ctx.guild, False]
@@ -1408,8 +1387,8 @@ class PlaylistCommands(MixinMeta, metaclass=CompositeMetaClass):
                 ctx.command.reset_cooldown(ctx)
                 return await self.send_embed_msg(
                     ctx,
-                    title=_("Invalid Playlist Name"),
-                    description=_(
+                    title="Invalid Playlist Name",
+                    description=(
                         "Playlist names must be a single word (up to 32 "
                         "characters) and not numbers only."
                     ),
@@ -1446,8 +1425,8 @@ class PlaylistCommands(MixinMeta, metaclass=CompositeMetaClass):
                 if playlist is not None:
                     return await self.send_embed_msg(
                         ctx,
-                        title=_("Playlist Created"),
-                        description=_(
+                        title="Playlist Created",
+                        description=(
                             "Playlist {name} (`{id}`) [**{scope}**] saved: {num} tracks added."
                         ).format(
                             name=playlist.name,
@@ -1455,17 +1434,15 @@ class PlaylistCommands(MixinMeta, metaclass=CompositeMetaClass):
                             id=playlist.id,
                             scope=scope_name,
                         ),
-                        footer=_("Playlist limit reached: Could not add {} tracks.").format(
-                            not_added
-                        )
+                        footer="Playlist limit reached: Could not add {} tracks.".format(not_added)
                         if not_added > 0
                         else None,
                     )
                 else:
                     return await self.send_embed_msg(
                         ctx,
-                        title=_("Playlist Couldn't be created"),
-                        description=_("Unable to create your playlist."),
+                        title="Playlist Couldn't be created",
+                        description="Unable to create your playlist.",
                     )
 
     @commands.cooldown(1, 30, commands.BucketType.member)
@@ -1515,11 +1492,11 @@ class PlaylistCommands(MixinMeta, metaclass=CompositeMetaClass):
         if self.playlist_api is None:
             return await self.send_embed_msg(
                 ctx,
-                title=_("Playlists Are Not Available"),
-                description=_("The playlist section of Audio is currently unavailable"),
+                title="Playlists Are Not Available",
+                description="The playlist section of Audio is currently unavailable",
                 footer=discord.Embed.Empty
                 if not await self.bot.is_owner(ctx.author)
-                else _("Check your logs."),
+                else "Check your logs.",
             )
         if scope_data is None:
             scope_data = [None, ctx.author, ctx.guild, False]
@@ -1529,8 +1506,8 @@ class PlaylistCommands(MixinMeta, metaclass=CompositeMetaClass):
             ctx.command.reset_cooldown(ctx)
             await self.send_embed_msg(
                 ctx,
-                title=_("Unable To Play Tracks"),
-                description=_("You need the DJ role to start playing playlists."),
+                title="Unable To Play Tracks",
+                description="You need the DJ role to start playing playlists.",
             )
             return False
         async with ctx.typing():
@@ -1545,10 +1522,8 @@ class PlaylistCommands(MixinMeta, metaclass=CompositeMetaClass):
                 ctx.command.reset_cooldown(ctx)
                 return await self.send_embed_msg(
                     ctx,
-                    title=_("Playlist Not Found"),
-                    description=_("Could not match '{arg}' to a playlist").format(
-                        arg=playlist_arg
-                    ),
+                    title="Playlist Not Found",
+                    description="Could not match '{arg}' to a playlist".format(arg=playlist_arg),
                 )
 
             if not await self._playlist_check(ctx):
@@ -1603,7 +1578,7 @@ class PlaylistCommands(MixinMeta, metaclass=CompositeMetaClass):
                     track_len += 1
                 player.maybe_shuffle()
                 if len(tracks) > track_len:
-                    maxlength_msg = _(" {bad_tracks} tracks cannot be queued.").format(
+                    maxlength_msg = " {bad_tracks} tracks cannot be queued.".format(
                         bad_tracks=(len(tracks) - track_len)
                     )
                 else:
@@ -1616,8 +1591,8 @@ class PlaylistCommands(MixinMeta, metaclass=CompositeMetaClass):
                     scope_name = "Global"
 
                 embed = discord.Embed(
-                    title=_("Playlist Enqueued"),
-                    description=_(
+                    title="Playlist Enqueued",
+                    description=(
                         "{name} - (`{id}`) [**{scope}**]\nAdded {num} "
                         "tracks to the queue.{maxlength_msg}"
                     ).format(
@@ -1636,8 +1611,8 @@ class PlaylistCommands(MixinMeta, metaclass=CompositeMetaClass):
                 ctx.command.reset_cooldown(ctx)
                 return await self.send_embed_msg(
                     ctx,
-                    title=_("Playlist Not Found"),
-                    description=_("Playlist {id} does not exist in {scope} scope.").format(
+                    title="Playlist Not Found",
+                    description="Playlist {id} does not exist in {scope} scope.".format(
                         id=playlist_arg, scope=self.humanize_scope(scope, the=True)
                     ),
                 )
@@ -1645,8 +1620,8 @@ class PlaylistCommands(MixinMeta, metaclass=CompositeMetaClass):
                 ctx.command.reset_cooldown(ctx)
                 return await self.send_embed_msg(
                     ctx,
-                    title=_("Missing Arguments"),
-                    description=_("You need to specify the Guild ID for the guild to lookup."),
+                    title="Missing Arguments",
+                    description="You need to specify the Guild ID for the guild to lookup.",
                 )
             except TypeError:
                 if playlist:
@@ -1696,11 +1671,11 @@ class PlaylistCommands(MixinMeta, metaclass=CompositeMetaClass):
         if self.playlist_api is None:
             return await self.send_embed_msg(
                 ctx,
-                title=_("Playlists Are Not Available"),
-                description=_("The playlist section of Audio is currently unavailable"),
+                title="Playlists Are Not Available",
+                description="The playlist section of Audio is currently unavailable",
                 footer=discord.Embed.Empty
                 if not await self.bot.is_owner(ctx.author)
-                else _("Check your logs."),
+                else "Check your logs.",
             )
         if scope_data is None:
             scope_data = [None, ctx.author, ctx.guild, False]
@@ -1719,10 +1694,8 @@ class PlaylistCommands(MixinMeta, metaclass=CompositeMetaClass):
                 ctx.command.reset_cooldown(ctx)
                 return await self.send_embed_msg(
                     ctx,
-                    title=_("Playlist Not Found"),
-                    description=_("Could not match '{arg}' to a playlist.").format(
-                        arg=playlist_arg
-                    ),
+                    title="Playlist Not Found",
+                    description="Could not match '{arg}' to a playlist.".format(arg=playlist_arg),
                 )
 
             if not await self._playlist_check(ctx):
@@ -1742,23 +1715,23 @@ class PlaylistCommands(MixinMeta, metaclass=CompositeMetaClass):
                     ctx.command.reset_cooldown(ctx)
                     return await self.send_embed_msg(
                         ctx,
-                        title=_("Invalid Playlist"),
-                        description=_("Custom playlists cannot be updated."),
+                        title="Invalid Playlist",
+                        description="Custom playlists cannot be updated.",
                     )
             except RuntimeError:
                 ctx.command.reset_cooldown(ctx)
                 return await self.send_embed_msg(
                     ctx,
-                    title=_("Playlist Not Found"),
-                    description=_("Playlist {id} does not exist in {scope} scope.").format(
+                    title="Playlist Not Found",
+                    description="Playlist {id} does not exist in {scope} scope.".format(
                         id=playlist_arg, scope=self.humanize_scope(scope, the=True)
                     ),
                 )
             except MissingGuild:
                 return await self.send_embed_msg(
                     ctx,
-                    title=_("Missing Arguments"),
-                    description=_("You need to specify the Guild ID for the guild to lookup."),
+                    title="Missing Arguments",
+                    description="You need to specify the Guild ID for the guild to lookup.",
                 )
             else:
                 scope_name = self.humanize_scope(
@@ -1784,11 +1757,11 @@ class PlaylistCommands(MixinMeta, metaclass=CompositeMetaClass):
                             if i % 10 == 0 or i == total_removed:
                                 page_count += 1
                                 embed = discord.Embed(
-                                    title=_("Tracks removed"),
+                                    title="Tracks removed",
                                     colour=_colour,
                                     description=removed_text,
                                 )
-                                text = _("Page {page_num}/{total_pages}").format(
+                                text = "Page {page_num}/{total_pages}".format(
                                     page_num=page_count, total_pages=total_pages
                                 )
                                 embed.set_footer(text=text)
@@ -1806,9 +1779,9 @@ class PlaylistCommands(MixinMeta, metaclass=CompositeMetaClass):
                             if i % 10 == 0 or i == total_added:
                                 page_count += 1
                                 embed = discord.Embed(
-                                    title=_("Tracks added"), colour=_colour, description=added_text
+                                    title="Tracks added", colour=_colour, description=added_text
                                 )
-                                text = _("Page {page_num}/{total_pages}").format(
+                                text = "Page {page_num}/{total_pages}".format(
                                     page_num=page_count, total_pages=total_pages
                                 )
                                 embed.set_footer(text=text)
@@ -1819,8 +1792,8 @@ class PlaylistCommands(MixinMeta, metaclass=CompositeMetaClass):
                 else:
                     return await self.send_embed_msg(
                         ctx,
-                        title=_("Playlist Has Not Been Modified"),
-                        description=_("No changes for {name} (`{id}`) [**{scope}**].").format(
+                        title="Playlist Has Not Been Modified",
+                        description="No changes for {name} (`{id}`) [**{scope}**].".format(
                             id=playlist.id, name=playlist.name, scope=scope_name
                         ),
                     )
@@ -1866,11 +1839,11 @@ class PlaylistCommands(MixinMeta, metaclass=CompositeMetaClass):
         if self.playlist_api is None:
             return await self.send_embed_msg(
                 ctx,
-                title=_("Playlists Are Not Available"),
-                description=_("The playlist section of Audio is currently unavailable"),
+                title="Playlists Are Not Available",
+                description="The playlist section of Audio is currently unavailable",
                 footer=discord.Embed.Empty
                 if not await self.bot.is_owner(ctx.author)
-                else _("Check your logs."),
+                else "Check your logs.",
             )
         if scope_data is None:
             scope_data = [None, ctx.author, ctx.guild, False]
@@ -1889,7 +1862,7 @@ class PlaylistCommands(MixinMeta, metaclass=CompositeMetaClass):
             if not ctx.message.attachments:
                 await self.send_embed_msg(
                     ctx,
-                    title=_(
+                    title=(
                         "Please upload the playlist file. Any other message will cancel this "
                         "operation."
                     ),
@@ -1900,18 +1873,18 @@ class PlaylistCommands(MixinMeta, metaclass=CompositeMetaClass):
                     )
                 except asyncio.TimeoutError:
                     return await self.send_embed_msg(
-                        ctx, title=_("No file detected, try again later.")
+                        ctx, title="No file detected, try again later."
                     )
             else:
                 file_message = ctx.message
             try:
                 file_url = file_message.attachments[0].url
             except IndexError:
-                return await self.send_embed_msg(ctx, title=_("Upload cancelled."))
+                return await self.send_embed_msg(ctx, title="Upload cancelled.")
             file_suffix = file_url.rsplit(".", 1)[1]
             if file_suffix != "txt":
                 return await self.send_embed_msg(
-                    ctx, title=_("Only Red playlist files can be uploaded.")
+                    ctx, title="Only Red playlist files can be uploaded."
                 )
             try:
                 async with self.session.request("GET", file_url) as r:
@@ -1919,7 +1892,7 @@ class PlaylistCommands(MixinMeta, metaclass=CompositeMetaClass):
                         content_type="text/plain", encoding="utf-8", loads=json.loads
                     )
             except UnicodeDecodeError:
-                return await self.send_embed_msg(ctx, title=_("Not a valid playlist file."))
+                return await self.send_embed_msg(ctx, title="Not a valid playlist file.")
 
             new_schema = uploaded_playlist.get("schema", 1) >= 2
             version = uploaded_playlist.get("version", "v2")
@@ -1931,7 +1904,7 @@ class PlaylistCommands(MixinMeta, metaclass=CompositeMetaClass):
                 uploaded_playlist_url = uploaded_playlist.get("link", None)
                 track_list = uploaded_playlist.get("playlist", [])
             if len(track_list) > 10000:
-                return await self.send_embed_msg(ctx, title=_("This playlist is too large."))
+                return await self.send_embed_msg(ctx, title="This playlist is too large.")
             uploaded_playlist_name = uploaded_playlist.get(
                 "name", (file_url.split("/")[6]).split(".")[0]
             )
@@ -1979,8 +1952,8 @@ class PlaylistCommands(MixinMeta, metaclass=CompositeMetaClass):
                 self.update_player_lock(ctx, False)
                 return await self.send_embed_msg(
                     ctx,
-                    title=_("Unable to Get Track"),
-                    description=_(
+                    title="Unable to Get Track",
+                    description=(
                         "I'm unable to get a track from Lavalink at the moment, try again in a few "
                         "minutes."
                     ),
@@ -2034,11 +2007,11 @@ class PlaylistCommands(MixinMeta, metaclass=CompositeMetaClass):
         if self.playlist_api is None:
             return await self.send_embed_msg(
                 ctx,
-                title=_("Playlists Are Not Available"),
-                description=_("The playlist section of Audio is currently unavailable"),
+                title="Playlists Are Not Available",
+                description="The playlist section of Audio is currently unavailable",
                 footer=discord.Embed.Empty
                 if not await self.bot.is_owner(ctx.author)
-                else _("Check your logs."),
+                else "Check your logs.",
             )
         if scope_data is None:
             scope_data = [None, ctx.author, ctx.guild, False]
@@ -2049,8 +2022,8 @@ class PlaylistCommands(MixinMeta, metaclass=CompositeMetaClass):
                 ctx.command.reset_cooldown(ctx)
                 return await self.send_embed_msg(
                     ctx,
-                    title=_("Invalid Playlist Name"),
-                    description=_(
+                    title="Invalid Playlist Name",
+                    description=(
                         "Playlist names must be a single word (up to 32 "
                         "characters) and not numbers only."
                     ),
@@ -2066,10 +2039,8 @@ class PlaylistCommands(MixinMeta, metaclass=CompositeMetaClass):
                 ctx.command.reset_cooldown(ctx)
                 return await self.send_embed_msg(
                     ctx,
-                    title=_("Playlist Not Found"),
-                    description=_("Could not match '{arg}' to a playlist.").format(
-                        arg=playlist_arg
-                    ),
+                    title="Playlist Not Found",
+                    description="Could not match '{arg}' to a playlist.".format(arg=playlist_arg),
                 )
             if not await self.can_manage_playlist(
                 scope, playlist, ctx, author, guild, bypass=False
@@ -2082,7 +2053,7 @@ class PlaylistCommands(MixinMeta, metaclass=CompositeMetaClass):
             old_name = playlist.name
             update = {"name": new_name}
             await playlist.edit(update)
-            msg = _("'{old}' playlist has been renamed to '{new}' (`{id}`) [**{scope}**]").format(
+            msg = "'{old}' playlist has been renamed to '{new}' (`{id}`) [**{scope}**]".format(
                 old=bold(old_name), new=bold(playlist.name), id=playlist.id, scope=scope_name
             )
-            await self.send_embed_msg(ctx, title=_("Playlist Modified"), description=msg)
+            await self.send_embed_msg(ctx, title="Playlist Modified", description=msg)

@@ -18,7 +18,6 @@ from ..abc import MixinMeta
 from ..cog_utils import CompositeMetaClass
 
 log = logging.getLogger("red.cogs.Audio.cog.Commands.miscellaneous")
-_ = lambda s: s
 
 
 class MiscellaneousCommands(MixinMeta, metaclass=CompositeMetaClass):
@@ -44,7 +43,7 @@ class MiscellaneousCommands(MixinMeta, metaclass=CompositeMetaClass):
     async def command_percent(self, ctx: commands.Context):
         """Queue percentage."""
         if not self._player_check(ctx):
-            return await self.send_embed_msg(ctx, title=_("Nothing playing."))
+            return await self.send_embed_msg(ctx, title="Nothing playing.")
         player = lavalink.get_player(ctx.guild.id)
         queue_tracks = player.queue
         requesters = {"total": 0, "users": {}}
@@ -68,7 +67,7 @@ class MiscellaneousCommands(MixinMeta, metaclass=CompositeMetaClass):
             )
             await _usercount(req_username)
         except AttributeError:
-            return await self.send_embed_msg(ctx, title=_("There's nothing in the queue."))
+            return await self.send_embed_msg(ctx, title="There's nothing in the queue.")
 
         async for req_username in AsyncIter(requesters["users"]):
             percentage = float(requesters["users"][req_username]["songcount"]) / float(
@@ -89,5 +88,5 @@ class MiscellaneousCommands(MixinMeta, metaclass=CompositeMetaClass):
         queue_user = ["{}: {:g}%".format(x[0], x[1]) for x in top_queue_users]
         queue_user_list = "\n".join(queue_user)
         await self.send_embed_msg(
-            ctx, title=_("Queued and playing tracks:"), description=queue_user_list
+            ctx, title="Queued and playing tracks:", description=queue_user_list
         )

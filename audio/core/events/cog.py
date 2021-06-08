@@ -23,7 +23,6 @@ from ..abc import MixinMeta
 from ..cog_utils import CompositeMetaClass
 
 log = logging.getLogger("red.cogs.Audio.cog.Events.audio")
-_ = lambda s: s
 
 
 class AudioEvents(MixinMeta, metaclass=CompositeMetaClass):
@@ -210,5 +209,5 @@ class AudioEvents(MixinMeta, metaclass=CompositeMetaClass):
                 and player._last_resume + datetime.timedelta(seconds=60)
                 > datetime.datetime.now(tz=datetime.timezone.utc)
             ):
-                await self.send_embed_msg(notify_channel, title=_("Auto Play started."))
+                await self.send_embed_msg(notify_channel, title="Auto Play started.")
             player.store("autoplay_notified", True)

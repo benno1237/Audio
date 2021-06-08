@@ -19,7 +19,6 @@ from ..abc import MixinMeta
 from ..cog_utils import CompositeMetaClass
 
 log = logging.getLogger("red.cogs.Audio.cog.Commands.local_track")
-_ = lambda s: s
 
 
 class LocalTrackCommands(MixinMeta, metaclass=CompositeMetaClass):
@@ -51,8 +50,8 @@ class LocalTrackCommands(MixinMeta, metaclass=CompositeMetaClass):
             if not _dir.exists():
                 return await self.send_embed_msg(
                     ctx,
-                    title=_("Folder Not Found"),
-                    description=_("Localtracks folder named {name} does not exist.").format(
+                    title="Folder Not Found",
+                    description="Localtracks folder named {name} does not exist.".format(
                         name=folder
                     ),
                 )
@@ -80,7 +79,7 @@ class LocalTrackCommands(MixinMeta, metaclass=CompositeMetaClass):
             return
         localtracks_folders = await self.get_localtracks_folders(ctx, search_subfolders=True)
         if not localtracks_folders:
-            return await self.send_embed_msg(ctx, title=_("No album folders found."))
+            return await self.send_embed_msg(ctx, title="No album folders found.")
         async with ctx.typing():
             len_folder_pages = math.ceil(len(localtracks_folders) / 5)
             folder_page_list = []
@@ -138,9 +137,9 @@ class LocalTrackCommands(MixinMeta, metaclass=CompositeMetaClass):
             ),
         )
         if not all_tracks:
-            return await self.send_embed_msg(ctx, title=_("No album folders found."))
+            return await self.send_embed_msg(ctx, title="No album folders found.")
         async with ctx.typing():
             search_list = await self._build_local_search_list(all_tracks, search_words)
         if not search_list:
-            return await self.send_embed_msg(ctx, title=_("No matches."))
+            return await self.send_embed_msg(ctx, title="No matches.")
         return await ctx.invoke(self.command_search, query=search_list)

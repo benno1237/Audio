@@ -51,7 +51,7 @@ if TYPE_CHECKING:
     from .. import Audio
     from ..core.utilities import SettingCacheManager
 
-_ = lambda s: s
+
 log = logging.getLogger("red.cogs.Audio.api.AudioAPIInterface")
 _TOP_100_US = "https://www.youtube.com/playlist?list=PL4fGSI1pDJn5rWitrRWFKdm-ulaFiIyoK"
 # TODO: Get random from global Cache
@@ -298,7 +298,7 @@ class AudioAPIInterface:
             if notifier is not None and (youtube_api_error and not global_api):
                 error_embed = discord.Embed(
                     colour=await ctx.embed_colour(),
-                    title=_("Failing to get tracks, skipping remaining."),
+                    title="Failing to get tracks, skipping remaining.",
                 )
                 await notifier.update_embed(error_embed)
                 break
@@ -331,7 +331,7 @@ class AudioAPIInterface:
         try:
             if results["error"]["status"] == 401 and not recursive:
                 raise SpotifyFetchError(
-                    _(
+                    (
                         "The Spotify API key or client secret has not been set properly. "
                         "\nUse `{prefix}audioset spotifyapi` for instructions."
                     )
@@ -373,7 +373,7 @@ class AudioAPIInterface:
                     break
             except KeyError:
                 raise SpotifyFetchError(
-                    _("This doesn't seem to be a valid Spotify playlist/album URL or code.")
+                    "This doesn't seem to be a valid Spotify playlist/album URL or code."
                 )
         return tracks
 
@@ -498,7 +498,7 @@ class AudioAPIInterface:
                 lock(ctx, False)
                 embed3 = discord.Embed(
                     colour=await ctx.embed_colour(),
-                    title=_("This doesn't seem to be a supported Spotify URL or code."),
+                    title="This doesn't seem to be a supported Spotify URL or code.",
                 )
                 await notifier.update_embed(embed3)
 
@@ -588,9 +588,7 @@ class AudioAPIInterface:
                                 lock(ctx, False)
                                 error_embed = discord.Embed(
                                     colour=await ctx.embed_colour(),
-                                    title=_(
-                                        "The connection was reset while loading the playlist."
-                                    ),
+                                    title="The connection was reset while loading the playlist.",
                                 )
                                 if notifier is not None:
                                     await notifier.update_embed(error_embed)
@@ -599,7 +597,7 @@ class AudioAPIInterface:
                                 lock(ctx, False)
                                 error_embed = discord.Embed(
                                     colour=await ctx.embed_colour(),
-                                    title=_("Player timeout, skipping remaining tracks."),
+                                    title="Player timeout, skipping remaining tracks.",
                                 )
                                 if notifier is not None:
                                     await notifier.update_embed(error_embed)
@@ -627,7 +625,7 @@ class AudioAPIInterface:
                 ):
                     error_embed = discord.Embed(
                         colour=await ctx.embed_colour(),
-                        title=_("Failing to get tracks, skipping remaining."),
+                        title="Failing to get tracks, skipping remaining.",
                     )
                     if notifier is not None:
                         await notifier.update_embed(error_embed)
@@ -700,7 +698,7 @@ class AudioAPIInterface:
                         await player.play()
             if enqueue and tracks_from_spotify:
                 if total_tracks > enqueued_tracks:
-                    maxlength_msg = _(" {bad_tracks} tracks cannot be queued.").format(
+                    maxlength_msg = " {bad_tracks} tracks cannot be queued.".format(
                         bad_tracks=(total_tracks - enqueued_tracks)
                     )
                 else:
@@ -708,8 +706,8 @@ class AudioAPIInterface:
 
                 embed = discord.Embed(
                     colour=await ctx.embed_colour(),
-                    title=_("Playlist Enqueued"),
-                    description=_("Added {num} tracks to the queue.{maxlength_msg}").format(
+                    title="Playlist Enqueued",
+                    description="Added {num} tracks to the queue.{maxlength_msg}".format(
                         num=enqueued_tracks, maxlength_msg=maxlength_msg
                     ),
                 )
@@ -718,7 +716,7 @@ class AudioAPIInterface:
                     and queue_dur > 0
                 ):
                     embed.set_footer(
-                        text=_(
+                        text=(
                             "{time} until start of playlist"
                             " playback: starts at #{position} in queue"
                         ).format(time=queue_total_duration, position=before_queue_length + 1)
@@ -729,7 +727,7 @@ class AudioAPIInterface:
             lock(ctx, False)
             if not track_list and not has_not_allowed:
                 raise SpotifyFetchError(
-                    message=_(
+                    message=(
                         "Nothing found.\nThe YouTube API key may be invalid "
                         "or you may be rate limited on YouTube's search service.\n"
                         "Check the YouTube API key again and follow the instructions "

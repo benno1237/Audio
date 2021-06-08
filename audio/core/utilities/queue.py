@@ -22,7 +22,6 @@ from ..abc import MixinMeta
 from ..cog_utils import CompositeMetaClass
 
 log = logging.getLogger("red.cogs.Audio.cog.Utilities.queue")
-_ = lambda s: s
 
 
 class QueueUtilities(MixinMeta, metaclass=CompositeMetaClass):
@@ -41,7 +40,7 @@ class QueueUtilities(MixinMeta, metaclass=CompositeMetaClass):
         queue_idx_start = (page_num - 1) * 15
         queue_idx_end = queue_idx_start + 15
         if len(player.queue) > 500:
-            queue_list = _("__Too many songs in the queue, only showing the first 500__.\n\n")
+            queue_list = "__Too many songs in the queue, only showing the first 500__.\n\n"
         else:
             queue_list = ""
 
@@ -58,18 +57,14 @@ class QueueUtilities(MixinMeta, metaclass=CompositeMetaClass):
             player.current, self.local_folder_current_path
         )
         if query.is_stream:
-            queue_list += _("**Currently livestreaming:**\n")
+            queue_list += "**Currently livestreaming:**\n"
             queue_list += f"{current_track_description}\n"
-            queue_list += _("Requested by: **{user}**").format(
-                user=player.current.requester.mention
-            )
+            queue_list += "Requested by: **{user}**".format(user=player.current.requester.mention)
             queue_list += f"\n\n{arrow}`{pos}`/`{dur}`\n\n"
         else:
-            queue_list += _("Playing: ")
+            queue_list += "Playing: "
             queue_list += f"{current_track_description}\n"
-            queue_list += _("Requested by: **{user}**").format(
-                user=player.current.requester.mention
-            )
+            queue_list += "Requested by: **{user}**".format(user=player.current.requester.mention)
             queue_list += f"\n\n{arrow}`{pos}`/`{dur}`\n\n"
         songs_for_page = queue[queue_idx_start:queue_idx_end]
         async for i, track in AsyncIter(songs_for_page).enumerate(start=queue_idx_start):
@@ -80,7 +75,7 @@ class QueueUtilities(MixinMeta, metaclass=CompositeMetaClass):
             queue_list += f"`{track_idx}.` {track_description}\n"
         embed = discord.Embed(
             colour=await ctx.embed_colour(),
-            title=_("Queue for __{guild_name}__").format(guild_name=ctx.guild.name),
+            title="Queue for __{guild_name}__".format(guild_name=ctx.guild.name),
             description=queue_list,
         )
 
@@ -91,7 +86,7 @@ class QueueUtilities(MixinMeta, metaclass=CompositeMetaClass):
             embed.set_thumbnail(url=player.current.thumbnail)
         queue_dur = await self.queue_duration(ctx)
         queue_total_duration = self.format_time(queue_dur)
-        text = _(
+        text = (
             "Page {page_num}/{total_pages} | {num_tracks} tracks, {num_remaining} remaining\n"
         ).format(
             page_num=humanize_number(page_num),
@@ -100,19 +95,17 @@ class QueueUtilities(MixinMeta, metaclass=CompositeMetaClass):
             num_remaining=queue_total_duration,
         )
         text += (
-            _("Auto-Play")
-            + ": "
-            + ("\N{WHITE HEAVY CHECK MARK}" if autoplay else "\N{CROSS MARK}")
+            "Auto-Play" + ": " + ("\N{WHITE HEAVY CHECK MARK}" if autoplay else "\N{CROSS MARK}")
         )
         text += (
             (" | " if text else "")
-            + _("Shuffle")
+            + "Shuffle"
             + ": "
             + ("\N{WHITE HEAVY CHECK MARK}" if shuffle else "\N{CROSS MARK}")
         )
         text += (
             (" | " if text else "")
-            + _("Repeat")
+            + "Repeat"
             + ": "
             + ("\N{WHITE HEAVY CHECK MARK}" if repeat else "\N{CROSS MARK}")
         )
@@ -164,10 +157,10 @@ class QueueUtilities(MixinMeta, metaclass=CompositeMetaClass):
             else:
                 track_match += "`{}.` **{}**\n".format(track[0], track[1])
         embed = discord.Embed(
-            colour=await ctx.embed_colour(), title=_("Matching Tracks:"), description=track_match
+            colour=await ctx.embed_colour(), title="Matching Tracks:", description=track_match
         )
         embed.set_footer(
-            text=_("Page {page_num}/{total_pages} | {num_tracks} tracks").format(
+            text="Page {page_num}/{total_pages} | {num_tracks} tracks".format(
                 page_num=humanize_number(page_num),
                 total_pages=humanize_number(search_num_pages),
                 num_tracks=len(search_list),

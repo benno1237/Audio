@@ -43,7 +43,7 @@ from ..utils import PlaylistScope
 from .api_utils import PlaylistFetchResult
 
 log = logging.getLogger("red.cogs.Audio.api.Playlists")
-_ = lambda s: s
+
 
 if TYPE_CHECKING:
     # Audio Imports

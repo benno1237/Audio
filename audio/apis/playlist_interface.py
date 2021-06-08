@@ -21,7 +21,6 @@ from .api_utils import PlaylistFetchResult, prepare_config_scope, standardize_sc
 from .playlist_wrapper import PlaylistWrapper
 
 log = logging.getLogger("red.cogs.Audio.api.PlaylistsInterface")
-_ = lambda s: s
 
 
 class Playlist:

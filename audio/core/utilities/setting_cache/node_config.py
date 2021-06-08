@@ -173,8 +173,8 @@ class NodeConfigManager(CacheBase):
                 "lavalink"
             ]["nodes"]["primary"]["region"]
 
-    async def get_shard_id(self, node_identifier: str = "primary") -> int:
-        ret: int
+    async def get_shard_id(self, node_identifier: str = "primary") -> str:
+        ret: str
         self._cached_global.setdefault(
             node_identifier, self._config.defaults["GLOBAL"]["lavalink"]["nodes"]["primary"]
         )
@@ -185,7 +185,7 @@ class NodeConfigManager(CacheBase):
             self._cached_global[node_identifier]["shard_id"] = ret
         return ret
 
-    async def set_shard_id(self, set_to: int, node_identifier: str = "primary") -> None:
+    async def set_shard_id(self, set_to: str, node_identifier: str = "primary") -> None:
         self._cached_global.setdefault(
             node_identifier, self._config.defaults["GLOBAL"]["lavalink"]["nodes"]["primary"]
         )
