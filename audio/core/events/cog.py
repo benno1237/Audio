@@ -150,30 +150,34 @@ class AudioEvents(MixinMeta, ABC, metaclass=CompositeMetaClass):
         await self.config_cache.currently_playing_name.set_guild(guild, set_to=track.title)
         auto_lyrics = await self.config_cache.auto_lyrics.get_context_value(guild)
         if auto_lyrics:
-            notify_channel = lavalink.get_player(guild.id).fetch("channel")
+            notify_channel = lavalink.get_player(guild.id).fetch("notify_channel")
             if notify_channel:
                 notify_channel = self.bot.get_channel(notify_channel)
                 botsong = BOT_SONG_RE.sub("", track.title).strip()
                 title, artist, lyrics, source = await self.get_lyrics_string(botsong)
-                paged_embeds = []
-                paged_content = [p for p in pagify(lyrics, page_length=900)]
-                for index, page in enumerate(paged_content, start=1):
-                    e = discord.Embed(
-                        title=f"{title} by {artist}",
-                        description=page,
-                        colour=await self.bot.get_embed_color(notify_channel),
-                    )
-                    if source:
-                        e.set_footer(
-                            text=f"Requested by {track.requester} | Source: {source} | Page: {index}/{len(paged_content)}"
+                if all([title, artist, lyrics, source]):
+                    paged_embeds = []
+                    paged_content = [p for p in pagify(lyrics, page_length=900)]
+                    for index, page in enumerate(paged_content, start=1):
+                        e = discord.Embed(
+                            title=f"{title} by {artist}",
+                            description=page,
+                            colour=await self.bot.get_embed_color(notify_channel),
                         )
-                    paged_embeds.append(e)
-                if paged_embeds:
-                    asyncio.create_task(
-                        menu(
-                            notify_channel, paged_embeds, controls=DEFAULT_CONTROLS, timeout=180.0
+                        if source:
+                            e.set_footer(
+                                text=f"Requested by {track.requester} | Source: {source} | Page: {index}/{len(paged_content)}"
+                            )
+                        paged_embeds.append(e)
+                    if paged_embeds:
+                        asyncio.create_task(
+                            menu(
+                                notify_channel,
+                                paged_embeds,
+                                controls=DEFAULT_CONTROLS,
+                                timeout=180.0,
+                            )
                         )
-                    )
 
     @commands.Cog.listener()
     async def on_red_audio_queue_end(
