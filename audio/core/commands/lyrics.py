@@ -21,14 +21,14 @@ log = logging.getLogger("red.cogs.Music.cog.Commands.lyrics")
 
 
 class LyricsCommands(MixinMeta, ABC, metaclass=CompositeMetaClass):
-    @commands.group(name="lyrics")
+    @commands.group(name="mlyrics")
     @commands.guild_only()
     @commands.bot_has_permissions(embed_links=True, add_reactions=True)
-    async def command_lyrics(self, ctx: commands.Context):
+    async def command_mlyrics(self, ctx: commands.Context):
         """Get for a songs lyrics."""
 
-    @command_lyrics.command(name="search")
-    async def command_lyrics_search(self, ctx, *, artistsong: str):
+    @command_mlyrics.command(name="search")
+    async def command_mlyrics_search(self, ctx, *, artistsong: str):
         """
         Returns Lyrics for Song Lookup.
         User arguments - artist/song
@@ -51,8 +51,8 @@ class LyricsCommands(MixinMeta, ABC, metaclass=CompositeMetaClass):
                 paged_embeds.append(embed)
         await menu(ctx, paged_embeds, controls=DEFAULT_CONTROLS, timeout=180.0)
 
-    @command_lyrics.command(name="spotify")
-    async def command_lyrics_spotify(self, ctx, user: Optional[discord.Member] = None):
+    @command_mlyrics.command(name="spotify")
+    async def command_mlyrics_spotify(self, ctx, user: Optional[discord.Member] = None):
         """
         Returns Lyrics from Discord Member song.
         Optional User arguments - Mention/ID, no argument returns your own
@@ -101,8 +101,8 @@ class LyricsCommands(MixinMeta, ABC, metaclass=CompositeMetaClass):
                 paged_embeds.append(embed)
         await menu(ctx, paged_embeds, controls=DEFAULT_CONTROLS, timeout=180.0)
 
-    @command_lyrics.command(name="playing")
-    async def command_lyrics_playing(self, ctx):
+    @command_mlyrics.command(name="playing")
+    async def command_mlyrics_playing(self, ctx):
         """
         Returns Lyrics for bot's current track.
         """
