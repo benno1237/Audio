@@ -1832,8 +1832,8 @@ class AudioSetCommands(MixinMeta, ABC, metaclass=CompositeMetaClass):
     @command_audioset_guild.command(name="autolyrics")
     async def command_audioset_guild_auto_lyrics(self, ctx: commands.Context):
         """Toggle Lyrics to be shown when a new track starts"""
-        auto_lyrics = await self.config_cache.auto_lyrics.get_global()
-        await self.config_cache.auto_lyrics.set_global(not auto_lyrics)
+        auto_lyrics = await self.config_cache.auto_lyrics.get_guild()
+        await self.config_cache.auto_lyrics.set_guild(ctx.guild, not auto_lyrics)
         await self.send_embed_msg(
             ctx,
             title="Setting Changed",
