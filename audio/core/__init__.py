@@ -3,7 +3,7 @@ from __future__ import annotations
 
 # Standard Library Imports
 from collections import Counter, defaultdict
-from typing import Mapping
+from typing import MutableMapping, Mapping, Optional
 import asyncio
 import datetime
 
@@ -160,7 +160,8 @@ class Music(
             lavalink__managed_yaml=lavalink_yaml,
         )
 
-        default_guild = dict(
+        default_guild: Mapping = dict(
+            auto_lyrics=False,
             auto_play=False,
             currently_auto_playing_in=[],
             auto_deafen=True,
