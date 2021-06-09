@@ -53,7 +53,7 @@ class AudioEvents(MixinMeta, ABC, metaclass=CompositeMetaClass):
             today = datetime.date.today()
             midnight = datetime.datetime.combine(today, datetime.datetime.min.time())
             today_id = int(time.mktime(today.timetuple()))
-            track = self.track_to_json(track)
+            track_json = self.track_to_json(track)
             if daily_cache:
                 name = f"Daily playlist - {today}"
                 playlist: Optional[Playlist]
@@ -70,9 +70,9 @@ class AudioEvents(MixinMeta, ABC, metaclass=CompositeMetaClass):
                     playlist = None
 
                 if playlist:
-                    tracks = playlist.tracks
-                    tracks.append(track)
-                    await playlist.edit({"tracks": tracks})
+                    tracks_list = playlist.tracks
+                    tracks_list.append(track_json)
+                    await playlist.edit({"tracks": tracks_list})
                 else:
                     playlist = Playlist(
                         bot=self.bot,
@@ -81,7 +81,7 @@ class AudioEvents(MixinMeta, ABC, metaclass=CompositeMetaClass):
                         playlist_id=today_id,
                         name=name,
                         playlist_url=None,
-                        tracks=[track],
+                        tracks=[track_json],
                         guild=guild,
                         playlist_api=self.playlist_api,
                     )
@@ -100,9 +100,9 @@ class AudioEvents(MixinMeta, ABC, metaclass=CompositeMetaClass):
                 except RuntimeError:
                     playlist = None
                 if playlist:
-                    tracks = playlist.tracks
-                    tracks.append(track)
-                    await playlist.edit({"tracks": tracks})
+                    tracks_list = playlist.tracks
+                    tracks_list.append(track_json)
+                    await playlist.edit({"tracks": tracks_list})
                 else:
                     playlist = Playlist(
                         bot=self.bot,
@@ -111,7 +111,7 @@ class AudioEvents(MixinMeta, ABC, metaclass=CompositeMetaClass):
                         playlist_id=today_id,
                         name=global_name,
                         playlist_url=None,
-                        tracks=[track],
+                        tracks=[track_json],
                         guild=guild,
                         playlist_api=self.playlist_api,
                     )
