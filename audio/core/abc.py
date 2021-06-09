@@ -552,3 +552,7 @@ class MixinMeta(ABC):
     @staticmethod
     def is_slash_compatible() -> bool:
         raise NotImplementedError()
+
+    @staticmethod
+    async def get_lyrics_string(artist_song: str) -> Tuple[str, str, str, str]:
+        raise NotImplementedError()

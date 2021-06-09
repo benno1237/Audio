@@ -14,13 +14,12 @@
     case_sensitive = true
     remove_redundant_aliases = true
     dedup_headings = true
-    star_first = true
     skip_glob = [
     ]
     filter_files = true
     sections = ["FUTURE", "STDLIB", "THIRDPARTY", "FIRSTPARTY", "LOCALFOLDER"]
     known_first_party = ["lavalink", "audio"]
-    known_third_party= ["redbot", "yaml", "tabulate", "discord"]
+    known_third_party= ["redbot", "yaml", "tabulate", "discord", "bs4"]
     import_heading_future = "Future Imports"
     import_heading_stdlib = "Standard Library Imports"
     import_heading_thirdparty = "Dependency Imports"

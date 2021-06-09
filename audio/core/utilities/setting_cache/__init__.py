@@ -8,12 +8,14 @@ import attr
 
 # Music Imports
 from .auto_deafen import AutoDeafenManager
+from .auto_lyrics import AutoLyricsManager
 from .autodc import AutoDCManager
 from .autoplay import AutoPlayManager
 from .blacklist_whitelist import WhitelistBlacklistManager
 from .bot import BotConfigManager
 from .channel_restrict import ChannelRestrictManager
 from .country_code import CountryCodeManager
+from .currently_playing_cache import CurrentlyPlayingNameManager
 from .daily_global_playlist import DailyGlobalPlaylistManager
 from .daily_playlist import DailyPlaylistManager
 from .dj_roles import DJRoleManager
@@ -111,6 +113,11 @@ class SettingCacheManager:
     vc_restricted: VCRestrictedManager = cache_factory(VCRestrictedManager)
     auto_deafen: AutoDeafenManager = cache_factory(AutoDeafenManager)
     max_queue_size: MaxQueueSizerManager = cache_factory(MaxQueueSizerManager)
+    auto_lyrics: AutoLyricsManager = cache_factory(AutoLyricsManager)
+    currently_playing_name: CurrentlyPlayingNameManager = cache_factory(
+        CurrentlyPlayingNameManager
+    )
+
     bot_config: BotConfigManager = cache_factory(BotConfigManager)
 
     def reset_globals(self):
