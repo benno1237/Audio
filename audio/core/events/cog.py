@@ -157,19 +157,23 @@ class AudioEvents(MixinMeta, ABC, metaclass=CompositeMetaClass):
                 title, artist, lyrics, source = await self.get_lyrics_string(botsong)
                 paged_embeds = []
                 paged_content = [p for p in pagify(lyrics, page_length=900)]
-                for index, page in enumerate(paged_content):
+                for index, page in enumerate(paged_content, start=1):
                     e = discord.Embed(
                         title=f"{title} by {artist}",
                         description=page,
                         colour=await self.bot.get_embed_color(notify_channel),
                     )
-                    e.set_footer(
-                        text=f"Requested by {track.requester} | Source: {source} | Page: {index}/{len(paged_content)}"
-                    )
+                    if source:
+                        e.set_footer(
+                            text=f"Requested by {track.requester} | Source: {source} | Page: {index}/{len(paged_content)}"
+                        )
                     paged_embeds.append(e)
-                asyncio.create_task(
-                    menu(notify_channel, paged_embeds, controls=DEFAULT_CONTROLS, timeout=180.0)
-                )
+                if paged_embeds:
+                    asyncio.create_task(
+                        menu(
+                            notify_channel, paged_embeds, controls=DEFAULT_CONTROLS, timeout=180.0
+                        )
+                    )
 
     @commands.Cog.listener()
     async def on_red_audio_queue_end(

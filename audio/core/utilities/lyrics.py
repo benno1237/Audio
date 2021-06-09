@@ -30,7 +30,7 @@ class LyricUtilities(MixinMeta, ABC, metaclass=CompositeMetaClass):
         searchquery = quote_plus(artist_song)
         async with aiohttp.ClientSession(json_serialize=json.dumps) as session:
             async with session.get(f"https://google.com/search?q={searchquery}+lyrics") as resp:
-                response_one = resp.text()
+                response_one = await resp.text()
         soup = BeautifulSoup(response_one, "html.parser")
         bouncer = "Our systems have detected unusual traffic from your computer network"
         if bouncer in soup.get_text():
@@ -48,7 +48,7 @@ class LyricUtilities(MixinMeta, ABC, metaclass=CompositeMetaClass):
                 title_, artist_, lyrics_, source_ = (
                     "",
                     "",
-                    f"Not able to find the lyrics for {searchquery}.",
+                    f"Not able to find the lyrics for {artist_song}.",
                     "",
                 )
         return title_, artist_, lyrics_, source_

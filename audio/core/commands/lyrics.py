@@ -38,15 +38,16 @@ class LyricsCommands(MixinMeta, ABC, metaclass=CompositeMetaClass):
             title = "" if title == "" else f"{title} by {artist}"
             paged_embeds = []
             paged_content = [p for p in pagify(lyrics, page_length=900)]
-            for index, page in enumerate(paged_content):
+            for index, page in enumerate(paged_content, start=1):
                 embed = discord.Embed(
-                    title="{}".format(title),
+                    title=f"{title}",
                     description=page,
                     colour=await self.bot.get_embed_color(ctx.channel),
                 )
-                embed.set_footer(
-                    text=f"Requested by {ctx.message.author} | Source: {source} | Page: {index}/{len(paged_content)}"
-                )
+                if source:
+                    embed.set_footer(
+                        text=f"Requested by {ctx.message.author} | Source: {source} | Page: {index}/{len(paged_content)}"
+                    )
                 paged_embeds.append(embed)
         await menu(ctx, paged_embeds, controls=DEFAULT_CONTROLS, timeout=180.0)
 
@@ -87,15 +88,16 @@ class LyricsCommands(MixinMeta, ABC, metaclass=CompositeMetaClass):
             title = "" if title == "" else f"{title} by {artist}"
             paged_embeds = []
             paged_content = [p for p in pagify(lyrics, page_length=900)]
-            for index, page in enumerate(paged_content):
+            for index, page in enumerate(paged_content, start=1):
                 embed = discord.Embed(
                     title=f"{title}",
                     description=page,
                     colour=await self.bot.get_embed_color(ctx.channel),
                 )
-                embed.set_footer(
-                    text=f"Requested by {ctx.message.author} | Source: {source} | Page: {index}/{len(paged_content)}"
-                )
+                if source:
+                    embed.set_footer(
+                        text=f"Requested by {ctx.message.author} | Source: {source} | Page: {index}/{len(paged_content)}"
+                    )
                 paged_embeds.append(embed)
         await menu(ctx, paged_embeds, controls=DEFAULT_CONTROLS, timeout=180.0)
 
@@ -113,14 +115,15 @@ class LyricsCommands(MixinMeta, ABC, metaclass=CompositeMetaClass):
             title = "" if title == "" else f"{title} by {artist}"
             paged_embeds = []
             paged_content = [p for p in pagify(lyrics, page_length=900)]
-            for index, page in enumerate(paged_content):
+            for index, page in enumerate(paged_content, start=1):
                 embed = discord.Embed(
                     title="{}".format(title),
                     description=page,
                     colour=await self.bot.get_embed_color(ctx.channel),
                 )
-                embed.set_footer(
-                    text=f"Requested by {ctx.message.author} | Source: {source} | Page: {index}/{len(paged_content)}"
-                )
+                if source:
+                    embed.set_footer(
+                        text=f"Requested by {ctx.message.author} | Source: {source} | Page: {index}/{len(paged_content)}"
+                    )
                 paged_embeds.append(embed)
         await menu(ctx, paged_embeds, controls=DEFAULT_CONTROLS, timeout=180.0)
