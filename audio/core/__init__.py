@@ -3,7 +3,7 @@ from __future__ import annotations
 
 # Standard Library Imports
 from collections import Counter, defaultdict
-from typing import MutableMapping, Mapping, Optional
+from typing import Mapping, MutableMapping, Optional
 import asyncio
 import datetime
 
