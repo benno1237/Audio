@@ -28,7 +28,7 @@ _RE_YT_LIST_PLAYLIST: Final[Pattern] = re.compile(
     r"^(https?://)?(www\.)?(youtube\.com|youtu\.?be)(/playlist\?).*(list=)(.*)(&|$)"
 )
 _MIN_SLASH_SUPPORT = VersionInfo.from_json(
-    {"major": 999999, "minor": 1, "micro": 0, "releaselevel": "alpha"}
+    {"major": 999999, "minor": 1, "micro": 0, "releaselevel": "final"}
 )
 
 

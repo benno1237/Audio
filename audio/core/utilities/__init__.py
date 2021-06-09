@@ -9,6 +9,7 @@ from ..cog_utils import CompositeMetaClass
 from .equalizer import EqualizerUtilities
 from .formatting import FormattingUtilities
 from .local_tracks import LocalTrackUtilities
+from .lyrics import LyricUtilities
 from .miscellaneous import MiscellaneousUtilities
 from .parsers import ParsingUtilities
 from .player import PlayerUtilities
@@ -22,6 +23,7 @@ class Utilities(
     EqualizerUtilities,
     FormattingUtilities,
     LocalTrackUtilities,
+    LyricUtilities,
     MiscellaneousUtilities,
     PlayerUtilities,
     PlaylistUtilities,

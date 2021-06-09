@@ -11,6 +11,7 @@ from .controller import PlayerControllerCommands
 from .equalizer import EqualizerCommands
 from .filters import EffectsCommands
 from .localtracks import LocalTrackCommands
+from .lyrics import LyricsCommands
 from .miscellaneous import MiscellaneousCommands
 from .player import PlayerCommands
 from .playlists import PlaylistCommands
@@ -23,6 +24,7 @@ class Commands(
     EqualizerCommands,
     EffectsCommands,
     LocalTrackCommands,
+    LyricsCommands,
     MiscellaneousCommands,
     PlayerCommands,
     PlaylistCommands,
