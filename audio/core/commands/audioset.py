@@ -95,6 +95,23 @@ class AudioSetCommands(MixinMeta, ABC, metaclass=CompositeMetaClass):
             ),
         )
 
+    @command_audioset_global.command(name="autolyrics")
+    async def command_audioset_global_auto_lyrics(self, ctx: commands.Context):
+        """Toggle whether the bot will be auto lyrics are allowed.
+
+
+        If disabled, servers will not be able to overwrite it.
+        """
+        auto_lyrics = await self.config_cache.auto_lyrics.get_global()
+        await self.config_cache.auto_lyrics.set_global(not auto_lyrics)
+        await self.send_embed_msg(
+            ctx,
+            title="Setting Changed",
+            description="Auto Lyrics: {true_or_false}.".format(
+                true_or_false=ENABLED_TITLE if not auto_lyrics else DISABLED_TITLE
+            ),
+        )
+
     @command_audioset_global.command(name="notify")
     async def command_audioset_global_dailyqueue_notify(self, ctx: commands.Context):
         """Toggle track announcement and other bot messages.
@@ -750,6 +767,7 @@ class AudioSetCommands(MixinMeta, ABC, metaclass=CompositeMetaClass):
         max_queue = await self.config_cache.max_queue_size.get_global()
         country_code = await self.config_cache.country_code.get_global()
         historical_playlist = await self.config_cache.daily_global_playlist.get_global()
+        auto_lyrics = await self.config_cache.auto_lyrics.get_global()
         disabled = DISABLED_TITLE
         enabled = ENABLED_TITLE
 
@@ -776,6 +794,7 @@ class AudioSetCommands(MixinMeta, ABC, metaclass=CompositeMetaClass):
             + (
                 "Allow notify messages:        [{notify}]\n"
                 "Allow daily playlist:         [{daily_playlist}]\n"
+                "Allow Auto-Lyrics:            [{auto_lyrics}]\n"
                 "Enforced auto-disconnect:     [{dc}]\n"
                 "Enforced empty dc:            [{empty_dc_enabled}]\n"
                 "Empty dc timer:               [{dc_num_seconds}]\n"
@@ -808,6 +827,7 @@ class AudioSetCommands(MixinMeta, ABC, metaclass=CompositeMetaClass):
             thumbnail=enabled if thumbnail else disabled,
             max_queue=humanize_number(max_queue),
             lyrics=enabled if lyrics else disabled,
+            auto_lyrics=enabled if auto_lyrics else disabled,
         )
 
         msg += (
@@ -1809,6 +1829,19 @@ class AudioSetCommands(MixinMeta, ABC, metaclass=CompositeMetaClass):
             description="Set auto-play playlist to play recently played tracks.",
         )
 
+    @command_audioset_guild.command(name="autolyrics")
+    async def command_audioset_guild_auto_lyrics(self, ctx: commands.Context):
+        """Toggle Lyrics to be shown when a new track starts"""
+        auto_lyrics = await self.config_cache.auto_lyrics.get_global()
+        await self.config_cache.auto_lyrics.set_global(not auto_lyrics)
+        await self.send_embed_msg(
+            ctx,
+            title="Setting Changed",
+            description="Auto Lyrics: {true_or_false}.".format(
+                true_or_false=ENABLED_TITLE if not auto_lyrics else DISABLED_TITLE
+            ),
+        )
+
     @command_audioset_guild.command(name="info", aliases=["settings"])
     async def command_audioset_guild_info(self, ctx: commands.Context):
         """Display server settings."""
@@ -1838,7 +1871,7 @@ class AudioSetCommands(MixinMeta, ABC, metaclass=CompositeMetaClass):
         bumpped_shuffle = await self.config_cache.shuffle_bumped.get_guild(ctx.guild)
         repeat = await self.config_cache.repeat.get_guild(ctx.guild)
         shuffle = await self.config_cache.shuffle.get_guild(ctx.guild)
-
+        auto_lyrics = await self.config_cache.auto_lyrics.get_guild(ctx.guild)
         autoplaylist = await self.config.guild(ctx.guild).autoplaylist()
 
         disabled = DISABLED_TITLE
@@ -1851,6 +1884,7 @@ class AudioSetCommands(MixinMeta, ABC, metaclass=CompositeMetaClass):
             "Vote mode:           [{vote_enabled}]\n"
             "Vote percentage:     [{vote_percent}%]\n"
             "Auto-play:           [{autoplay}]\n"
+            "Auto-Lyrics:         [{auto_lyrics}]\n"
             "Auto-disconnect:     [{dc}]\n"
             "Empty dc:            [{empty_dc_enabled}]\n"
             "Empty dc timer:      [{dc_num_seconds}]\n"
@@ -1899,6 +1933,7 @@ class AudioSetCommands(MixinMeta, ABC, metaclass=CompositeMetaClass):
             repeat=enabled if repeat else disabled,
             shuffle=enabled if shuffle else disabled,
             bumpped_shuffle=enabled if bumpped_shuffle else disabled,
+            auto_lyrics=enabled if auto_lyrics else disabled,
         )
 
         if autoplaylist["enabled"]:
@@ -3369,6 +3404,7 @@ class AudioSetCommands(MixinMeta, ABC, metaclass=CompositeMetaClass):
         song_notify = await self.config_cache.notify.get_context_value(ctx.guild)
         persist_queue = await self.config_cache.persistent_queue.get_context_value(ctx.guild)
         auto_deafen = await self.config_cache.auto_deafen.get_context_value(ctx.guild)
+        auto_lyrics = await self.config_cache.auto_lyrics.get_context_value(ctx.guild)
         volume = await self.config_cache.volume.get_context_value(
             ctx.guild, channel=self.rgetattr(ctx, "guild.me.voice.channel", None)
         )
@@ -3381,6 +3417,9 @@ class AudioSetCommands(MixinMeta, ABC, metaclass=CompositeMetaClass):
         msg += "Auto-disconnect:  [{dc}]\n".format(dc=ENABLED_TITLE if dc else DISABLED_TITLE)
         msg += "Auto-play:        [{autoplay}]\n".format(
             autoplay=ENABLED_TITLE if autoplay else DISABLED_TITLE
+        )
+        msg += "Auto-Lyrics:      [{autoplay}]\n".format(
+            autoplay=ENABLED_TITLE if auto_lyrics else DISABLED_TITLE
         )
         if emptydc_enabled:
             msg += "Disconnect timer: [{num_seconds}]\n".format(

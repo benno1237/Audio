@@ -11,6 +11,8 @@ import time
 
 # Dependency Imports
 from redbot.core import commands
+from redbot.core.utils.chat_formatting import pagify
+from redbot.core.utils.menus import DEFAULT_CONTROLS, menu
 import discord
 
 # My Modded Imports
@@ -19,7 +21,7 @@ import lavalink
 # Music Imports
 from ...apis.playlist_interface import delete_playlist, get_playlist, Playlist
 from ...audio_logging import debug_exc_log
-from ...utils import PlaylistScope
+from ...utils import BOT_SONG_RE, PlaylistScope
 from ..abc import MixinMeta
 from ..cog_utils import CompositeMetaClass
 
@@ -145,6 +147,29 @@ class AudioEvents(MixinMeta, ABC, metaclass=CompositeMetaClass):
             await self.api_interface.persistent_queue_api.played(
                 guild_id=guild.id, track_id=track_identifier
             )
+        await self.config_cache.currently_playing_name.set_guild(guild, set_to=track.title)
+        auto_lyrics = await self.config_cache.auto_lyrics.get_context_value(guild)
+        if auto_lyrics:
+            notify_channel = lavalink.get_player(guild.id).fetch("channel")
+            if notify_channel:
+                notify_channel = self.bot.get_channel(notify_channel)
+                botsong = BOT_SONG_RE.sub("", track.title).strip()
+                title, artist, lyrics, source = await self.get_lyrics_string(botsong)
+                paged_embeds = []
+                paged_content = [p for p in pagify(lyrics, page_length=900)]
+                for index, page in enumerate(paged_content):
+                    e = discord.Embed(
+                        title=f"{title} by {artist}",
+                        description=page,
+                        colour=await self.bot.get_embed_color(notify_channel),
+                    )
+                    e.set_footer(
+                        text=f"Requested by {track.requester} | Source: {source} | Page: {index}/{len(paged_content)}"
+                    )
+                    paged_embeds.append(e)
+                asyncio.create_task(
+                    menu(notify_channel, paged_embeds, controls=DEFAULT_CONTROLS, timeout=180.0)
+                )
 
     @commands.Cog.listener()
     async def on_red_audio_queue_end(
@@ -159,6 +184,7 @@ class AudioEvents(MixinMeta, ABC, metaclass=CompositeMetaClass):
             await self.api_interface.persistent_queue_api.drop(guild.id)
             await asyncio.sleep(5)
             await self.api_interface.persistent_queue_api.delete_scheduled()
+        await self.config_cache.currently_playing_name.set_guild(guild, None)
 
     @commands.Cog.listener()
     async def on_red_audio_track_enqueue(

@@ -10,6 +10,7 @@ import asyncio
 import contextlib
 import datetime
 import logging
+import re
 import time
 
 # Dependency Imports
@@ -18,6 +19,11 @@ from redbot.core import commands, data_manager
 import discord
 
 log = logging.getLogger("red.cogs.Music.task.callback")
+
+BOT_SONG_RE = re.compile(
+    r"((\[)|(\()).*(of?ficial|feat\.?|" r"ft\.?|audio|video|lyrics?|remix|HD).*(?(2)]|\))",
+    flags=re.I,
+)
 
 
 class CacheLevel:

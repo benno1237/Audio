@@ -118,6 +118,7 @@ class Music(
         lavalink_yaml["server"]["port"] = default_cog_lavalink_settings["primary"]["port"]
 
         default_global = dict(
+            auto_lyrics=True,
             migrated_from_core=False,
             schema_version=1,
             bundled_playlist_version=0,

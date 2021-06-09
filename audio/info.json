@@ -22,7 +22,8 @@
         "PyYAML==5.4.1",
         "dislash.py~=1.0.3",
         "tabulate",
-        "async_lru"
+        "async_lru",
+        "beautifulsoup4~=4.9"
     ],
     "min_bot_version": "3.3.10",
     "end_user_data_statement": "This cog stores metadata and partial messages for playlists and equalizer configuration."
