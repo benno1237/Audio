@@ -91,3 +91,11 @@ I will continue maintaining the Global API for Audio even if the Org wanted to r
 I will continue maintaining the Global API domain.
 I will continue maintaining Edge as loads of users do depend on it.
 I will continue maintaining this fork of Audio because users do depend on it.
+
+
+Update:
+Due to the org removing myself from it completely I've cut all ties with the org, which means the global api as it is will cease to exist.
+
+Not to worry I will continue to provide the service to users of my audio, however if you use red Audio the api will cease to function for you.
+
+
