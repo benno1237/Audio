@@ -97,5 +97,3 @@ Update:
 Due to the org removing myself from it completely I've cut all ties with the org, which means the global api as it is will cease to exist.
 
 Not to worry I will continue to provide the service to users of my audio, however if you use red Audio the api will cease to function for you.
-
-
