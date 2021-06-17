@@ -19,6 +19,13 @@
 
 This repository contains a heavily modded version of the core Audio cog, with several new features (Filters, Bundled EQ, Global settings to name a few), fixes and potentially new bugs :smile:
 
+# Notice:
+The Global Audio API service has not been discontinued, yes this is a direct contradiction to the [claim](https://github.com/Cog-Creators/Red-Status/issues/13) made by the organization Cog Creators and their [published change logs](https://docs.discord.red/en/latest/changelog_3_4_0.html#redbot-3-4-12-2021-06-17) and discord announcement.
+
+The Global Audio API is a service that has been alive for over 2 years, long prior to it being used by the Cog Creators organization.
+
+Cog Creators lost their ability to use the service, after the fact they have decided to make a claim about the Global API being discontinued, which is not true as the owner of the API will keep it alive and maintained as originally stated.
+
 ------------
 ## Requirements:
 1. If you use an external instance you are required to use the following JAR:
