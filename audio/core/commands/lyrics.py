@@ -25,7 +25,7 @@ class LyricsCommands(MixinMeta, ABC, metaclass=CompositeMetaClass):
     @commands.guild_only()
     @commands.bot_has_permissions(embed_links=True, add_reactions=True)
     async def command_mlyrics(self, ctx: commands.Context):
-        """Get for a songs lyrics."""
+        """Get a song's lyrics."""
 
     @command_mlyrics.command(name="search")
     async def command_mlyrics_search(self, ctx, *, artistsong: str):
